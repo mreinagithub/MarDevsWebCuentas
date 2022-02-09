@@ -1,0 +1,318 @@
+/* /Pages/Auth/Login.razor.rz.scp.css */
+.form-signin[b-ymfm43o10w] {
+    width: 100%;
+    max-width: 400px;
+    padding: 15px;
+    margin: auto;
+} 
+
+
+.form-logo img[b-ymfm43o10w] {
+    width: 100%;    
+}
+
+/* /Pages/Index.razor.rz.scp.css */
+.contenedor-imagen-izquierda[b-9frg9um0tx] {
+    padding-right: 6px;
+}
+
+.contenedor-imagen-derecha[b-9frg9um0tx] {
+    padding-left: 6px;
+}
+
+.img-horizonal[b-9frg9um0tx] {
+    display: flex;
+}
+
+.img-vertical[b-9frg9um0tx] {
+    display: none;
+    max-height: 180px;
+    width: 100%;
+}
+
+
+@media screen and (max-width: 767px) {
+    .img-vertical[b-9frg9um0tx] {
+        display: flex;
+    }
+
+    .img-horizonal[b-9frg9um0tx] {
+        display: none;
+    }
+
+    .contenedor-imagen-izquierda[b-9frg9um0tx] {
+        padding-right: 15px;
+    }
+
+    .contenedor-imagen-derecha[b-9frg9um0tx] {
+        padding-left: 15px;
+        padding-top: 12px;
+    }
+}
+
+.imagen-seleccionable:hover[b-9frg9um0tx] {
+    transform: scale(1.02);
+    cursor: pointer;
+}
+/* /Shared/BuscadorTexto.razor.rz.scp.css */
+/*SIMULACION PARA ELIMINAR TEXTO DEL INPUT DE BUSQUEDA*/
+.form-group.position-relative input[b-hkz3bx2nja] {
+    padding-right: 32px;
+}
+
+.form-group-custom-align[b-hkz3bx2nja] {
+    padding-left: 0px;
+    margin-bottom: 0px;
+}
+
+.form-clear[b-hkz3bx2nja] {
+    align-items: center;
+    bottom: 8px;
+    color: rgba(0, 0, 0, .54);
+    cursor: pointer;
+    display: flex;
+    height: 24px;
+    position: absolute;
+    right: 12px;
+    width: 24px;
+    z-index: 10;
+    bottom: calc(1rem - 8px);
+}
+/* /Shared/CustomError.razor.rz.scp.css */
+
+.page-wrap[b-m6xczqqjqv] {
+    min-height: 100vh;
+    background-color: var(--fondo) !important;
+}
+/* /Shared/CustomNotFound.razor.rz.scp.css */
+
+.page-wrap[b-ctg1za3cj0] {
+    min-height: 100vh;
+    background-color: var(--fondo) !important;
+}
+/* /Shared/InputCUIT.razor.rz.scp.css */
+
+.form-signin .form-control[b-5s08i9bvaz] {
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.form-control:focus[b-5s08i9bvaz] {
+    border-color: var(--color-primario);
+    box-shadow: 0px 1px 1px rgba(51, 107, 135, 0.075) inset, 0px 0px 8px rgba(51, 107, 135, 0.5);
+}
+
+.inputWithIcon input[type=number][b-5s08i9bvaz] {
+    padding-left: 40px
+}
+
+.inputWithIcon input[type=text][b-5s08i9bvaz] {
+    padding-left: 40px
+}
+
+.inputWithIcon input[type=password][b-5s08i9bvaz] {
+    padding-left: 40px
+}
+
+
+.inputWithIcon input[b-5s08i9bvaz] {
+    padding-left: 40px
+}
+
+.inputWithIcon[b-5s08i9bvaz] {
+    position: relative;
+}
+
+    .inputWithIcon i[b-5s08i9bvaz] {
+        position: absolute;
+        left: 5px;
+        top: 5px;
+        padding: 10px 8px;
+        color: var(--color-primario);
+        z-index: 2;
+    }
+/* /Shared/InputPassword.razor.rz.scp.css */
+
+.form-signin .form-control[b-z2zd9uut09] {
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.form-control:focus[b-z2zd9uut09] {
+    border-color: var(--color-primario);
+    box-shadow: 0px 1px 1px rgba(51, 107, 135, 0.075) inset, 0px 0px 8px rgba(51, 107, 135, 0.5);
+}
+
+
+.inputWithIcon input[type=number][b-z2zd9uut09] {
+    padding-left: 40px
+}
+
+.inputWithIcon input[type=text][b-z2zd9uut09] {
+    padding-left: 40px
+}
+
+.inputWithIcon input[type=password][b-z2zd9uut09] {
+    padding-left: 40px
+}
+
+.inputWithIcon input[b-z2zd9uut09] {
+    padding-left: 40px
+}
+
+.inputWithIcon[b-z2zd9uut09] {
+    position: relative;
+}
+
+    .inputWithIcon i[b-z2zd9uut09] {
+        position: absolute;
+        left: 5px;
+        top: 5px;
+        padding: 10px 8px;
+        color: var(--color-primario);
+        z-index: 2;
+    }
+/* /Shared/InputTexto.razor.rz.scp.css */
+.form-signin .form-control[b-yaycghvm14] {
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.form-control:focus[b-yaycghvm14] {
+    border-color: var(--color-primario);
+    box-shadow: 0px 1px 1px rgba(51, 107, 135, 0.075) inset, 0px 0px 8px rgba(51, 107, 135, 0.5);
+}
+
+.inputWithIcon input[type=number][b-yaycghvm14] {
+    padding-left: 40px
+}
+
+.inputWithIcon input[type=text][b-yaycghvm14] {
+    padding-left: 40px
+}
+
+.inputWithIcon input[type=password][b-yaycghvm14] {
+    padding-left: 40px
+}
+
+
+.inputWithIcon input[b-yaycghvm14] {
+    padding-left: 40px
+}
+
+.inputWithIcon[b-yaycghvm14] {
+    position: relative;
+}
+
+    .inputWithIcon i[b-yaycghvm14] {
+        position: absolute;
+        left: 5px;
+        top: 5px;
+        padding: 10px 8px;
+        color: var(--color-primario);
+        z-index: 2;
+    }
+/* /Shared/LoginLayout.razor.rz.scp.css */
+
+html[b-22762qgih6],
+body[b-22762qgih6] {
+    height: 100%;
+}
+
+
+body[b-22762qgih6] {
+    display: block;
+    -ms-flex-align: center;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: var(--fondo) !important;
+}
+
+.container[b-22762qgih6] {
+    margin-top: 100px;
+}
+
+@media (max-height:498px) {
+    .container[b-22762qgih6] {
+        margin-top: 30px;
+    }
+}
+
+@media (max-height:405px) {
+    .container[b-22762qgih6] {
+        margin-top: 0px !important;
+    }
+}
+
+
+/* /Shared/MiLayout.razor.rz.scp.css */
+.wrapper[b-f3aorkfxhe] {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+    background-color: var(--fondo);
+}
+
+#content[b-f3aorkfxhe] {
+    width: 100%;
+    min-height: 100vh;
+    transition: all 0.3s;
+}
+
+.mainpage[b-f3aorkfxhe] {
+    margin-top: 100px;
+}
+
+
+/*SEGUN CHROME A PARTIR DE DICIEMBRE 2019 -WEBKIT-APPEARECEN:LISTBOX QUE TRAE BOOTSTRAP DEJA DE FUNCIONAR... POR ESO HAGO OVERRIDE Y LE PONGO NONE*/
+input[type="date"][b-f3aorkfxhe], input[type="time"][b-f3aorkfxhe], input[type="datetime-local"][b-f3aorkfxhe], input[type="month"][b-f3aorkfxhe] {
+    -webkit-appearance: none;
+}
+/* /Shared/MiNavMenu.razor.rz.scp.css */
+/*HEADER*/
+#navbarDropdown[b-f8a1ysx82x] {
+    color: #fff;
+}
+
+.dropdown-item:active[b-f8a1ysx82x] {
+    background-color: var(--color-primario);
+}
+
+.icon-bar[b-f8a1ysx82x] {
+    width: 22px;
+    height: 2px;
+    background-color: #fff;
+    display: block;
+    transition: all 0.2s;
+    margin-top: 4px
+}
+
+.custom-logo[b-f8a1ysx82x] {
+    align-items: center;
+    margin: 0px;
+    display: block;
+}
+
+.custom-logo-img[b-f8a1ysx82x] {
+    width: 150px;
+}
+
+
+.navbar[b-f8a1ysx82x] {
+    padding: 10px 10px;
+    background: var(--color-primario);
+    border: none;
+    border-radius: 0;
+    margin-bottom: 15px;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}

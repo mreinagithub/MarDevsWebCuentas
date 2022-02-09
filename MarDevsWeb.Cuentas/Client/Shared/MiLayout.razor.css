@@ -1,0 +1,22 @@
+﻿.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+    background-color: var(--fondo);
+}
+
+#content {
+    width: 100%;
+    min-height: 100vh;
+    transition: all 0.3s;
+}
+
+.mainpage {
+    margin-top: 100px;
+}
+
+
+/*SEGUN CHROME A PARTIR DE DICIEMBRE 2019 -WEBKIT-APPEARECEN:LISTBOX QUE TRAE BOOTSTRAP DEJA DE FUNCIONAR... POR ESO HAGO OVERRIDE Y LE PONGO NONE*/
+input[type="date"], input[type="time"], input[type="datetime-local"], input[type="month"] {
+    -webkit-appearance: none;
+}

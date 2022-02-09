@@ -1,0 +1,71 @@
+﻿@inject IJSRuntime js
+@inject NavigationManager navigationManager
+
+<AuthorizeView>
+
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+
+            <div class="custom-logo">
+                <a href="./">
+                    <img src="./Imagenes/logoblanco.png" alt="homepage" class="custom-logo-img" />
+                </a>
+            </div>
+
+
+
+            <div class="dropdown show float-right">
+
+                <a class="nav-link" href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img src="./Imagenes/UsuarioDefault.jpg" alt="user" class="rounded-circle" width="31">
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="font-size:15px;">
+                    <span style="padding-left:15px; font-weight:bold;"> @context.User.Claims.FirstOrDefault(c => c.Type.Equals("NombreAMostrar")).Value</span>
+                    <div class="dropdown-divider"></div>
+                    <a style="padding-left:15px;" class="dropdown-item" href="MisPedidos"><i class="fas fa-search m-r-5"></i> Ver tus pedidos</a>
+                    <div class="dropdown-divider"></div>
+                    <a style="padding-left:15px;" class="dropdown-item" href="ModificarClave"><i class="fas fa-key m-r-5"></i> Modificar Clave</a>
+                    <div class="dropdown-divider"></div>
+                    <a style="padding-left:15px;" class="dropdown-item" href="javascript:void(0)" @onclick="MostrarModalCierreSesion" id="cerrarSesionform"><i class="fas fa-power-off m-r-5"></i> Cerrar Sesión</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <MensajeModal @ref="modal" AlCerrarModal="CancelarCierreSesion" ModalTitle="Pregunta" ModalBody="¿Desea cerrar sesión?">        
+        <ModalRenderFooter>
+            <button type="button" class="btn btn-custom" data-dismiss="modal" id="btnCerrarSesion-si" @onclick="Logout">Si</button>
+            <button type="button" class="btn btn-custom-secondary" data-dismiss="modal" id="btnCerrarSesion-no" @onclick="CancelarCierreSesion">No</button>
+        </ModalRenderFooter>
+    </MensajeModal>
+
+</AuthorizeView>
+
+@code {
+
+    [CascadingParameter] public Task<AuthenticationState> AuthenticationState { get; set; }
+
+    private MensajeModal modal = new MensajeModal();
+
+    private async Task MostrarModalCierreSesion()
+    {
+        modal.Open();
+        await js.Focus("btnCerrarSesion-si");
+    }
+
+    private void CancelarCierreSesion()
+    {
+        modal.Close();
+    }
+
+    private async Task Logout()
+    {
+        var authState = await AuthenticationState;
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("./logout");
+        }
+    }
+
+}

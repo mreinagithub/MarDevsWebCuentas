@@ -1,0 +1,33 @@
+﻿@layout EmptyLayout
+
+@page "/error"
+
+@inject ErrorHandler errorHandler;
+
+<Title Value="@PageTitle"></Title>
+
+<div class="page-wrap d-flex flex-row align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12 text-center">
+                <span class="display-1 d-block">@errorHandler.StatusCode</span>
+                <div class="mb-4 lead">
+                    @*<h1>Ooops!</h1>*@
+                    <p>@errorHandler.Message</p>
+                </div>
+                <a href="javascript:window.history.back()" class="btn btn-link">Volver</a>
+                <a href="./" class="btn btn-link">Inicio</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code{    
+
+    public string PageTitle { get; set; }
+
+    protected override void OnInitialized()
+    {
+        PageTitle = $"MarDevs - Error {errorHandler.StatusCode}";
+    }
+}

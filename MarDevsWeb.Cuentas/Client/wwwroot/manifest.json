@@ -1,0 +1,20 @@
+{
+  "name": "MarDevs Cuentas",
+  "short_name": "MarDevs Cuentas",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#03173d",
+  "icons": [
+    {
+      "src": "Imagenes/aromitalia-favicon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "Imagenes/aromitalia-favicon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ]
+}

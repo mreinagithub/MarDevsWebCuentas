@@ -1,0 +1,19 @@
+﻿@page "/Logout"
+
+@inject NavigationManager navigationManager
+@inject ILoginService loginService
+
+@using MarDevsWeb.Cuentas.Client.Auth
+
+<text>Deslogueando... </text>
+
+
+@code {        
+
+    protected async override Task OnInitializedAsync()
+    {
+        await loginService.Logout();
+        navigationManager.NavigateTo("./");
+    }
+
+}

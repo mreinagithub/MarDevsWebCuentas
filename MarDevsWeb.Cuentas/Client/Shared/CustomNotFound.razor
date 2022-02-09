@@ -1,0 +1,26 @@
+﻿
+<Title Value="MarDevs Cuentas - Error 404"></Title>
+
+<div class="page-wrap d-flex flex-row align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12 text-center">
+                <span class="display-1 d-block">404</span>
+                <div class="mb-4 lead">
+                    <h1>Ooops!</h1>
+                    <p>Nada que mostrar por aquí</p>
+                </div>
+                <a href="javascript:window.history.back()" class="btn btn-link">Volver</a>
+                <a href="./" class="btn btn-link">Inicio</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code{
+
+    protected override void OnInitialized()
+    {
+        Console.WriteLine("404: Ruta no encontrada");
+    }
+}

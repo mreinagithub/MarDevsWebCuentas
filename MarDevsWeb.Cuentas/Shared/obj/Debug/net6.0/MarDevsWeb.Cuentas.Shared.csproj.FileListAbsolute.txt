@@ -1,0 +1,11 @@
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Shared\bin\Debug\net6.0\MarDevsWeb.Cuentas.Shared.deps.json
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Shared\bin\Debug\net6.0\MarDevsWeb.Cuentas.Shared.dll
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Shared\bin\Debug\net6.0\ref\MarDevsWeb.Cuentas.Shared.dll
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Shared\bin\Debug\net6.0\MarDevsWeb.Cuentas.Shared.pdb
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Shared\obj\Debug\net6.0\MarDevsWeb.Cuentas.Shared.GeneratedMSBuildEditorConfig.editorconfig
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Shared\obj\Debug\net6.0\MarDevsWeb.Cuentas.Shared.AssemblyInfoInputs.cache
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Shared\obj\Debug\net6.0\MarDevsWeb.Cuentas.Shared.AssemblyInfo.cs
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Shared\obj\Debug\net6.0\MarDevsWeb.Cuentas.Shared.csproj.CoreCompileInputs.cache
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Shared\obj\Debug\net6.0\MarDevsWeb.Cuentas.Shared.dll
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Shared\obj\Debug\net6.0\ref\MarDevsWeb.Cuentas.Shared.dll
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Shared\obj\Debug\net6.0\MarDevsWeb.Cuentas.Shared.pdb

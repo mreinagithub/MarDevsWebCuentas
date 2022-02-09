@@ -1,0 +1,121 @@
+﻿
+@page "/modificarClave"
+
+@inject IRepositorio repositorio
+@inject NavigationManager navigationManager
+@inject IJSRuntime js
+
+@attribute [Authorize]
+
+
+<Title Value="MarDevs - Modificar Clave"></Title>
+
+
+
+<h3>Modificación de Clave</h3>
+
+<hr />
+
+<div class="row">
+    <div class="col-12  col-sm-10 col-md-6 col-xl-6">
+        <div class="row">
+            <h5 class="col-4">Usuario:</h5>
+            <h5 class="col-8">@NombreAMostrar</h5>
+        </div>
+        <div id="formModifClave">
+            <EditForm Model="userModificarClave" OnValidSubmit="ModificarClaveUsuario" autocomplete="off">
+                <DataAnnotationsValidator />
+                <div class="form-group">
+                    <label class="control-label">Clave actual</label>
+                    <InputPassword class="form-control" @bind-Value="@userModificarClave.PasswordActual" id="inputPasswordId"/>
+                    <ValidationMessage For="@(()=> userModificarClave.PasswordActual)" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Clave nueva</label>
+                    <InputPassword class="form-control" @bind-Value="@userModificarClave.PasswordNuevo" />
+                    <ValidationMessage For="@(()=> userModificarClave.PasswordNuevo)" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Repetir clave nueva</label>
+                    <InputPassword class="form-control" @bind-Value="@userModificarClave.PasswordNuevoRepetido" />
+                    <ValidationMessage For="@(()=> userModificarClave.PasswordNuevoRepetido)" />
+                </div>
+                @if (!String.IsNullOrWhiteSpace(MensajeErrorModificacionClave))
+                {
+                    <p style="text-align:left;color:red">@MensajeErrorModificacionClave</p>
+                }
+                <button type="submit" class="btn btn-custom col-12">
+                    @if (!ModificandoClave)
+                    {
+                        <text>Modificar</text>
+                    }
+                    else
+                    {
+                        <i class="fas fa-circle-notch fa-spin"></i><text> Modificando...</text>
+                    }
+                </button>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+<MensajeModal @ref="modal" AlCerrarModal="CerrarYRedirigir" ModalTitle="Información" ModalBody="Clave modificada exitosamente">    
+    <ModalRenderFooter>
+        <button type="button" class="btn btn-custom" data-dismiss="modal" id="btnAceptarModal" @onclick="CerrarYRedirigir">Aceptar</button>
+    </ModalRenderFooter>
+</MensajeModal>
+
+@code {
+
+    [CascadingParameter] public Task<AuthenticationState> AuthenticationState { get; set; }
+
+    private UserModificarClave userModificarClave = new UserModificarClave();
+    private string NombreAMostrar { get; set; }
+    private string MensajeErrorModificacionClave = "";
+    private bool ModificandoClave { get; set; } = false;
+
+    private MensajeModal modal { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationState;
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            userModificarClave.UsuarioID = Convert.ToInt32(authState.User.Identity.Name);
+            NombreAMostrar = authState.User.Claims.FirstOrDefault(c => c.Type.Equals("NombreAMostrar")).Value;
+            await js.Focus("inputPasswordId");
+        }
+    }
+
+    private async Task ModificarClaveUsuario()
+    {
+        ModificandoClave = true;
+        MensajeErrorModificacionClave = "";
+
+
+        var httpReponse = await repositorio.Post<UserModificarClave>("api/cuenta/modificarclave", userModificarClave);
+        if (httpReponse.Error)
+        {
+            ModificandoClave = false;
+            MensajeErrorModificacionClave = await httpReponse.GetBody();
+        }
+        else
+        {
+            ModificandoClave = false;
+            MensajeErrorModificacionClave = "";
+
+            modal.Open();
+            await js.Focus("btnAceptarModal");
+
+
+        }
+
+    }
+
+    private void CerrarYRedirigir()
+    {
+        modal.Close();
+        navigationManager.NavigateTo("./");
+    }
+
+}

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\inetpub\MarDevs\Pedidos</_PublishTargetUrl>
+    <History>True|2022-02-04T18:17:55.5377840Z;True|2022-02-04T13:11:01.3407120-03:00;True|2022-02-04T13:00:28.0844627-03:00;True|2022-02-04T12:52:48.2272577-03:00;True|2022-02-04T12:50:56.6390969-03:00;True|2022-02-04T11:49:14.7771626-03:00;True|2022-02-04T11:25:23.7598172-03:00;False|2022-02-04T11:24:29.3942181-03:00;True|2022-02-04T02:09:48.6394901-03:00;True|2022-02-04T01:51:54.0454283-03:00;True|2022-02-03T21:31:37.8404169-03:00;False|2022-02-03T21:28:14.5390740-03:00;False|2022-02-03T21:26:15.5903587-03:00;False|2022-02-03T21:25:40.3036675-03:00;True|2022-02-03T21:16:14.2627331-03:00;False|2022-02-03T21:14:44.0654790-03:00;</History>
+  </PropertyGroup>
+</Project>

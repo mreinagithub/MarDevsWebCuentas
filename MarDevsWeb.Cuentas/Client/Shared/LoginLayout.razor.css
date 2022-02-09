@@ -1,0 +1,33 @@
+﻿
+html,
+body {
+    height: 100%;
+}
+
+
+body {
+    display: block;
+    -ms-flex-align: center;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: var(--fondo) !important;
+}
+
+.container {
+    margin-top: 100px;
+}
+
+@media (max-height:498px) {
+    .container {
+        margin-top: 30px;
+    }
+}
+
+@media (max-height:405px) {
+    .container {
+        margin-top: 0px !important;
+    }
+}
+
+

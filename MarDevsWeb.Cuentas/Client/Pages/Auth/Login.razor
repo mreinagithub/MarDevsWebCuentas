@@ -1,0 +1,83 @@
+﻿@layout LoginLayout
+
+@page "/Login"
+
+@inject IRepositorio repositorio
+@inject NavigationManager navigationManager
+@inject ILoginService loginService
+@inject IMostrarMensajes mostrarMensajes
+
+@using MarDevsWeb.Cuentas.Client.Auth
+
+
+<Title Value="MarDevs Cuentas - Login"></Title>
+
+
+<EditForm Model="userInfo" OnValidSubmit="LoginUsuario" autocomplete="off">
+    <div class="form-signin">
+        <span style="text-align:match-parent" class="form-logo">
+            <img src="./Imagenes/logo-aromitalia.png" alt="Aromitalia logo" />
+        </span>
+        <DataAnnotationsValidator />
+        <div class="row p-b-30">
+            <div class="col-12">
+                <div class="form-group  mb-3">
+                    <InputTexto class="form-control" @bind-Value="@userInfo.Logon" />
+                    <ValidationMessage For="@(()=> userInfo.Logon)" />
+                </div>
+            </div>
+        </div>
+        <div class="row p-b-30">
+            <div class="col-12">
+                <div class="form-group  mb-3">
+                    <InputPassword class="form-control" @bind-Value="@userInfo.Password" />
+                    <ValidationMessage For="@(()=> userInfo.Password)" />
+                </div>
+            </div>
+        </div>
+        @if (!String.IsNullOrWhiteSpace(MensajeErrorAutenticacion))
+        {
+            <p style="text-align:left;color:red">@MensajeErrorAutenticacion</p>
+        }
+        <button type="submit" class="btn btn-custom col-12">
+            @if (!Autenticando)
+            {
+                <text>Ingresar</text>
+            }
+            else
+            {
+                <i class="fas fa-circle-notch fa-spin"></i><text> Autenticando...</text>
+            }
+        </button>
+        @*<p class="small" style="text-align:left;padding-top:10px;">Ingrese los 11 números del CUIT sin guiones.</p>*@
+    </div>
+</EditForm>
+
+
+@code {
+
+    private UserInfo userInfo = new UserInfo();
+    private bool Autenticando { get; set; } = false;
+    private string MensajeErrorAutenticacion = "";
+
+    private async Task LoginUsuario()
+    {
+        Autenticando = true;
+        MensajeErrorAutenticacion = "";
+        var httpReponse = await repositorio.Post<UserInfo, UserToken>("api/cuenta/login", userInfo);
+        if (httpReponse.Error)
+        {
+            Autenticando = false;
+            MensajeErrorAutenticacion = await httpReponse.GetBody();
+        }
+        else
+        {
+            Autenticando = false;
+            MensajeErrorAutenticacion = "";
+            await loginService.Login(httpReponse.Response);
+            navigationManager.NavigateTo("./");
+        }
+
+    }
+
+}

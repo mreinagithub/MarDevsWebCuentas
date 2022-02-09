@@ -1,0 +1,68 @@
+﻿@inject IRepositorio repositorio
+@inject NavigationManager navigationManager
+@inject ErrorHandler errorHandler
+
+@page "/"
+
+@attribute [Authorize]
+
+
+<Title Value="MarDevs Cuentas - Inicio"></Title>
+
+
+<div class="row">
+    <div class="col-12 pb-2">
+        <img src="./Imagenes/Cliente/BannerModuloPedidos.png" alt="Banner Modulo Pedidos" class="img-fluid" />
+    </div>
+</div>
+
+@*<div class="row">
+    <div class="col-12 col-md-6 contenedor-imagen-izquierda">
+        <a href="CargaPedido1">
+            @if (TienePedidosEnBorrador == null)
+            {
+                <div style="text-align:center;">
+                    <span style="color: #003670; justify-content:space-evenly; font-size:30px; padding-top:30px; padding-bottom:30px;" class="img-fluid img-vertical"><i class="fas fa-circle-notch fa-spin fa-lg"></i></span>
+                    <span style="color: #003670; justify-content:space-evenly; font-size:30px; padding-top:30px; padding-bottom:30px;" class="img-fluid img-horizonal"><i class="fas fa-circle-notch fa-spin fa-lg"></i></span>
+                </div>
+
+            }
+            else if (@TienePedidosEnBorrador.Value == true) //Tiene pedido en borrador
+            {
+                <img id="imgPedidoHome" src="./Imagenes/Cliente/CONTINUA_TU_PEDIDO_VERTICAL.jpg" alt="Tu Pedido" class="img-fluid imagen-seleccionable img-vertical" />
+                <img id="imgPedidoHome" src="./Imagenes/Cliente/CONTINUA_TU_PEDIDO_HORIZONTAL.png" alt="Tu Pedido" class="img-fluid imagen-seleccionable img-horizonal" />
+            }
+            else
+            {
+                <img id="imgPedidoHome" src="./Imagenes/Cliente/HACE_TU_PEDIDO_VERTICAL.jpg" alt="Tu Pedido" class="img-fluid imagen-seleccionable img-vertical" />
+                <img id="imgPedidoHome" src="./Imagenes/Cliente/HACE_TU_PEDIDO_HORIZONTAL.jpg" alt="Tu Pedido" class="img-fluid imagen-seleccionable img-horizonal" />
+            }
+        </a>
+    </div>
+    <div class="col-12 col-md-6 contenedor-imagen-derecha">
+        <a href="MisPedidos">
+            <img src="./Imagenes/Cliente/VER_TUS_PEDIDOS_VERTICAL.jpg" alt="Ver tus Pedidos" class="img-fluid imagen-seleccionable img-vertical" />
+            <img src="./Imagenes/Cliente/VER_TUS_PEDIDOS_HORIZONTAL.jpg" alt="Ver tus Pedidos" class="img-fluid imagen-seleccionable img-horizonal" />
+        </a>
+    </div>
+</div>*@
+
+
+@code{
+
+    //private bool? TienePedidosEnBorrador { get; set; } = null;
+
+    //protected async override Task OnInitializedAsync()
+    //{
+    //    //var httpReponse = await repositorio.Get<bool>("api/pedidos/tienePedidoBorrador");
+    //    //if (httpReponse.Error)
+    //    //{
+    //    //    await errorHandler.MostrarError(httpReponse.HttpResponseMessage);
+    //    //}
+    //    //else
+    //    //{
+    //    //    TienePedidosEnBorrador = httpReponse.Response;
+    //    //}
+    //}
+
+}

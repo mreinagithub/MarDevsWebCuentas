@@ -1,0 +1,37 @@
+﻿/*HEADER*/
+#navbarDropdown {
+    color: #fff;
+}
+
+.dropdown-item:active {
+    background-color: var(--color-primario);
+}
+
+.icon-bar {
+    width: 22px;
+    height: 2px;
+    background-color: #fff;
+    display: block;
+    transition: all 0.2s;
+    margin-top: 4px
+}
+
+.custom-logo {
+    align-items: center;
+    margin: 0px;
+    display: block;
+}
+
+.custom-logo-img {
+    width: 150px;
+}
+
+
+.navbar {
+    padding: 10px 10px;
+    background: var(--color-primario);
+    border: none;
+    border-radius: 0;
+    margin-bottom: 15px;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}

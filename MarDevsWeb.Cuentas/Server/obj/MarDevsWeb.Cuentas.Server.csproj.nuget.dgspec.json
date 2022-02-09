@@ -1,0 +1,267 @@
+{
+  "format": 1,
+  "restore": {
+    "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Server\\MarDevsWeb.Cuentas.Server.csproj": {}
+  },
+  "projects": {
+    "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Client\\MarDevsWeb.Cuentas.Client.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Client\\MarDevsWeb.Cuentas.Client.csproj",
+        "projectName": "MarDevsWeb.Cuentas.Client",
+        "projectPath": "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Client\\MarDevsWeb.Cuentas.Client.csproj",
+        "packagesPath": "C:\\Users\\Tincho\\.nuget\\packages\\",
+        "outputPath": "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Client\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Tincho\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Shared\\MarDevsWeb.Cuentas.Shared.csproj": {
+                "projectPath": "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Shared\\MarDevsWeb.Cuentas.Shared.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Components.Authorization": {
+              "target": "Package",
+              "version": "[5.0.1, )"
+            },
+            "Microsoft.AspNetCore.Components.Web.Extensions": {
+              "target": "Package",
+              "version": "[5.0.0-preview9.20513.1, )"
+            },
+            "Microsoft.AspNetCore.Components.WebAssembly": {
+              "target": "Package",
+              "version": "[5.0.1, )"
+            },
+            "Microsoft.AspNetCore.Components.WebAssembly.DevServer": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[5.0.1, )"
+            },
+            "Serilog.Sinks.BrowserHttp": {
+              "target": "Package",
+              "version": "[1.0.0-dev-00012, )"
+            },
+            "System.Net.Http.Json": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.NETCore.App.Runtime.Mono.browser-wasm",
+              "version": "[6.0.1, 6.0.1]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "browser-wasm": {
+          "#import": []
+        }
+      }
+    },
+    "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Server\\MarDevsWeb.Cuentas.Server.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Server\\MarDevsWeb.Cuentas.Server.csproj",
+        "projectName": "MarDevsWeb.Cuentas.Server",
+        "projectPath": "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Server\\MarDevsWeb.Cuentas.Server.csproj",
+        "packagesPath": "C:\\Users\\Tincho\\.nuget\\packages\\",
+        "outputPath": "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Server\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Tincho\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Client\\MarDevsWeb.Cuentas.Client.csproj": {
+                "projectPath": "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Client\\MarDevsWeb.Cuentas.Client.csproj"
+              },
+              "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Shared\\MarDevsWeb.Cuentas.Shared.csproj": {
+                "projectPath": "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Shared\\MarDevsWeb.Cuentas.Shared.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Microsoft.AspNetCore.Components.WebAssembly.Server": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Serilog.AspNetCore": {
+              "target": "Package",
+              "version": "[4.1.1-dev-00250, )"
+            },
+            "Serilog.AspNetCore.Ingestion": {
+              "target": "Package",
+              "version": "[1.0.0-dev-00021, )"
+            },
+            "Serilog.Sinks.Email": {
+              "target": "Package",
+              "version": "[2.4.1-dev-00135, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Shared\\MarDevsWeb.Cuentas.Shared.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Shared\\MarDevsWeb.Cuentas.Shared.csproj",
+        "projectName": "MarDevsWeb.Cuentas.Shared",
+        "projectPath": "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Shared\\MarDevsWeb.Cuentas.Shared.csproj",
+        "packagesPath": "C:\\Users\\Tincho\\.nuget\\packages\\",
+        "outputPath": "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Shared\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Tincho\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

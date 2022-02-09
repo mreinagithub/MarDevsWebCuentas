@@ -1,0 +1,65 @@
+﻿@inherits LayoutComponentBase
+
+@inject MarDevsWeb.Cuentas.Client.Auth.RenovadorToken renovadorToken
+@inject IJSRuntime js
+@inject NavigationManager navigationManager
+
+@using System.Globalization; 
+
+
+@attribute [Authorize]
+
+<AuthorizeView>
+    <Authorized>
+        <div class="wrapper">
+            <div id="content">
+                <MiNavMenu></MiNavMenu>
+                <div class="container mainpage">
+                    <div id="spinnerloading">
+                        <div id="spinnerloadingcontent">
+                            <p id="spinnerloadingspinner">
+                            </p>
+                        </div>
+                    </div>
+                    <main role="main" style="margin-top:-20px;">
+                        @Body
+                    </main>
+                </div>
+            </div>
+        </div>
+
+    </Authorized>
+    <NotAuthorized>
+        @if (true) { navigationManager.NavigateTo("./login"); }
+    </NotAuthorized>
+</AuthorizeView>
+
+
+@code{
+
+    [CascadingParameter] public Task<AuthenticationState> AuthenticationState { get; set; }
+
+  
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        await js.InicializarTimerInactivo(DotNetObjectReference.Create(this)); //Timer en javascript que si no detecta actividad por 10 minutos, revoca el token.
+        renovadorToken.Iniciar(); //Timer que corre cada 4 minutos para verificar y renovar el token si corresponde.
+
+        CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("es-AR");
+    }
+
+    [JSInvokable]
+    public async Task Logout() //Método que se invoca desde javascript (por eso el atributo invokable) si no hay actividad.
+    {
+        var authState = await AuthenticationState;
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("./logout");
+        }
+    }
+
+  
+
+}

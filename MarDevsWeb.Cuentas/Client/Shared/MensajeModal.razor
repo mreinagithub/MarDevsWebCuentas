@@ -1,0 +1,69 @@
+﻿
+<div class="modal @modalClass" tabindex="-1" role="dialog" style="display:@modalDisplay;" 
+     aria-labelledby="mySmallModalLabel" aria-hidden="true" id="modalIdMensaje">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    @ModalTitle
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="AlCerrarModal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @if (ModalRenderBody != null)
+                {
+                    @ModalRenderBody
+                }
+                else
+                {
+                    @ModalBody
+                }
+            </div>
+            <div class="modal-footer">                
+                @ModalRenderFooter                
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (showBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+@code {
+    [Parameter]
+    public string ModalTitle { get; set; } = "Información";
+
+    [Parameter]
+    public string ModalBody { get; set; } = "";
+
+    [Parameter]
+    public RenderFragment ModalRenderBody { get; set; }
+
+    [Parameter]
+    public RenderFragment ModalRenderFooter { get; set; }
+
+    [Parameter] public EventCallback AlCerrarModal { get; set; }
+
+    private string modalDisplay = "none;";
+    private string modalClass = "";
+    private bool showBackdrop = false;
+
+    public void Open()
+    {
+        modalDisplay = "block;";
+        modalClass = "show";
+        showBackdrop = true;
+    }
+
+    public void Close()
+    {
+        modalDisplay = "none";
+        modalClass = "";
+        showBackdrop = false;
+    }
+
+}
