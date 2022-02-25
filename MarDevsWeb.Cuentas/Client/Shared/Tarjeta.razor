@@ -1,0 +1,24 @@
+﻿            
+<div class="card card-extras shadow p-3 mb-5 bg-white rounded">
+    <div class="card-body">
+        <h5 class="card-title card-extras-title">@RenderIcono @Titulo</h5>                
+        <p class="card-text mb-0">@TextoLinea1</p>       
+        <p class="card-text mb-0">@TextoLinea2</p>       
+    </div>                     
+</div>  
+
+
+@code {    
+
+
+    [Parameter]
+    public string Titulo { get; set; } = "";
+    [Parameter]
+    public string TextoLinea1 { get; set; } = "";
+    [Parameter]
+    public string TextoLinea2 { get; set; } = "";
+
+    [Parameter]
+    public RenderFragment RenderIcono { get; set; }
+
+}

@@ -1,5 +1,6 @@
 @inject NavigationManager navigationManager
 
+
 <Router AppAssembly="@typeof(Program).Assembly">
     <Found Context="routeData">
         <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MiLayout)">
@@ -17,3 +18,5 @@
         </LayoutView>
     </NotFound>    
 </Router>
+
+

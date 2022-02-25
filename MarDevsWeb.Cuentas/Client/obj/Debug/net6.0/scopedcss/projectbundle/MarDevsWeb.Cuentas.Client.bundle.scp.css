@@ -4,13 +4,125 @@
     max-width: 400px;
     padding: 15px;
     margin: auto;
-} 
+}
 
 
 .form-logo img[b-ymfm43o10w] {
-    width: 100%;    
+    width: 100%;
+    margin-bottom: 15px;
+}
+/* /Pages/Conceptos/Conceptos.razor.rz.scp.css */
+/*Boton flotante scrollUp*/
+#btnScrollTop[b-v7q7pg3q05] {
+    display: none;
+    position: fixed;
+    bottom: 10px;
+    right: 15px;
+    z-index: 99;
+    font-size: 10px;
+    border: none;
+    outline: none;
+    background-color: var(--color-primario);
+    color: white;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 50px;
 }
 
+    #btnScrollTop:hover[b-v7q7pg3q05] {
+        background-color: #666666;
+    }
+
+
+/*Muestra cantidad de registros*/
+.infoRegistrosEncontrados[b-v7q7pg3q05] {
+    float: right !important;
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 0px !important;
+}
+/* /Pages/Gastos/MiGastoItem.razor.rz.scp.css */
+table tbody td[b-5705ksbrjs] {
+    font-size: smaller;
+}
+/* /Pages/Gastos/MisGastos.razor.rz.scp.css */
+/*Boton flotante scrollUp*/
+#btnScrollTop[b-qlxxbnvtdc] {
+    display: none;
+    position: fixed;
+    bottom: 10px;
+    right: 15px;
+    z-index: 99;
+    font-size: 10px;
+    border: none;
+    outline: none;
+    background-color: var(--color-primario);
+    color: white;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 50px;
+}
+
+    #btnScrollTop:hover[b-qlxxbnvtdc] {
+        background-color: #666666;
+    }
+
+
+/*Muestra cantidad de registros*/
+.infoRegistrosEncontrados[b-qlxxbnvtdc] {
+    float: right !important;
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 0px !important;
+}
+
+
+/*Buscador*/
+/*SIMULACION PARA ELIMINAR TEXTO DEL INPUT DE BUSQUEDA*/
+.form-group.position-relative input[b-qlxxbnvtdc] {
+    padding-right: 32px;
+}
+
+.form-group-custom-align[b-qlxxbnvtdc] {
+    padding-left: 0px;
+    margin-bottom: 0px;
+}
+
+.form-clear[b-qlxxbnvtdc] {
+    align-items: center;
+    bottom: 8px;
+    color: rgba(0, 0, 0, .54);
+    cursor: pointer;
+    display: flex;
+    height: 24px;
+    position: absolute;
+    right: 12px;
+    width: 24px;
+    z-index: 10;
+    bottom: calc(1rem - 8px);
+}
+/* /Pages/Gastos/ModalModificarFechas.razor.rz.scp.css */
+
+
+
+.modal-header-form[b-autt11839o] {
+    display: contents;
+}
+
+.modal-title-form[b-autt11839o] {
+    text-align: center;
+}
+
+/*Si el explorador es edge*/
+@supports (-ms-ime-align:auto) {
+    .modal-header-form[b-autt11839o] {
+        display: block;
+    }
+}
 /* /Pages/Index.razor.rz.scp.css */
 .contenedor-imagen-izquierda[b-9frg9um0tx] {
     padding-right: 6px;
@@ -51,8 +163,43 @@
 }
 
 .imagen-seleccionable:hover[b-9frg9um0tx] {
-    transform: scale(1.02);
+    transform: scale(1.03);
     cursor: pointer;
+}
+
+
+
+/* /Pages/Periodos/Periodos.razor.rz.scp.css */
+/*Boton flotante scrollUp*/
+#btnScrollTop[b-2fi3oex7t9] {
+    display: none;
+    position: fixed;
+    bottom: 10px;
+    right: 15px;
+    z-index: 99;
+    font-size: 10px;
+    border: none;
+    outline: none;
+    background-color: var(--color-primario);
+    color: white;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 50px;
+}
+
+#btnScrollTop:hover[b-2fi3oex7t9] {
+    background-color: #666666;
+}
+
+
+/*Muestra cantidad de registros*/
+.infoRegistrosEncontrados[b-2fi3oex7t9] {
+    float: right !important;
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 0px !important;
 }
 /* /Shared/BuscadorTexto.razor.rz.scp.css */
 /*SIMULACION PARA ELIMINAR TEXTO DEL INPUT DE BUSQUEDA*/
@@ -78,9 +225,38 @@
     z-index: 10;
     bottom: calc(1rem - 8px);
 }
+/* /Shared/CenterLayout.razor.rz.scp.css */
+.wrapper[b-74spqlh46d] {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+    background-color: var(--fondo);
+}
+
+#content[b-74spqlh46d] {
+    width: 100%;
+    min-height: 100vh;
+    transition: all 0.3s;
+}
+
+.mainpage[b-74spqlh46d] {
+    margin-top: 100px;
+}
+
+
+/*SEGUN CHROME A PARTIR DE DICIEMBRE 2019 -WEBKIT-APPEARECEN:LISTBOX QUE TRAE BOOTSTRAP DEJA DE FUNCIONAR... POR ESO HAGO OVERRIDE Y LE PONGO NONE*/
+input[type="date"][b-74spqlh46d], input[type="time"][b-74spqlh46d], input[type="datetime-local"][b-74spqlh46d], input[type="month"][b-74spqlh46d] {
+    -webkit-appearance: none;
+}
 /* /Shared/CustomError.razor.rz.scp.css */
 
 .page-wrap[b-m6xczqqjqv] {
+    min-height: 100vh;
+    background-color: var(--fondo) !important;
+}
+/* /Shared/CustomNotAuthorized.razor.rz.scp.css */
+
+.page-wrap[b-3a5smrtrlo] {
     min-height: 100vh;
     background-color: var(--fondo) !important;
 }
@@ -178,6 +354,18 @@
         color: var(--color-primario);
         z-index: 2;
     }
+
+
+
+.field-icon[b-z2zd9uut09] {
+    float: right;
+    font-size: 1.7em !important;
+    position: relative !important;
+    margin-right: 8px;
+    margin-top: -33px;
+    z-index: 2;
+    color: black;
+}
 /* /Shared/InputTexto.razor.rz.scp.css */
 .form-signin .form-control[b-yaycghvm14] {
     position: relative;
@@ -304,7 +492,7 @@ input[type="date"][b-f3aorkfxhe], input[type="time"][b-f3aorkfxhe], input[type="
 }
 
 .custom-logo-img[b-f8a1ysx82x] {
-    width: 150px;
+    width: 220px;
 }
 
 
@@ -315,4 +503,13 @@ input[type="date"][b-f3aorkfxhe], input[type="time"][b-f3aorkfxhe], input[type="
     border-radius: 0;
     margin-bottom: 15px;
     box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}
+/* /Shared/Tarjeta.razor.rz.scp.css */
+.card-extras[b-jspa4aw5i7] {
+    width: 100%;
+    height: 10rem;
+}
+
+.card-extras-title[b-jspa4aw5i7] {
+    color: var(--color-primario);
 }

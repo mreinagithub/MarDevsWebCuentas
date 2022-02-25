@@ -1,0 +1,76 @@
+﻿@layout CenterLayout
+
+@page "/validacion-correo/{token}"
+
+@inject IJSRuntime js
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensajes
+@inject NavigationManager navigationManager
+@inject ErrorHandler errorHandler
+
+
+<Title Value="MarDevs - Validacion Correo"></Title>
+
+@if(string.IsNullOrWhiteSpace(emailValidado))
+{
+    <Waiting></Waiting>
+}
+else
+{
+    <div class="row">
+        <div class="col-12">
+            <h5 style="text-align: center;">Usuario validado correctamente</h5>
+            <div style="text-align: center;">
+                <p>El e-mail <b>@emailValidado</b> ha sido validado correctamente. Ya puede ingresar a la plataforma.</p>            
+            </div>
+            <div  style="margin-top:15px;">                        
+                <p style="text-align: center;"><a href="./Login"><b>Ir al Login</b></a></p>                        
+            </div>
+        </div>
+    </div>
+}
+
+
+@code{
+    string emailValidado = "";
+
+    [Parameter] public string token { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        var partes = token.Split('_');
+        if (partes.Count() != 2)
+            navigationManager.NavigateTo("./CustomNotFound");
+        else
+        {
+            var esId = int.TryParse(partes[0], out int id);
+            if(!esId)
+                navigationManager.NavigateTo("./CustomNotFound");
+            else
+            {
+
+                var modelo = new ValidarCuentaDTO
+                    {
+                        UsuarioID = id,
+                        Token = partes[1]                                
+                    };
+
+                var httpResponse = await repositorio.Post<ValidarCuentaDTO, UserValidado>($"api/cuenta/validacion-correo",modelo);
+                if (httpResponse.Error)
+                {           
+                    await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+                }
+                else
+                {            
+                    emailValidado = httpResponse.Response.Email;     
+                    StateHasChanged();                    
+                }
+            }
+        }
+
+        
+    }  
+
+
+
+}

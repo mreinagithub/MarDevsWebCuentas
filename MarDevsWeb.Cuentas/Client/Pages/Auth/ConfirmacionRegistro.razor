@@ -1,0 +1,49 @@
+﻿@layout CenterLayout
+
+@page "/confirmacionRegistro"
+
+@inject IJSRuntime js
+@inject NavigationManager navigationManager
+
+@implements IDisposable
+
+<Title Value="MarDevs - Registro"></Title>
+
+
+<div class="row">
+    <div class="col-12">
+        <h5 style="text-align: center;">Usuario registrado correctamente</h5>
+        <div style="text-align: center;">
+            <p>En instantes recibirá un correo a la casilla informada.
+               Es necesario validar la dirección de correo para poder ingresar a la plataforma.</p>
+            <p><b>Importante:</b> en caso de no recibir el correo en bandeja de entrada, recuerde revisar en su carpeta de no deseados.</p>
+        </div>
+        <div  style="margin-top:15px;">                        
+            <p style="text-align: center;"><a href="./Login"><b>Ir al Login</b></a></p>                        
+        </div>
+    </div>
+</div>
+
+@code{
+    protected override async Task OnInitializedAsync()
+    {
+        var valor = await js.GetFromSessionStorage("showConfirmScreen");
+        if(valor == null || valor != "allow")
+        {            
+            await js.RemoveFromSessionStorage("showConfirmScreen");    
+            navigationManager.NavigateTo("./Login");
+        }   
+                
+    }
+
+       
+    async void IDisposable.Dispose()
+    {
+        var valor = await js.GetFromSessionStorage("showConfirmScreen");
+        if(!string.IsNullOrWhiteSpace(valor))
+        {           
+            await js.RemoveFromSessionStorage("showConfirmScreen");
+        }        
+    }
+
+}

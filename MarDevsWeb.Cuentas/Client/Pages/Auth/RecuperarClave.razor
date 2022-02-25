@@ -1,0 +1,206 @@
+﻿@layout CenterLayout
+
+@page "/recuperar-clave"
+
+@inject IJSRuntime js
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensajes
+@inject NavigationManager navigationManager
+@inject ErrorHandler errorHandler
+
+
+<Title Value="MarDevs - Recupero Clave"></Title>
+
+
+<div class="row">
+    <div class="col-12">
+        <h5>Recuperar Clave</h5>
+        <p>Le enviaremos una clave temporal con la cual podrá restablecer la suya.</p>
+    </div>
+</div>
+
+<div id="registroUsuarioForm">
+        <EditForm Model="Model" OnValidSubmit="Actualizar" autocomplete="off">
+            <DataAnnotationsValidator /> 
+           <div class="row">                
+                <div class="col-10">                    
+                    <div class="form-group mb-1">     
+                        <label class="control-label small mb-0 font-weight-bold">Email</label>
+                        <span class="small" style="display:inline-block">
+                            <ValidationMessage For="@(() => Model.Email)" />
+                        </span> 
+                        <InputText class="form-control" @bind-Value="@Model.Email" id="txtEmailRecuperoClave" autocomplete="nope"/>                             
+                    </div>                
+                </div>                
+                <div class="col-2 pl-0" style="margin-top: 24px;">           
+                    <button class="btn btn-info" type="button" id="btnEnviarClaveRecupero" style="width: 69px;" @onclick="EnviarClaveRecupero">
+                        @if (!Enviando)                                
+                        {
+                            <Text> Enviar </Text>               
+                        }                                
+                        else                                
+                        {                                    
+                            <i class="fas fa-circle-notch fa-spin"></i>                          
+                        }
+
+                    </button>                
+                </div>  
+                 @if (!String.IsNullOrWhiteSpace(MensajeErrorEnvioMail))                
+                 {                    
+                     <p style="text-align:left;color:red;margin-left:15px;">@MensajeErrorEnvioMail</p>                
+                 }
+                 @if (!String.IsNullOrWhiteSpace(MensajeExitoEnvioMail))                
+                 {                    
+                     <p style="text-align:left;color:var(--color-primario);margin-left:15px;">@MensajeExitoEnvioMail</p>                
+                 }
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group mb-1">
+                        <label class="control-label small mb-0 font-weight-bold">Clave temporal</label>
+                        <span class="small" style="display:inline-block">
+                            <ValidationMessage For="@(() => Model.PasswordTemporal)" />
+                        </span> 
+                        <InputPassword class="form-control" @bind-Value="@Model.PasswordTemporal" id="txtPassTempId" />     
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group mb-1">
+                        <label class="control-label small mb-0 font-weight-bold">Nueva clave</label>
+                        <span class="small" style="display:inline-block">
+                            <ValidationMessage For="@(() => Model.PasswordNuevo)" />
+                        </span> 
+                        <InputPassword class="form-control" @bind-Value="@Model.PasswordNuevo" id="txtPassId" />     
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group mb-1">
+                        <label class="control-label small mb-0 font-weight-bold">Repetir clave</label>
+                        <span class="small" style="display:inline-block">
+                            <ValidationMessage For="@(() => Model.PasswordNuevoRepetido)" />
+                        </span> 
+                        <InputPassword class="form-control" @bind-Value="@Model.PasswordNuevoRepetido" id="txtPassIdRep" />     
+                    </div>
+                </div>
+            </div>           
+             @if (!String.IsNullOrWhiteSpace(MensajeErrorCambioClave))
+                {
+                    <p style="text-align:left;color:red">@MensajeErrorCambioClave</p>
+                }
+            <div class="row border-secondary mb-0" style="justify-content:space-between;">
+                <div class="col-12 order-sm-first  col-sm-4">
+                    <a type="button" class="btn btn-custom-secondary col-12 btn-sm" id="btnCancelar" style="margin-bottom:8px;"
+                            href="./Login">                     
+                        Cancelar
+                    </a>
+                </div>
+                <div class="col-12 order-first col-sm-8">
+                    <div class="form-group" style="margin-bottom:8px;">
+                        <div class="p-t-10">
+                            <button class="btn btn-custom col-12 btn-sm" id="btnRegistrarUsuario" type="submit">
+                                @if (!Actualizando)
+                                {
+                                    <Text> Restablecer clave </Text>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-circle-notch fa-spin"></i><text> Restableciendo...</text>
+                                }
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+
+    <MensajeModal @ref="modal" AlCerrarModal="CerrarYRedirigir" ModalTitle="Información" ModalBody="Clave modificada exitosamente">    
+    <ModalRenderFooter>
+        <button type="button" class="btn btn-custom" data-dismiss="modal" id="btnAceptarModal" @onclick="CerrarYRedirigir">Aceptar</button>
+    </ModalRenderFooter>
+</MensajeModal>
+
+
+@code{
+
+    private UserRecuperarClave Model { get; set; }  = new UserRecuperarClave();         
+    bool Actualizando = false;
+    bool Enviando = false;
+    private string MensajeExitoEnvioMail = "";    
+    private string MensajeErrorEnvioMail = "";    
+    private string MensajeErrorCambioClave = "";   
+    private MensajeModal modal { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        string email = await js.GetFromSessionStorage("emailRecuClave");
+        Model.Email = email;
+
+        await js.RemoveFromSessionStorage("emailRecuClave");
+
+        if(!string.IsNullOrWhiteSpace(Model.Email))
+            await js.Focus("btnEnviarClaveRecupero");
+        else
+            await js.Focus("txtEmailRecuperoClave");
+
+    }
+
+    async Task EnviarClaveRecupero()
+    {
+        MensajeErrorEnvioMail = "";
+        MensajeExitoEnvioMail = "";                
+
+        if(string.IsNullOrWhiteSpace(Model.Email))
+        {
+            return;
+        }
+
+
+        Enviando = true;       
+
+
+        var httpResponse = await repositorio.Post<string>("api/cuenta/enviar-correo-recupero",Model.Email);
+        if (httpResponse.Error)
+        {
+            Enviando = false;
+            MensajeErrorEnvioMail = await httpResponse.GetBody();
+        }
+        else
+        {         
+            MensajeExitoEnvioMail = "El correo ha sido enviado, revise su casilla.";
+        }
+        Enviando = false;
+
+    }
+
+    async Task Actualizar()
+    {
+        MensajeErrorCambioClave = "";
+        Actualizando = true;
+        var httpResponse = await repositorio.Post<UserRecuperarClave>("api/cuenta/recuperar-clave", Model);
+        if (httpResponse.Error)
+        {
+            Actualizando = false;
+            MensajeErrorCambioClave = await httpResponse.GetBody();
+        }
+        else
+        {
+            modal.Open();
+            await js.Focus("btnAceptarModal"); 
+        }
+        Actualizando = false;
+    }
+
+     private void CerrarYRedirigir()
+    {
+        modal.Close();
+        navigationManager.NavigateTo("./Login");
+    }
+
+
+}

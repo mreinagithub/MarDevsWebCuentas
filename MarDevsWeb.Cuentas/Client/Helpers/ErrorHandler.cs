@@ -19,13 +19,40 @@ namespace MarDevsWeb.Cuentas.Client.Helpers
 
 
         public int StatusCode { get; set; }
-        public string Message { get; set; }
+        public string Message { get; set; }        
 
         public async Task MostrarError(HttpResponseMessage httpResponseMessage)
         {
             StatusCode = (int)httpResponseMessage.StatusCode;
-            Message = await httpResponseMessage.Content.ReadAsStringAsync();            
-            navigationManager.NavigateTo("./error");
+
+            if(StatusCode == 401)
+            {
+                ManejarUsuarioNoAutorizado();
+            }
+            else
+            {
+                Message = await httpResponseMessage.Content.ReadAsStringAsync();                
+                navigationManager.NavigateTo("./error");
+            }         
+        }
+        public void MostrarError(int statusCode, string mensaje)
+        {
+            StatusCode = statusCode;
+
+            if (StatusCode == 401)
+            {
+                ManejarUsuarioNoAutorizado();
+            }
+            else
+            {
+                Message = mensaje;                
+                navigationManager.NavigateTo("./error");
+            }
+        }
+        public void ManejarUsuarioNoAutorizado()
+        {
+            Message = "Parece que no tiene permisos para acceder a este sitio. Su sesión ha expirado";
+            navigationManager.NavigateTo("./no-autoirzado");
         }
     }
 }

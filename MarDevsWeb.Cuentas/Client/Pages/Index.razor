@@ -1,6 +1,13 @@
 ﻿@inject IRepositorio repositorio
 @inject NavigationManager navigationManager
 @inject ErrorHandler errorHandler
+@inject AuthenticationStateProvider authProvider
+@inject IJSRuntime js
+@inject ILoginService loginService
+
+@using System.Globalization
+@using MarDevsWeb.Cuentas.Client.Auth
+
 
 @page "/"
 
@@ -9,60 +16,92 @@
 
 <Title Value="MarDevs Cuentas - Inicio"></Title>
 
+@if (!string.IsNullOrWhiteSpace(NombrePila))
+{
+    <h4 style="margin-left: 10px;">Hola @NombrePila!</h4>
+
+}
 
 <div class="row">
-    <div class="col-12 pb-2">
-        <img src="./Imagenes/Cliente/BannerModuloPedidos.png" alt="Banner Modulo Pedidos" class="img-fluid" />
-    </div>
-</div>
-
-@*<div class="row">
     <div class="col-12 col-md-6 contenedor-imagen-izquierda">
-        <a href="CargaPedido1">
-            @if (TienePedidosEnBorrador == null)
-            {
-                <div style="text-align:center;">
-                    <span style="color: #003670; justify-content:space-evenly; font-size:30px; padding-top:30px; padding-bottom:30px;" class="img-fluid img-vertical"><i class="fas fa-circle-notch fa-spin fa-lg"></i></span>
-                    <span style="color: #003670; justify-content:space-evenly; font-size:30px; padding-top:30px; padding-bottom:30px;" class="img-fluid img-horizonal"><i class="fas fa-circle-notch fa-spin fa-lg"></i></span>
-                </div>
-
-            }
-            else if (@TienePedidosEnBorrador.Value == true) //Tiene pedido en borrador
-            {
-                <img id="imgPedidoHome" src="./Imagenes/Cliente/CONTINUA_TU_PEDIDO_VERTICAL.jpg" alt="Tu Pedido" class="img-fluid imagen-seleccionable img-vertical" />
-                <img id="imgPedidoHome" src="./Imagenes/Cliente/CONTINUA_TU_PEDIDO_HORIZONTAL.png" alt="Tu Pedido" class="img-fluid imagen-seleccionable img-horizonal" />
-            }
-            else
-            {
-                <img id="imgPedidoHome" src="./Imagenes/Cliente/HACE_TU_PEDIDO_VERTICAL.jpg" alt="Tu Pedido" class="img-fluid imagen-seleccionable img-vertical" />
-                <img id="imgPedidoHome" src="./Imagenes/Cliente/HACE_TU_PEDIDO_HORIZONTAL.jpg" alt="Tu Pedido" class="img-fluid imagen-seleccionable img-horizonal" />
-            }
+        <a href="Gasto" class="imagen-seleccionable img-vertical" id="agregarGastoId" style="text-decoration:none !important; color:black;">
+            <Tarjeta Titulo="Agregar Gasto" TextoLinea1="Carga rápida de gasto.">
+                <RenderIcono>
+                    <i class="fas fa-plus mr-2"></i>
+                </RenderIcono>
+            </Tarjeta>
+        </a>
+         <a href="Gasto" class="imagen-seleccionable img-horizonal" id="agregarGastoId" style="text-decoration:none !important; color:black;">
+            <Tarjeta Titulo="Agregar Gasto" TextoLinea1="Carga rápida de gasto.">
+                <RenderIcono>
+                    <i class="fas fa-plus mr-2"></i>
+                </RenderIcono>
+            </Tarjeta>
         </a>
     </div>
     <div class="col-12 col-md-6 contenedor-imagen-derecha">
-        <a href="MisPedidos">
-            <img src="./Imagenes/Cliente/VER_TUS_PEDIDOS_VERTICAL.jpg" alt="Ver tus Pedidos" class="img-fluid imagen-seleccionable img-vertical" />
-            <img src="./Imagenes/Cliente/VER_TUS_PEDIDOS_HORIZONTAL.jpg" alt="Ver tus Pedidos" class="img-fluid imagen-seleccionable img-horizonal" />
-        </a>
+
+        @if(Model == null)
+        {
+               <div style="text-align:center;">
+                    <span style="color: var(--color-primario); justify-content:space-evenly; font-size:30px; padding-top:30px; padding-bottom:30px;" class="img-fluid img-vertical"><i class="fas fa-circle-notch fa-spin fa-lg"></i></span>
+                    <span style="color: var(--color-primario); justify-content:space-evenly; font-size:30px; padding-top:30px; padding-bottom:30px;" class="img-fluid img-horizonal"><i class="fas fa-circle-notch fa-spin fa-lg"></i></span>
+                </div>
+        }
+        else
+        {            
+             <a href="MisGastos" class="imagen-seleccionable img-vertical" id="resumenGastosId" style="text-decoration:none !important; color:black;">
+                 <Tarjeta Titulo="Gastos a la fecha" TextoLinea1="@textoGastosLinea1" TextoLinea2="@textoGastosLinea2">
+                    <RenderIcono>
+                        <i class="fas fa-comment-dollar mr-2"></i>
+                    </RenderIcono>
+                </Tarjeta>          
+            </a>
+             <a href="MisGastos" class="imagen-seleccionable img-horizonal" id="resumenGastosId" style="text-decoration:none !important; color:black;">
+                <Tarjeta Titulo="Gastos a la fecha" TextoLinea1="@textoGastosLinea1" TextoLinea2="@textoGastosLinea2">
+                    <RenderIcono>
+                        <i class="fas fa-comment-dollar mr-2"></i>
+                    </RenderIcono>
+                </Tarjeta>          
+            </a>       
+        }
     </div>
-</div>*@
+</div> 
+
 
 
 @code{
+    string NombrePila { get; set; }
+    protected ResumenHomeDTO Model { get; set; } = null;
+    public EditarGastoDTO EditarGasto { get; set; }
 
-    //private bool? TienePedidosEnBorrador { get; set; } = null;
 
-    //protected async override Task OnInitializedAsync()
-    //{
-    //    //var httpReponse = await repositorio.Get<bool>("api/pedidos/tienePedidoBorrador");
-    //    //if (httpReponse.Error)
-    //    //{
-    //    //    await errorHandler.MostrarError(httpReponse.HttpResponseMessage);
-    //    //}
-    //    //else
-    //    //{
-    //    //    TienePedidosEnBorrador = httpReponse.Response;
-    //    //}
-    //}
+    private string textoGastosLinea1 = "";
+    private string textoGastosLinea2 = "";
+
+    protected async override Task OnInitializedAsync()
+    {        
+        NombrePila = await loginService.ObtenerNombrePilaUsuario();        
+
+        await Actualizar();
+    }
+
+    async Task Actualizar()
+    {
+        var httpReponse = await repositorio.Get<ResumenHomeDTO>("api/gasto/resumenHome");
+        if (httpReponse.Error)
+        {
+            await errorHandler.MostrarError(httpReponse.HttpResponseMessage);
+        }
+        else
+        {
+           
+
+            Model = httpReponse.Response;
+            textoGastosLinea1 = $"Desde {Model.FechaDesde:dd/MM/yyyy}";
+            textoGastosLinea2 = $"Total Gastos: {Model.TotalGastos:C2}";
+
+        }
+    }
 
 }

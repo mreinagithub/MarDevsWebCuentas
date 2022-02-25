@@ -13,6 +13,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Serilog.Core;
 using Serilog;
+using System.Globalization;
+
 
 namespace MarDevsWeb.Cuentas.Client
 {
@@ -24,13 +26,16 @@ namespace MarDevsWeb.Cuentas.Client
             ConfigureSerilog();
 
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
-            builder.RootComponents.Add<App>("#app");
+            builder.RootComponents.Add<App>("#app");        
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            ConfigureServices(builder);            
 
-            ConfigureServices(builder.Services);
 
-            
+            CultureInfo culture = new CultureInfo("es-AR");
+            CultureInfo.DefaultThreadCurrentCulture = culture;
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
+            CultureInfo.CurrentCulture = culture;
+            CultureInfo.CurrentUICulture = culture;
 
             await builder.Build().RunAsync();
         }
@@ -47,11 +52,36 @@ namespace MarDevsWeb.Cuentas.Client
             Log.Information("Hola, Blazor Cli!");
         }
 
-        private static void ConfigureServices(IServiceCollection services)
+        private static void ConfigureServices(WebAssemblyHostBuilder builder)
         {
-            services.AddOptions();
-            services.AddScoped<IRepositorio, Repositorio>();            
+
+            IServiceCollection services = builder.Services;
+
+            //services.AddScoped(sc =>
+            //{
+            //    var logService = sc.GetRequiredService<ProveedorAuthenticacionJWT>();
+
+            //    return new RenovadorTokenHandler()
+            //    {
+            //        InnerHandler = new HttpClientHandler()
+            //    };
+            //});
+            services.AddScoped(sp =>
+            {
+                var handler = sp.GetRequiredService<RenovadorTokenHandler>();
+
+                return new HttpClient(handler)
+                {
+                    BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+                };
+            });
+
+            services.AddScoped(sp => new HttpClient() { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
+
+            services.AddOptions();            
             services.AddScoped<IMostrarMensajes, MostrarMensajes>();
+            services.AddScoped<IRepositorio, Repositorio>();
             services.AddAuthorizationCore();
             //Creamos una instancia del proveedor
             services.AddScoped<ProveedorAuthenticacionJWT>();
@@ -60,12 +90,36 @@ namespace MarDevsWeb.Cuentas.Client
             services.AddScoped<AuthenticationStateProvider, ProveedorAuthenticacionJWT>(
                 provider => provider.GetRequiredService<ProveedorAuthenticacionJWT>());
             services.AddScoped<ILoginService, ProveedorAuthenticacionJWT>(
-                provider => provider.GetRequiredService<ProveedorAuthenticacionJWT>());
-
-            services.AddScoped<RenovadorToken>();
+                provider => provider.GetRequiredService<ProveedorAuthenticacionJWT>());                   
 
             //Para almacenar información del error a mostrar
             services.AddScoped<ErrorHandler>();
+
+            services.AddScoped<RenovadorTokenHandler>();            
+           
+           
+            services.AddScoped(sp =>
+            {
+                var handler = sp.GetRequiredService<RenovadorTokenHandler>();
+                handler.EndpointsIgnorados.Add("/api/cuenta/RefreshToken");
+                handler.EndpointsIgnorados.Add("/api/cuenta/enviar-correo-recupero");
+                handler.EndpointsIgnorados.Add("/api/cuenta/recuperar-clave");
+                handler.EndpointsIgnorados.Add("/api/cuenta/registrar");
+                handler.EndpointsIgnorados.Add("/api/cuenta/login");
+                handler.EndpointsIgnorados.Add("/api/cuenta/validacion-correo");
+
+
+                return new HttpClient(handler)
+                {
+                    BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+                };
+            });
+
+            
+
+
+
+
         }
     }
 }

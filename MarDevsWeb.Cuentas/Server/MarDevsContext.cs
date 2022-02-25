@@ -18,6 +18,8 @@ namespace MarDevsWeb.Cuentas.Server
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
+            modelBuilder.Entity<UsuarioValidacion>()
+                .HasKey("UsuarioID", "TokenValidacion");
           
 
         }
@@ -25,8 +27,13 @@ namespace MarDevsWeb.Cuentas.Server
         //Seguridad        
         public DbSet<Usuario> Usuario { get; set; }
         public DbSet<FlagsSeguridad> FlagsSeguridad { get; set; }
+        public DbSet<UsuarioValidacion> UsuarioValidacion { get; set; }
 
-       
+        //Negocio
+        public DbSet<Periodo> Periodo { get; set; }
+        public DbSet<FlagsCuentas> FlagsCuentas { get; set; }
+        public DbSet<Concepto> Concepto { get; set; }
+        public DbSet<Gasto> Gasto { get; set; }
 
 
     }   

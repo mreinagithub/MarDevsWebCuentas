@@ -28,6 +28,14 @@ namespace MarDevsWeb.Cuentas.Client.Helpers
 
         public static ValueTask<object> RemoveFromLocalStorage(this IJSRuntime js, string key)
             => js.InvokeAsync<object>("localStorage.removeItem", key);
+        public static ValueTask<object> SetInSessionStorage(this IJSRuntime js, string key, string content)
+           => js.InvokeAsync<object>("sessionStorage.setItem", key, content);
+
+        public static ValueTask<string> GetFromSessionStorage(this IJSRuntime js, string key)
+            => js.InvokeAsync<string>("sessionStorage.getItem", key);
+
+        public static ValueTask<object> RemoveFromSessionStorage(this IJSRuntime js, string key)
+            => js.InvokeAsync<object>("sessionStorage.removeItem", key);
 
         public static async ValueTask Focus(this IJSRuntime js, string elementId)
             => await js.InvokeVoidAsync("focusElement", elementId);
@@ -43,6 +51,9 @@ namespace MarDevsWeb.Cuentas.Client.Helpers
 
         public static async ValueTask ActualizarValorBootstrapSelect(this IJSRuntime js, string elementId, string valor)
           => await js.InvokeVoidAsync("actualizarValorBootstrapSelect", elementId, valor);
+
+        public static async ValueTask SeleccionarValorSelectItem(this IJSRuntime js, string elementId, string valor)
+        => await js.InvokeVoidAsync("seleccionarSelectItem", elementId, valor);
 
     }
 }

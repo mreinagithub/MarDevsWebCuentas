@@ -17,14 +17,21 @@ H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuenta
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\MarDevsWeb.Cuentas.Server.pdb
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\MailKit.dll
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.AspNetCore.Authorization.dll
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.AspNetCore.Components.dll
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.AspNetCore.Components.Authorization.dll
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.AspNetCore.Components.Forms.dll
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.AspNetCore.Components.Web.dll
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.AspNetCore.Components.Web.Extensions.dll
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.AspNetCore.Components.WebAssembly.dll
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.AspNetCore.Components.WebAssembly.Server.dll
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.AspNetCore.Metadata.dll
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.Data.SqlClient.dll
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.dll
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Abstractions.dll
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Relational.dll
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.SqlServer.dll
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.Extensions.Caching.Memory.dll
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.Extensions.DependencyModel.dll
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.Identity.Client.dll
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
@@ -32,6 +39,7 @@ H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuenta
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.JSInterop.dll
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.JSInterop.WebAssembly.dll
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\MimeKit.dll
@@ -54,6 +62,7 @@ H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuenta
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\System.Configuration.ConfigurationManager.dll
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\System.Drawing.Common.dll
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\System.IO.Pipelines.dll
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\System.Runtime.Caching.dll
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\System.Security.Cryptography.ProtectedData.dll
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Server\bin\Debug\net6.0\System.Security.Permissions.dll

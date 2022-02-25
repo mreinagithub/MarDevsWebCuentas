@@ -1,0 +1,21 @@
+﻿@inject NavigationManager navigationManager
+@inject IJSRuntime js
+
+<tr>
+    <td> @ConceptoDTO.Descripcion</td>   
+    <td><a class="btn btn-custom-secondary btn-sm" href="javascript:void(0)" @onclick="EditarConcepto">Editar</a>
+        <a class="btn btn-danger btn-sm" href="javascript:void(0)" @onclick="(() => EliminarConcepto.InvokeAsync(ConceptoDTO))">Eliminar</a></td>
+</tr>
+
+
+@code{
+
+    [Parameter] public ConceptoDTO ConceptoDTO { get; set; }
+    [Parameter] public EventCallback<ConceptoDTO> EliminarConcepto { get; set; }
+
+    private void EditarConcepto()
+    {       
+        navigationManager.NavigateTo($"./concepto/{ConceptoDTO.Id}");
+    }
+    
+}

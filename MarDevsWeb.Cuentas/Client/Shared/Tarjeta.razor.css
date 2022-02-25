@@ -1,0 +1,8 @@
+﻿.card-extras {
+    width: 100%;
+    height: 10rem;
+}
+
+.card-extras-title {
+    color: var(--color-primario);
+}

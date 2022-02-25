@@ -1,0 +1,23 @@
+﻿@inject NavigationManager navigationManager
+@inject IJSRuntime js
+
+<tr>
+    <td> @($"{@PeriodoDTO.Desde:dd/MM/yyyy}")</td>
+    <td>@($"{@PeriodoDTO.Hasta:dd/MM/yyyy}")</td>
+    <td>@PeriodoDTO.Dias.ToString()</td>
+    <td><a class="btn btn-custom-secondary btn-sm" href="javascript:void(0)" @onclick="EditarPeriodo">Editar</a>
+        <a class="btn btn-danger btn-sm" href="javascript:void(0)" @onclick="(() => EliminarPeriodo.InvokeAsync(PeriodoDTO.Id))">Eliminar</a></td>
+</tr>
+
+
+@code{
+
+    [Parameter] public PeriodoDTO PeriodoDTO { get; set; }
+    [Parameter] public EventCallback<Guid> EliminarPeriodo { get; set; }
+
+    private void EditarPeriodo()
+    {       
+        navigationManager.NavigateTo($"./periodo/{PeriodoDTO.Id}");
+    }
+    
+}

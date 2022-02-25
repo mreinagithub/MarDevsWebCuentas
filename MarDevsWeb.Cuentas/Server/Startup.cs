@@ -1,7 +1,9 @@
+using MarDevsWeb.Cuentas.Server.Servicios;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -10,6 +12,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -33,8 +37,8 @@ namespace MarDevsWeb.Cuentas.Server
             services.AddRazorPages();
 
             string connString = Configuration.GetConnectionString("MarDevsContext");
-            connString = connString.Replace("[USUARIO]", "sa");
-            connString = connString.Replace("[PASSWORD]", "issues");
+            connString = connString.Replace("[USUARIO]", "mardev");
+            connString = connString.Replace("[PASSWORD]", "mDev@1686");
 
             services.AddDbContext<MarDevsContext>(options =>
              options.UseSqlServer(connString));
@@ -51,11 +55,20 @@ namespace MarDevsWeb.Cuentas.Server
                      Encoding.UTF8.GetBytes(Configuration["jwt:key"])),
                  ClockSkew = TimeSpan.Zero
              });
+
+            services.AddScoped<IMailService, MailService>();
+
+            services.AddHttpContextAccessor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //env.EnvironmentName = "Production";
+
+            //app.UseDeveloperExceptionPage();
+            //app.UseWebAssemblyDebugging();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -70,13 +83,25 @@ namespace MarDevsWeb.Cuentas.Server
 
             app.UseHttpsRedirection();
             app.UseBlazorFrameworkFiles();
-            app.UseStaticFiles();
+            app.UseStaticFiles();          
+
+            //Harcodear información cultural a la  es-AR
+            var defaultCulture = new CultureInfo("es-AR");
+            app.UseRequestLocalization(opt =>
+            {
+                opt.DefaultRequestCulture = new RequestCulture(defaultCulture);
+                opt.SupportedCultures = new List<CultureInfo> { defaultCulture };
+                opt.SupportedUICultures = new List<CultureInfo> { defaultCulture };
+            });
+
 
             app.UseSerilogIngestion();
 
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+
+            //app.UsePathBase("/Cuentas");
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "MarDevsWeb.Cuentas.Shared/1.0.0": {
+        "runtime": {
+          "MarDevsWeb.Cuentas.Shared.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "MarDevsWeb.Cuentas.Shared/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

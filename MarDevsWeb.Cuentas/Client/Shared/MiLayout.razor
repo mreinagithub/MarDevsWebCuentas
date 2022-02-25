@@ -1,6 +1,6 @@
 ﻿@inherits LayoutComponentBase
 
-@inject MarDevsWeb.Cuentas.Client.Auth.RenovadorToken renovadorToken
+@*@inject MarDevsWeb.Cuentas.Client.Auth.RenovadorToken renovadorToken*@
 @inject IJSRuntime js
 @inject NavigationManager navigationManager
 
@@ -44,21 +44,21 @@
     protected override async Task OnInitializedAsync()
     {
 
-        await js.InicializarTimerInactivo(DotNetObjectReference.Create(this)); //Timer en javascript que si no detecta actividad por 10 minutos, revoca el token.
-        renovadorToken.Iniciar(); //Timer que corre cada 4 minutos para verificar y renovar el token si corresponde.
+        //await js.InicializarTimerInactivo(DotNetObjectReference.Create(this)); //Timer en javascript que si no detecta actividad por 10 minutos, revoca el token.
+        //renovadorToken.Iniciar(); //Timer que corre cada 4 minutos para verificar y renovar el token si corresponde.
 
         CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("es-AR");
     }
 
-    [JSInvokable]
-    public async Task Logout() //Método que se invoca desde javascript (por eso el atributo invokable) si no hay actividad.
-    {
-        var authState = await AuthenticationState;
-        if (authState.User.Identity.IsAuthenticated)
-        {
-            navigationManager.NavigateTo("./logout");
-        }
-    }
+    //[JSInvokable]
+    //public async Task Logout() //Método que se invoca desde javascript (por eso el atributo invokable) si no hay actividad.
+    //{
+    //    var authState = await AuthenticationState;
+    //    if (authState.User.Identity.IsAuthenticated)
+    //    {
+    //        navigationManager.NavigateTo("./logout");
+    //    }
+    //}
 
   
 

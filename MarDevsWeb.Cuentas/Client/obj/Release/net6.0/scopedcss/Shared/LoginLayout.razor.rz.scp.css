@@ -1,0 +1,33 @@
+
+html[b-22762qgih6],
+body[b-22762qgih6] {
+    height: 100%;
+}
+
+
+body[b-22762qgih6] {
+    display: block;
+    -ms-flex-align: center;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: var(--fondo) !important;
+}
+
+.container[b-22762qgih6] {
+    margin-top: 100px;
+}
+
+@media (max-height:498px) {
+    .container[b-22762qgih6] {
+        margin-top: 30px;
+    }
+}
+
+@media (max-height:405px) {
+    .container[b-22762qgih6] {
+        margin-top: 0px !important;
+    }
+}
+
+

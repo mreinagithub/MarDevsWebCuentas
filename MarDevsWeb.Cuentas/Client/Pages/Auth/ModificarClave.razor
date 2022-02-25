@@ -18,26 +18,22 @@
 
 <div class="row">
     <div class="col-12  col-sm-10 col-md-6 col-xl-6">
-        <div class="row">
-            <h5 class="col-4">Usuario:</h5>
-            <h5 class="col-8">@NombreAMostrar</h5>
+        <div class="row">            
+            <h5 class="col-12">@NombreAMostrar</h5>
         </div>
         <div id="formModifClave">
             <EditForm Model="userModificarClave" OnValidSubmit="ModificarClaveUsuario" autocomplete="off">
                 <DataAnnotationsValidator />
-                <div class="form-group">
-                    <label class="control-label">Clave actual</label>
-                    <InputPassword class="form-control" @bind-Value="@userModificarClave.PasswordActual" id="inputPasswordId"/>
+                <div class="form-group">                    
+                    <InputPassword class="form-control" @bind-Value="@userModificarClave.PasswordActual" id="inputPasswordId" placeholder="Ingrese clave actual..."/>
                     <ValidationMessage For="@(()=> userModificarClave.PasswordActual)" />
                 </div>
-                <div class="form-group">
-                    <label class="control-label">Clave nueva</label>
-                    <InputPassword class="form-control" @bind-Value="@userModificarClave.PasswordNuevo" />
+                <div class="form-group">                    
+                    <InputPassword class="form-control" @bind-Value="@userModificarClave.PasswordNuevo" placeholder="Ingrese nueva clave..."/>
                     <ValidationMessage For="@(()=> userModificarClave.PasswordNuevo)" />
                 </div>
-                <div class="form-group">
-                    <label class="control-label">Repetir clave nueva</label>
-                    <InputPassword class="form-control" @bind-Value="@userModificarClave.PasswordNuevoRepetido" />
+                <div class="form-group">                    
+                    <InputPassword class="form-control" @bind-Value="@userModificarClave.PasswordNuevoRepetido" placeholder="Repetir nueva clave..." />
                     <ValidationMessage For="@(()=> userModificarClave.PasswordNuevoRepetido)" />
                 </div>
                 @if (!String.IsNullOrWhiteSpace(MensajeErrorModificacionClave))

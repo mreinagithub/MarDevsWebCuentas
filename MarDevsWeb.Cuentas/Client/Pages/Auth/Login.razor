@@ -6,6 +6,7 @@
 @inject NavigationManager navigationManager
 @inject ILoginService loginService
 @inject IMostrarMensajes mostrarMensajes
+@inject IJSRuntime js
 
 @using MarDevsWeb.Cuentas.Client.Auth
 
@@ -15,22 +16,22 @@
 
 <EditForm Model="userInfo" OnValidSubmit="LoginUsuario" autocomplete="off">
     <div class="form-signin">
-        <span style="text-align:match-parent" class="form-logo">
-            <img src="./Imagenes/logo-aromitalia.png" alt="Aromitalia logo" />
+        <span style="text-align:match-parent;" class="form-logo">
+            <img src="./Imagenes/MarDevsCuentasBgTransparentHD.png" alt="MarDevs logo" />
         </span>
         <DataAnnotationsValidator />
         <div class="row p-b-30">
             <div class="col-12">
                 <div class="form-group  mb-3">
-                    <InputTexto class="form-control" @bind-Value="@userInfo.Logon" />
-                    <ValidationMessage For="@(()=> userInfo.Logon)" />
+                    <InputTexto class="form-control" @bind-Value="@userInfo.Email" id="txtLogonId" placeholder="Email"/>
+                    <ValidationMessage For="@(()=> userInfo.Email)" />
                 </div>
             </div>
         </div>
         <div class="row p-b-30">
             <div class="col-12">
                 <div class="form-group  mb-3">
-                    <InputPassword class="form-control" @bind-Value="@userInfo.Password" />
+                    <InputPassword class="form-control" @bind-Value="@userInfo.Password" id="txtPassId" placeholder="Clave" />                    
                     <ValidationMessage For="@(()=> userInfo.Password)" />
                 </div>
             </div>
@@ -49,7 +50,10 @@
                 <i class="fas fa-circle-notch fa-spin"></i><text> Autenticando...</text>
             }
         </button>
-        @*<p class="small" style="text-align:left;padding-top:10px;">Ingrese los 11 números del CUIT sin guiones.</p>*@
+        <div  style="margin-top:15px;">                        
+            <p><a href="javascript:void(0)" @onclick="RecuperarClave"><b>¿Olvidaste tu clave?</b></a></p>            
+            <p><a href="./registro"><b>¿Sos Nuevo? Registrate acá...</b></a></p>
+        </div>
     </div>
 </EditForm>
 
@@ -59,6 +63,21 @@
     private UserInfo userInfo = new UserInfo();
     private bool Autenticando { get; set; } = false;
     private string MensajeErrorAutenticacion = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var ultusrlog = await loginService.ObtenerUltimoUsuarioLogueado();
+
+        if(!string.IsNullOrWhiteSpace(ultusrlog))
+        {
+            userInfo.Email = ultusrlog;
+            await js.Focus("txtPassId");
+        }
+        else
+        {
+            await js.Focus("txtLogonId");
+        }
+    }
 
     private async Task LoginUsuario()
     {
@@ -77,6 +96,14 @@
             await loginService.Login(httpReponse.Response);
             navigationManager.NavigateTo("./");
         }
+
+    }
+
+    private async Task RecuperarClave()
+    {
+
+        await js.SetInSessionStorage("emailRecuClave", userInfo.Email);
+        navigationManager.NavigateTo("./recuperar-clave");
 
     }
 

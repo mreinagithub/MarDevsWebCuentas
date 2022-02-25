@@ -1,0 +1,236 @@
+﻿@page "/MisGastos"
+
+
+@inject IJSRuntime js
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensajes
+@inject NavigationManager navigationManager
+@inject ErrorHandler errorHandler
+
+
+
+@attribute [Authorize]
+
+
+<Title Value="MarDevs - Mis Gastos"></Title>
+
+
+<div class="row">
+    <div class="col-6">
+        <h5>Mis Gastos</h5>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-4 col-lg-4 col-4 col-sm-4">
+        <p>@textoFiltro</p>
+    </div>
+    <div class="col-xl-4 col-lg-4 col-4 col-sm-4">
+        <a href="javascript:void(0);" @onclick="AbrirModalSelectorFecha"><b>Modificar fechas</b></a>
+    </div>
+    <div class="col-xl-4 col-lg-4 col-4 col-sm-4">
+        <p class="float-right" style="color:#28a745; font-weight:bold;">@($"{importeTtlMostrado:C2}")</p>
+    </div>
+</div>
+
+<BuscadorTexto @bind-TextoBusqueda="textoBusqueda" Buscar="Actualizar" placeholder="Concepto, Observaciones..." id="txtBusqueda"></BuscadorTexto>
+
+<div class="row">
+    <div class="col-12">
+        <label class="infoRegistrosEncontrados">Registros: @cantidadRegistros</label>
+    </div>
+</div>
+
+<button @onclick="ScrollTop" id="btnScrollTop" title="Ir arriba"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
+
+@if (PreviewGastos == null)
+{
+    <Waiting></Waiting>
+}
+else
+{
+    <div class="">
+        <table class="table table-sm" id="tablaVerGastos">
+            <tbody>
+
+                @foreach (var GastoPreview in PreviewGastos)
+                {
+                    <MiGastoItem GastoPreview="GastoPreview" />
+
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <ModalModificarFechas @bind-FechaDesde="fechaDesde" @bind-FechaHasta="fechaHasta"                
+                OtrosPeriodos = "otrosPeriodos"
+                ProcesarCambioFecha="ProcesarCambioDeFecha"
+                RestablecerFechasDefault ="RestablecerFechasDefault"
+                AlCancelarCambioFecha="CerrarModalSelectorFecha" >
+            </ModalModificarFechas>
+}
+
+@code{
+
+    public List<GastoDTO> PreviewGastos { get; set; }
+    IJSObjectReference modulo;
+    int cantidadRegistros = 0;
+    Dictionary<string, string> queryStringDict = new Dictionary<string, string>();    
+    string textoBusqueda = "";
+    DateTime? fechaDesde = null;
+    DateTime? fechaHasta = null;
+    List<PeriodoDTO> otrosPeriodos = null;    
+    string textoFiltro = "";
+    decimal importeTtlMostrado = 0;
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        modulo = await js.InvokeAsync<IJSObjectReference>("import", "./js/MisGastos.js");
+
+        var url = navigationManager.Uri;
+
+        var queries = navigationManager.ObtenerQueryStrings(url);     
+
+        if (queries == null)
+        {
+            await ArmarQueryDefault();
+            ArmarTextoFiltro();
+            await Actualizar();
+        }
+        else
+        {
+            queryStringDict = queries;
+            LlenarCampos();
+            var queryStrings = url.Split(new string[] { "?" }, StringSplitOptions.None)[1];
+            await BuscarRegistros(queryStrings);           
+        }      
+
+        //await js.Focus("txtBusqueda");
+    }
+
+
+    private async Task Actualizar()
+    {
+        var queryStrings = GenerarQueryString();
+        navigationManager.NavigateTo("./MisGastos?" + queryStrings);
+        await BuscarRegistros(queryStrings);
+    }
+    private void LlenarCampos()
+    {     
+        if (queryStringDict.ContainsKey("textoBuscar"))
+        {
+            textoBusqueda = queryStringDict["textoBuscar"];           
+        }
+        if(queryStringDict.ContainsKey("fechaDesde"))
+        {
+            fechaDesde = DateTime.Parse(queryStringDict["fechaDesde"]);            
+
+        }
+        if(queryStringDict.ContainsKey("fechaHasta"))
+        {
+            fechaHasta = DateTime.Parse(queryStringDict["fechaHasta"]);                        
+        }
+        ArmarTextoFiltro();
+
+    }
+    private string GenerarQueryString()
+    {
+        if (queryStringDict == null) { queryStringDict = new Dictionary<string, string>(); }     
+        queryStringDict["textoBuscar"] = textoBusqueda;
+        queryStringDict["fechaDesde"] = $"{fechaDesde:yyyy-MM-dd}";
+        queryStringDict["fechaHasta"] = $"{fechaHasta:yyyy-MM-dd}";
+
+        var valoresPorDefecto = new List<string>() { "" };
+
+        return string.Join("&", queryStringDict
+            .Where(x => !valoresPorDefecto.Contains(x.Value.ToLower()))
+            .Select(x => $"{x.Key}={System.Web.HttpUtility.UrlEncode(x.Value)}").ToArray());
+
+
+    }
+    private async Task BuscarRegistros(string queryStrings)
+    {
+        var httpResponse = await repositorio.Get<List<GastoDTO>>("api/gasto/buscar?" + queryStrings);
+        if (httpResponse.Error)
+        {
+            await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+        }
+        else
+        {
+            PreviewGastos = httpResponse.Response;
+            cantidadRegistros = PreviewGastos.Count();
+            importeTtlMostrado = PreviewGastos.Sum(g => g.Importe);
+        }
+    }
+    private async Task ScrollTop()
+    {
+        if (modulo != null)
+        {
+            await modulo.InvokeVoidAsync("ScrollTop");
+        }
+    }  
+
+    private async Task ArmarQueryDefault()
+    {
+        var httpResponse = await repositorio.Get<DateTime>("api/gasto/obtenerFechaActual");
+        if (httpResponse.Error)
+        {
+            await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+        }
+        else
+        {
+            fechaDesde = httpResponse.Response.Date;            
+            if (fechaDesde.Value.Date > DateTime.Now.Date)
+                fechaHasta = fechaDesde;
+            else
+            {
+                fechaHasta = DateTime.Now.Date;
+            }
+        }
+    }
+    private void ArmarTextoFiltro()
+    {
+        textoFiltro = "";
+        if(fechaDesde != null)
+        {
+            textoFiltro = $"{fechaDesde:dd/MM/yyyy}";
+        }
+        if(fechaHasta != null)
+        {
+            textoFiltro += $" a {fechaHasta:dd/MM/yyyy}";
+        }
+    }
+
+    async Task AbrirModalSelectorFecha()
+    {   
+        //Refresco la lista de periodos
+        var httpResponse = await repositorio.Get<List<PeriodoDTO>>("api/periodo/buscar");
+        if (httpResponse.Error)
+        {
+            await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+        }
+        else
+        {
+            otrosPeriodos = httpResponse.Response;            
+        }
+        await js.SeleccionarValorSelectItem("lstPeriodosElegibles", "default");        
+        await js.MostrarModal("modarModificarFechasBusqueda");
+    }    
+    async Task RestablecerFechasDefault()
+    {
+        await ArmarQueryDefault();
+        await ProcesarCambioDeFecha();            
+    }
+    async Task ProcesarCambioDeFecha()
+    {
+        await CerrarModalSelectorFecha();
+        ArmarTextoFiltro();
+        await Actualizar();
+    }
+    async Task CerrarModalSelectorFecha()
+    {
+        await js.OcultarModal("modarModificarFechasBusqueda");
+    }
+
+}

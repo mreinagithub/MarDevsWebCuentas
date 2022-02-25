@@ -11,6 +11,9 @@ namespace MarDevsWeb.Cuentas.Client.Auth
 
         Task Login(UserToken userToken);
         Task Logout();
-        Task ManejarRenovarToken();
+        Task VerificarYRenovarToken();
+
+        Task<string> ObtenerUltimoUsuarioLogueado();
+        Task<string> ObtenerNombrePilaUsuario();
     }
 }

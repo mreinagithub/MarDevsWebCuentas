@@ -1,0 +1,17 @@
+
+
+
+.modal-header-form[b-autt11839o] {
+    display: contents;
+}
+
+.modal-title-form[b-autt11839o] {
+    text-align: center;
+}
+
+/*Si el explorador es edge*/
+@supports (-ms-ime-align:auto) {
+    .modal-header-form[b-autt11839o] {
+        display: block;
+    }
+}

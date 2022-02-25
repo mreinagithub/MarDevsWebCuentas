@@ -1,0 +1,32 @@
+﻿@layout EmptyLayout
+
+@page "/no-autoirzado"
+
+@inject ErrorHandler errorHandler;
+
+<Title Value="@PageTitle"></Title>
+
+<div class="page-wrap d-flex flex-row align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12 text-center">
+                <span class="display-1 d-block">401</span>
+                <div class="mb-4 lead">
+                    @*<h1>Ooops!</h1>*@
+                    <p>@errorHandler.Message</p>
+                </div>                
+                <a href="./logout" class="btn btn-link">Ir al Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code{    
+
+    public string PageTitle { get; set; }
+
+    protected override void OnInitialized()
+    {
+        PageTitle = $"MarDevs - No Autorizado 401";
+    }
+}

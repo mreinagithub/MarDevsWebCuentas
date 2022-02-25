@@ -1,0 +1,145 @@
+﻿@page "/Periodos"
+
+@inject IJSRuntime js
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensajes
+@inject NavigationManager navigationManager
+@inject ErrorHandler errorHandler
+
+
+
+@attribute [Authorize]
+
+
+<Title Value="MarDevs - Periodos"></Title>
+
+
+<div class="row">
+    <div class="col-6">
+        <h5>Periodos</h5>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-6 mb-1">
+        <button class="btn btn-custom btn-sm" id="btnNuevoPeriodo" type="button" @onclick="AltaPeriodo" >
+                                            Nuevo Periodo
+        </button>
+    </div>
+    <div class="col-6">
+        <label class="infoRegistrosEncontrados">Registros: @cantidadRegistros</label>
+    </div>
+</div>
+
+<button @onclick="ScrollTop" id="btnScrollTop" title="Ir arriba"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
+
+@if (PeriodosDTO == null)
+{
+    <Waiting></Waiting>
+}
+else
+{
+    <div class="">
+        <table class="table table-sm" id="tablaVerPeriodos">
+            <thead>
+                <tr>
+                    <th>Desde</th>
+                    <th>Hasta</th>
+                    <th>Días</th>
+                    <th></th>                    
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var periodo in PeriodosDTO)
+                {
+                    <PeriodoItem PeriodoDTO="periodo" EliminarPeriodo="PreguntarEliminarPeriodo"/>
+
+                }
+            </tbody>
+        </table>
+    </div>
+
+     <MensajeModal @ref="modalElim" AlCerrarModal="AbortarModalEliminacion" ModalTitle="Pregunta">
+                <ModalRenderBody>
+                    <p>¿Confirma que desea <b>ELIMINAR</b> el periodo seleccionado?</p>
+                </ModalRenderBody>
+                <ModalRenderFooter>
+                    <button type="button" class="btn btn-custom" data-dismiss="modal" id="btnEliminarItem-si" @onclick="EliminarPeriodo">Si</button>
+                    <button type="button" class="btn btn-custom-secondary" data-dismiss="modal" id="btnEliminarItem-no" @onclick="AbortarModalEliminacion">No</button>
+                </ModalRenderFooter>
+            </MensajeModal>
+}
+
+
+
+@code 
+{
+
+    int cantidadRegistros = 0;
+    IJSObjectReference modulo;
+    public List<PeriodoDTO> PeriodosDTO { get; set; } = null;
+    MensajeModal modalElim;
+    Guid periodoAEliminar;
+
+    protected async override Task OnInitializedAsync()
+    {
+        modulo = await js.InvokeAsync<IJSObjectReference>("import", "./js/Periodos.js");
+        await BuscarRegistros();
+    }
+
+    private async Task ScrollTop()
+    {
+        if (modulo != null)
+        {
+            await modulo.InvokeVoidAsync("ScrollTop");
+        }
+
+    }  
+
+    private async Task BuscarRegistros()
+    {
+        var httpResponse = await repositorio.Get<List<PeriodoDTO>>("api/periodo/buscar");
+        if (httpResponse.Error)
+        {
+            await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+        }
+        else
+        {
+            PeriodosDTO = httpResponse.Response;
+            cantidadRegistros = PeriodosDTO.Count();
+        }
+    }
+
+    private void AltaPeriodo()
+    {
+        navigationManager.NavigateTo("./Periodo");
+    }
+
+    void AbortarModalEliminacion()
+    {
+        modalElim.Close();
+    }
+    async Task PreguntarEliminarPeriodo(Guid aEliminarId)    
+    {
+        periodoAEliminar = aEliminarId;
+        await js.Focus("btnEliminarItem-no");
+        modalElim.Open();
+    }
+
+    async Task EliminarPeriodo()
+    {
+        var httpResponse = await repositorio.Delete($"api/periodo/eliminar/{periodoAEliminar}");
+            if (httpResponse.Error)
+            {
+                await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+            }
+            else
+            {
+                modalElim.Close();
+                 await BuscarRegistros();
+            }
+    }
+
+}

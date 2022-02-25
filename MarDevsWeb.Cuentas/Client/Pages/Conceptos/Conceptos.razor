@@ -1,0 +1,144 @@
+﻿@page "/Conceptos"
+
+@inject IJSRuntime js
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensajes
+@inject NavigationManager navigationManager
+@inject ErrorHandler errorHandler
+
+
+
+@attribute [Authorize]
+
+
+<Title Value="MarDevs - Conceptos"></Title>
+
+
+<div class="row">
+    <div class="col-6">
+        <h5>Conceptos</h5>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-6 mb-1">
+        <button class="btn btn-custom btn-sm" id="btnNuevoConcepto" type="button" @onclick="AltaConcepto" >
+                                            Nuevo Concepto
+        </button>
+    </div>
+    <div class="col-6">
+        <label class="infoRegistrosEncontrados">Registros: @cantidadRegistros</label>
+    </div>
+</div>
+
+<button @onclick="ScrollTop" id="btnScrollTop" title="Ir arriba"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
+
+@if (ConceptosDTO == null)
+{
+    <Waiting></Waiting>
+}
+else
+{
+    <div class="">
+        <table class="table table-sm" id="tablaVerConceptos">
+            <thead>
+                <tr>
+                    <th>Descripción</th>                    
+                    <th></th>                    
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var concepto in ConceptosDTO)
+                {
+                    <ConceptoItem ConceptoDTO="concepto" EliminarConcepto="PreguntarEliminarConcepto" />
+
+                }
+            </tbody>
+        </table>
+    </div>
+
+     <MensajeModal @ref="modalElim" AlCerrarModal="AbortarModalEliminacion" ModalTitle="Pregunta">
+                <ModalRenderBody>
+                    <p>¿Confirma que desea <b>ELIMINAR</b> el concepto '@conceptoDescEliminar'?</p>
+                </ModalRenderBody>
+                <ModalRenderFooter>
+                    <button type="button" class="btn btn-custom" data-dismiss="modal" id="btnEliminarItem-si" @onclick="EliminarConcepto">Si</button>
+                    <button type="button" class="btn btn-custom-secondary" data-dismiss="modal" id="btnEliminarItem-no" @onclick="AbortarModalEliminacion">No</button>
+                </ModalRenderFooter>
+            </MensajeModal>
+}
+
+
+
+@code 
+{
+
+    int cantidadRegistros = 0;
+    IJSObjectReference modulo;
+    public List<ConceptoDTO> ConceptosDTO { get; set; } = null;
+    MensajeModal modalElim;
+    Guid conceptoIdEliminar;
+    string conceptoDescEliminar = "";
+
+    protected async override Task OnInitializedAsync()
+    {
+        modulo = await js.InvokeAsync<IJSObjectReference>("import", "./js/Conceptos.js");
+        await BuscarRegistros();
+    }
+
+    private async Task ScrollTop()
+    {
+        if (modulo != null)
+        {
+            await modulo.InvokeVoidAsync("ScrollTop");
+        }
+
+    }  
+
+    private async Task BuscarRegistros()
+    {
+        var httpResponse = await repositorio.Get<List<ConceptoDTO>>("api/concepto/buscar");
+        if (httpResponse.Error)
+        {
+            await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+        }
+        else
+        {
+            ConceptosDTO = httpResponse.Response;
+            cantidadRegistros = ConceptosDTO.Count();
+        }
+    }
+
+    private void AltaConcepto()
+    {
+        navigationManager.NavigateTo("./Concepto");
+    }
+
+    void AbortarModalEliminacion()
+    {
+        modalElim.Close();
+    }
+    async Task PreguntarEliminarConcepto(ConceptoDTO conceptodto)    
+    {
+        conceptoIdEliminar = conceptodto.Id;
+        conceptoDescEliminar = conceptodto.Descripcion;
+        await js.Focus("btnEliminarItem-no");
+        modalElim.Open();
+    }
+
+    async Task EliminarConcepto()
+    {
+        var httpResponse = await repositorio.Delete($"api/concepto/eliminar/{conceptoIdEliminar}");
+            if (httpResponse.Error)
+            {
+                await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+            }
+            else
+            {
+                modalElim.Close();
+                 await BuscarRegistros();
+            }
+    }
+
+}

@@ -1,0 +1,40 @@
+﻿@inject NavigationManager navigationManager
+@inject IJSRuntime js
+
+<tr>
+    <td>
+        <a style="text-decoration:none;color:black;" @onclick="EditarGasto" href="javascript:void();"  >
+        @*href="@($"./gasto/{GastoPreview.Id}")">*@
+            <div style="margin-top:10px;">
+                <div class="row">
+                    <div class="col-3 text-nowrap">
+                         <b>@GastoPreview.Fecha.ToString("dd/MM/yyyy")</b>
+                    </div>
+                    <div class="col-3 text-nowrap">
+                       <b>@GastoPreview.Concepto</b>
+                    </div>
+                    <div class="col-6 text-nowrap">
+                        <b class="float-right" style="color:#28a745;">@GastoPreview.Importe.ToString("C2")</b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        @GastoPreview.Observaciones
+                    </div>
+                </div>                
+            </div>
+        </a>
+    </td>
+</tr>
+
+
+@code{
+
+    [Parameter] public GastoDTO GastoPreview { get; set; }
+
+    private void EditarGasto()
+    {
+        js.SetInLocalStorage("returnUrlGasto", navigationManager.Uri);
+        navigationManager.NavigateTo($"./gasto/{GastoPreview.Id}");
+    }
+}

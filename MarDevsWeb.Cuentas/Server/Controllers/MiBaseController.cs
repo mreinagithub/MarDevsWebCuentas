@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MarDevsWeb.Cuentas.Server.Models;
 
 namespace MarDevsWeb.Cuentas.Server.Controllers
 {
@@ -54,7 +55,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
             if (ex is DbUpdateConcurrencyException) //Chequear cuando se implemente versinado, que ante errores de concurrencia caiga acá.
                 return new ExcepcionConcurrencia(STR_ERROR_CONCURRENCIA, ex);
             if ((ex.InnerException is SqlException) && ((ex.InnerException as SqlException).Number == 547))//violacion de foreign key
-                return new ExcepcionEliminacion(STR_ERROR_ELIMINAR_FK, ex);
+                return new ExcepcionEliminacion(STR_ERROR_ELIMINAR_FK,ex);
             else if ((ex.InnerException is SqlException) && ((ex.InnerException as SqlException).Number == 2627))//violacion de unique al insertar
                 return new ExcepcionInsertClaveDuplicada(STR_ERROR_INSERTAR_UK, ex);
             else if ((ex.InnerException is SqlException) && ((ex.InnerException as SqlException).Number == 2601))//violacion de unique al insertar
@@ -70,5 +71,34 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
         }
 
         #endregion
+
+        #region CADA ENTIDAD FILTRADA
+
+        protected IQueryable<Periodo> PeriodosUsuario
+        {
+            get
+            {
+                return _context.Periodo.Where(p => p.CreadoPor == YO).AsQueryable();
+            }
+        }
+        protected IQueryable<Concepto> ConceptosUsuario
+        {
+            get
+            {
+                return _context.Concepto.Where(c => c.CreadoPor == YO).AsQueryable();
+            }
+        }
+        protected IQueryable<Gasto> GastosUsuario
+        {
+            get
+            {
+                return _context.Gasto.Where(g => g.CreadoPor == YO).AsQueryable();
+            }
+        }
+
+
+        #endregion
+
+
     }
 }

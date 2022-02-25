@@ -1,0 +1,133 @@
+﻿@layout CenterLayout
+
+@page "/Registro"
+
+@inject IJSRuntime js
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensajes
+@inject NavigationManager navigationManager
+@inject ErrorHandler errorHandler
+
+
+<Title Value="MarDevs - Registro"></Title>
+
+
+<div class="row">
+    <div class="col-6">
+        <h5>Registro de Usuario</h5>
+    </div>
+</div>
+
+    <div id="registroUsuarioForm">
+        <EditForm Model="Model" OnValidSubmit="Actualizar" autocomplete="off">
+            <DataAnnotationsValidator />                      
+             <div class="row">
+                <div class="col-12">
+                    <div class="form-group mb-1">
+                        <label class="control-label small mb-0 font-weight-bold">E-mail (se utiliza para ingresar al sistema y recuperación de clave)</label>
+                        <span class="small" style="display:inline-block">
+                            <ValidationMessage For="@(() => Model.Email)" />
+                        </span> 
+                        <InputText @bind-Value="@Model.Email" class="form-control" id="txtEmailRegistro" autocomplete="nope"></InputText>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group mb-1">
+                        <label class="control-label small mb-0 font-weight-bold">Contraseña</label>
+                        <span class="small" style="display:inline-block">
+                            <ValidationMessage For="@(() => Model.PasswordNuevo)" />
+                        </span> 
+                        <InputPassword class="form-control" @bind-Value="@Model.PasswordNuevo" id="txtPassId" />     
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group mb-1">
+                        <label class="control-label small mb-0 font-weight-bold">Repetir Contraseña</label>
+                        <span class="small" style="display:inline-block">
+                            <ValidationMessage For="@(() => Model.PasswordNuevoRepetido)" />
+                        </span> 
+                        <InputPassword class="form-control" @bind-Value="@Model.PasswordNuevoRepetido" id="txtPassIdRep" />     
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group mb-1">
+                        <label class="control-label small mb-0 font-weight-bold">Nombre (su nombre de pila)</label>
+                        <span class="small" style="display:inline-block">
+                            <ValidationMessage For="@(() => Model.Nombre)" />
+                        </span> 
+                        <InputText @bind-Value="@Model.Nombre" class="form-control" id="txtNombre"></InputText>
+                    </div>
+                </div>
+            </div>
+             @if (!String.IsNullOrWhiteSpace(MensajeErrorRegistro))
+                {
+                    <p style="text-align:left;color:red">@MensajeErrorRegistro</p>
+                }
+            <div class="row border-secondary mb-0" style="justify-content:space-between;">
+                <div class="col-12 order-sm-first  col-sm-4">
+                    <a type="button" class="btn btn-custom-secondary col-12 btn-sm" id="btnCancelar" style="margin-bottom:8px;"
+                            href="./Login">                     
+                        Cancelar
+                    </a>
+                </div>
+                <div class="col-12 order-first col-sm-8">
+                    <div class="form-group" style="margin-bottom:8px;">
+                        <div class="p-t-10">
+                            <button class="btn btn-custom col-12 btn-sm" id="btnRegistrarUsuario" type="submit">
+                                @if (!Actualizando)
+                                {
+                                    <Text> Registrarme </Text>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-circle-notch fa-spin"></i><text> Registrando...</text>
+                                }
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+
+@code{
+
+
+    private UserRegistro Model { get; set; }  = new UserRegistro();         
+    bool Actualizando = false;
+    private string MensajeErrorRegistro = "";    
+
+
+    protected async override Task OnInitializedAsync()           
+    {       
+        await js.Focus("txtEmailRegistro");
+    }  
+
+
+
+    async Task Actualizar()
+    {
+        MensajeErrorRegistro = "";
+        Actualizando = true;
+        var httpResponse = await repositorio.Post<UserRegistro>("api/cuenta/registrar", Model);
+        if (httpResponse.Error)
+        {
+            Actualizando = false;
+            MensajeErrorRegistro = await httpResponse.GetBody();
+        }
+        else
+        {
+            //Plantamos una semilla para poder acceder a la página de confirmación
+            await js.SetInSessionStorage("showConfirmScreen", "allow");
+            navigationManager.NavigateTo("./confirmacionRegistro");            
+        }
+        Actualizando = false;
+    } 
+ 
+}

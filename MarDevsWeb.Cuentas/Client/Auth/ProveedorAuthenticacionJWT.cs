@@ -20,6 +20,8 @@ namespace MarDevsWeb.Cuentas.Client.Auth
 
         public static readonly string TOKENKEY = "clave_token";
         public static readonly string EXPIRATIONTOKENKEY = "expiracion_token";
+        public static readonly string REFRESH_TOKEN = "refresh_token";
+        public static readonly string ULTIMO_USUARIO_LOGUEADO = "ultimo_usr_logueado";
         private readonly IJSRuntime js;
         private readonly HttpClient httpClient;
         private readonly IRepositorio repositorio;
@@ -39,80 +41,65 @@ namespace MarDevsWeb.Cuentas.Client.Auth
 
         public async override Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-
             var token = await js.GetFromLocalStorage(TOKENKEY);
-
-            if(string.IsNullOrEmpty(token))
+            if (string.IsNullOrEmpty(token))
             {
                 return Anonimo;
             }
-
             var timeExpirationString = await js.GetFromLocalStorage(EXPIRATIONTOKENKEY);
-            DateTime tiempoExpiracion;
-            if(DateTime.TryParse(timeExpirationString, out tiempoExpiracion))
+            if (!DateTime.TryParse(timeExpirationString, out DateTime tiempoExpiracion))
             {
-                if(TokenExpirado(tiempoExpiracion))
+                return Anonimo;
+            }
+            if (DebeRenovarToken(tiempoExpiracion))
+            {
+                token = await RefreshToken(token);
+                if (string.IsNullOrEmpty(token))
                 {
-                    await Limpiar();
                     return Anonimo;
                 }
-                
-                if(DebeRenovarToken(tiempoExpiracion))
-                {
-                    token = await RenovarToken(token);
-                }
             }
-
-
             return ConstruirAuthenticationState(token);
         }
 
-        public async Task ManejarRenovarToken()
-        {
-            var timeExpirationString = await js.GetFromLocalStorage(EXPIRATIONTOKENKEY);
-            DateTime tiempoExpiracion;
-            if (DateTime.TryParse(timeExpirationString, out tiempoExpiracion))
+        private async Task<string> RefreshToken(string token)
+        {            
+            if (string.IsNullOrWhiteSpace(token))
+                return null;
+
+            var claims = ParseClaimsFromJwt(token);
+            if (claims == null || claims.Count() == 0 || !claims.Any(c => c.Type == "unique_name"))
+                return null;
+            var userId = Convert.ToInt32(claims.FirstOrDefault(c => c.Type == "unique_name").Value);
+
+            var refreshToken = await js.GetFromLocalStorage(REFRESH_TOKEN);
+
+            var userRefreshDT = new UserRefreshToken
             {
-                if (TokenExpirado(tiempoExpiracion))
-                {
-                    await Logout();
-                }
+                UsuarioID = userId,
+                Token = token,
+                RefreshToken = refreshToken
+            };
 
-                if (DebeRenovarToken(tiempoExpiracion))
-                {
-                    var token = await js.GetFromLocalStorage(TOKENKEY);
-                    var nuevoToken = await RenovarToken(token);
-                    var authState = ConstruirAuthenticationState(nuevoToken);
-                    NotifyAuthenticationStateChanged(Task.FromResult(authState));
-                }
-            }
-        }
+            Console.WriteLine("Renovando token...");
 
-        private async Task<string> RenovarToken(string token)
-        {
-            Console.WriteLine("Renovando el token...");
+            var nuevoTokenResponse = await repositorio.Post<UserRefreshToken,UserToken>("api/cuenta/RefreshToken",userRefreshDT);
 
-            httpClient.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("bearer", token);
-
-            var nuevoTokenResponse = await repositorio.Get<UserToken>("api/cuenta/RenovarToken");
+            if (nuevoTokenResponse.Error)
+                return "";            
+            
             var nuevoToken = nuevoTokenResponse.Response;
+
             await js.SetInLocalStorage(TOKENKEY, nuevoToken.Token);
             await js.SetInLocalStorage(EXPIRATIONTOKENKEY, nuevoToken.Expiration.ToString());
+            await js.SetInLocalStorage(REFRESH_TOKEN, nuevoToken.RefreshToken);
 
-            return nuevoToken.Token;
+            return nuevoToken.Token;            
         }
-
         private bool DebeRenovarToken(DateTime tiempoExpiracion)
-        {
+        {            
             return tiempoExpiracion.Subtract(DateTime.UtcNow) < TimeSpan.FromMinutes(5);
-        }
-
-        private bool TokenExpirado(DateTime tiempoExpiracion)
-        {
-            return tiempoExpiracion <= DateTime.UtcNow;
-        }
-
+        }      
         private AuthenticationState ConstruirAuthenticationState(string token)
         {
             httpClient.DefaultRequestHeaders.Authorization =
@@ -122,7 +109,6 @@ namespace MarDevsWeb.Cuentas.Client.Auth
                 new ClaimsPrincipal(
                     new ClaimsIdentity(ParseClaimsFromJwt(token),"jwt")));
         }
-
         //Obtener una lista de claims desde el token.
         private IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
         {
@@ -164,27 +150,74 @@ namespace MarDevsWeb.Cuentas.Client.Auth
             }
             return Convert.FromBase64String(base64);
         }
+        private async Task Limpiar()
+        {
+            await js.RemoveFromLocalStorage(TOKENKEY);
+            await js.RemoveFromLocalStorage(EXPIRATIONTOKENKEY);
+            await js.RemoveFromLocalStorage(REFRESH_TOKEN);
+            httpClient.DefaultRequestHeaders.Authorization = null;
+
+        }
+
 
         public async Task Login(UserToken userToken)
         {
             await js.SetInLocalStorage(TOKENKEY, userToken.Token);
             await js.SetInLocalStorage(EXPIRATIONTOKENKEY, userToken.Expiration.ToString());
+            await js.SetInLocalStorage(ULTIMO_USUARIO_LOGUEADO, userToken.Email);
+            await js.SetInLocalStorage(REFRESH_TOKEN, userToken.RefreshToken);
+
             var authState = ConstruirAuthenticationState(userToken.Token);
             NotifyAuthenticationStateChanged(Task.FromResult(authState));
-        }
 
+            
+        }
         public async Task Logout()
         {
             await Limpiar();
             NotifyAuthenticationStateChanged(Task.FromResult(Anonimo));
         }
-
-        private async Task Limpiar()
+        public async Task VerificarYRenovarToken()
         {
-            await js.RemoveFromLocalStorage(TOKENKEY);
-            await js.RemoveFromLocalStorage(EXPIRATIONTOKENKEY);
-            httpClient.DefaultRequestHeaders.Authorization = null;
 
+            Console.WriteLine("Verificando token...");
+            var token = await js.GetFromLocalStorage(TOKENKEY);
+            var timeExpirationString = await js.GetFromLocalStorage(EXPIRATIONTOKENKEY);
+            if (string.IsNullOrEmpty(token))
+            {
+                NotifyAuthenticationStateChanged(Task.FromResult(Anonimo));
+            }
+            else if (!DateTime.TryParse(timeExpirationString, out DateTime tiempoExpiracion))
+            {
+                NotifyAuthenticationStateChanged(Task.FromResult(Anonimo));
+            }
+            else
+            {
+                if (DebeRenovarToken(tiempoExpiracion))
+                {
+                    var nuevoToken = await RefreshToken(token);
+                    if (string.IsNullOrEmpty(nuevoToken))
+                        NotifyAuthenticationStateChanged(Task.FromResult(Anonimo));
+                    else
+                    {
+                        var authState = ConstruirAuthenticationState(nuevoToken);
+                        NotifyAuthenticationStateChanged(Task.FromResult(authState));
+                    }
+                }
+            }   
+        }
+        public async Task<string> ObtenerUltimoUsuarioLogueado()
+        {
+            return await js.GetFromLocalStorage(ULTIMO_USUARIO_LOGUEADO);
+        }
+        public async Task<string> ObtenerNombrePilaUsuario()
+        {
+            var token = await js.GetFromLocalStorage(TOKENKEY);
+            var claims = ParseClaimsFromJwt(token);
+            if (claims == null || claims.Count() == 0 || !claims.Any(c => c.Type == "NombrePila"))
+                return "Anónimo";
+            else
+                return claims.FirstOrDefault(c => c.Type == "NombrePila").Value;
         }
     }
 }

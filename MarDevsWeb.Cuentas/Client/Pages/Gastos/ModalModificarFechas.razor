@@ -1,0 +1,131 @@
+﻿<div class="container">
+    <!-- The Modal -->
+    <div class="modal fade" id="modarModificarFechasBusqueda">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header modal-header-form">
+                    <button type="button" id="btnCerrar" class="close mr-1" data-dismiss="modal"  @onclick="CancelarCambios">&times;</button>
+                    <div class="modal-title modal-title-form">
+                        @*<span><i class="fas fa-shopping-cart"></i></span>*@
+                        <b>Modificar fechas de búsqueda</b>
+                    </div>
+
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body" id="editarFormItemPedido">
+                    @if (OtrosPeriodos != null)
+                    {
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group mb-1">
+                                    <label class="control-label small mb-0 font-weight-bold">Periodo</label>                                                                                            
+                                    <select class="form-control " id="lstPeriodosElegibles" autocomplete="off" @onchange="ModificarSeleccion">
+                                        <option value="default">--Buscar otro periodo--</option>
+                                        @foreach (var periodo in OtrosPeriodos)
+                                        {
+                                            <option value="@periodo.Id">@($"{periodo.Desde:dd/MM/yyyy} a {periodo.Hasta:dd/MM/yyyy}")</option>
+                                        }                                    
+                                    </select>             
+
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group mb-1">
+                                <label class="control-label small mb-0 font-weight-bold">Desde</label>                                
+                                <input @bind="@FechaDesde" class="form-control" type="date"></input>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="row">
+                        <div class="col-12">
+                            <div class="form-group mb-1">
+                                <label class="control-label small mb-0 font-weight-bold">Hasta</label>                                
+                                <input @bind="@FechaHasta" class="form-control" type="date"></input>
+                            </div>
+                        </div>
+                    </div>
+                    @if (!String.IsNullOrWhiteSpace(errorAlProcesar))
+                    {
+                        <p style="text-align:left;color:red">@errorAlProcesar</p>
+                    }
+                    <div class="row border-secondary">
+                            <div class="col-8">
+                                <div class="p-t-10">
+                                    <button class="btn btn-custom btn-sm col-12" id="btnActualizarFechasBusqueda" type="button" @onclick="ProcesarSeleccion">
+                                        Actualizar Fechas
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="p-t-10">
+                                    <button class="btn btn-custom-secondary btn-sm col-12" id="btnRestablecerFechasDefault" type="button" @onclick="RestablecerFechasDefault">
+                                        Restablecer
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+@code{
+
+    [Parameter] public DateTime? FechaDesde { get; set; }
+    [Parameter] public DateTime? FechaHasta { get; set; }
+    [Parameter] public List<PeriodoDTO> OtrosPeriodos { get; set; }    
+
+    [Parameter] public EventCallback<DateTime?> FechaDesdeChanged { get; set; }
+    [Parameter] public EventCallback<DateTime?> FechaHastaChanged { get; set; }
+    [Parameter] public EventCallback AlCancelarCambioFecha { get; set; }
+    [Parameter] public EventCallback ProcesarCambioFecha { get; set; }
+    [Parameter] public EventCallback RestablecerFechasDefault { get; set; }
+
+    string errorAlProcesar = "";
+
+    protected override void OnInitialized()
+    {
+        errorAlProcesar = "";
+    }
+
+    async Task CancelarCambios()
+    {
+        errorAlProcesar = "";
+        await AlCancelarCambioFecha.InvokeAsync();
+    }
+
+
+    async Task ProcesarSeleccion()
+    {
+        errorAlProcesar = "";
+        if(FechaDesde == null || FechaHasta == null)
+        {
+            errorAlProcesar = "Debe seleccionar las fechas desde y hasta";
+            StateHasChanged();
+        }
+        else
+        {
+            await FechaDesdeChanged.InvokeAsync(FechaDesde);
+            await FechaHastaChanged.InvokeAsync(FechaHasta);
+            await ProcesarCambioFecha.InvokeAsync();    
+        }        
+    }
+
+    void ModificarSeleccion(ChangeEventArgs e)
+    {
+        bool esInt = Guid.TryParse(e.Value.ToString(), out Guid idPeriodo);
+        if(esInt)
+        {
+            var periodo = OtrosPeriodos.FirstOrDefault(p => p.Id == idPeriodo);
+            FechaDesde = periodo.Desde;
+            FechaHasta = periodo.Hasta;
+        }
+    }
+}

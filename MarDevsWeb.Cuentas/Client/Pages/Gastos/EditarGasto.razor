@@ -1,0 +1,230 @@
+﻿@page "/Gasto/{gastoId:guid?}"
+
+@inject IJSRuntime js
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensajes
+@inject NavigationManager navigationManager
+@inject ErrorHandler errorHandler
+
+@implements IDisposable
+
+@attribute [Authorize]
+
+<Title Value="MarDevs - Gasto"></Title>
+
+<div class="row">
+    <div class="col-12">
+        <h5>@tituloAccion</h5>
+    </div>    
+</div>
+
+@if (Model == null)
+{
+    <Waiting></Waiting>
+}
+else
+{
+    @if (gastoId != null)
+    {
+        <div class="row">
+            <div class="col-12">
+                <a class="btn btn-danger btn-sm float-right" href="javascript:void(0)" @onclick="PreguntarEliminarGasto">Eliminar</a>
+            </div>
+        </div>
+
+          <MensajeModal @ref="modalElim" AlCerrarModal="AbortarModalEliminacion" ModalTitle="Pregunta">
+                <ModalRenderBody>
+                    <p>¿Confirma que desea <b>ELIMINAR</b> el gasto?</p>
+                </ModalRenderBody>
+                <ModalRenderFooter>
+                    <button type="button" class="btn btn-custom" data-dismiss="modal" id="btnEliminarItem-si" @onclick="EliminarGasto">Si</button>
+                    <button type="button" class="btn btn-custom-secondary" data-dismiss="modal" id="btnEliminarItem-no" @onclick="AbortarModalEliminacion">No</button>
+                </ModalRenderFooter>
+            </MensajeModal>
+    }
+    <div id="editarGastoForm">
+        <EditForm Model="Model" OnValidSubmit="Actualizar" autocomplete="off">
+            <DataAnnotationsValidator />
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group mb-1">
+                        <label class="control-label small mb-0 font-weight-bold">Concepto</label>                                                            
+                        <span class="small" style="display:inline-block">
+                            <ValidationMessage For="@(() => Model.ConceptoID)" />
+                        </span>
+                        <select class="form-control" @bind="Model.ConceptoID" id="lstConceptosDisponibles" autocomplete="off">
+                            <option selected value="">--Seleccione--</option>
+                            @foreach (var concepto in Model.ConceptosDisponibles)
+                            {
+                                <option value="@concepto.ConceptoID">@concepto.Descripcion</option>
+                            }                                    
+                        </select>             
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group mb-1">
+                        <label class="control-label small mb-0 font-weight-bold">Fecha</label>
+                        <span class="small" style="display:inline-block">
+                            <ValidationMessage For="@(() => Model.Fecha)" />
+                        </span> 
+                        <InputDate @bind-Value="@Model.Fecha" class="form-control"></InputDate>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group mb-1">
+                        <label class="control-label small mb-0 font-weight-bold">Importe</label>
+                        <span class="small" style="display:inline-block">
+                            <ValidationMessage For="@(() => Model.Importe)" />
+                        </span> 
+                        <InputNumber TValue="decimal?" @bind-Value="Model.Importe" ParsingErrorMessage="El campo debe ser un valor numérico" 
+                                                 class="form-control"></InputNumber>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group mb-1">
+                        <label class="control-label small mb-0 font-weight-bold">Observaciones</label>
+                        <span class="small" style="display:inline-block">
+                            <ValidationMessage For="@(() => Model.Observaciones)" />
+                        </span>
+                        <InputTextArea @bind-Value="@Model.Observaciones" rows="2" style="resize:none" class="form-control"></InputTextArea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row border-secondary mb-0" style="justify-content:space-between;">
+                <div class="col-12 order-sm-first  col-sm-4">
+                    <a type="button" class="btn btn-custom-secondary col-12 btn-sm" id="btnCancelar" style="margin-bottom:8px;"
+                            href="javascript:void(0);" @onclick="VolverAPaginaCorrespondiente">
+                        @*<i class="fas fa-trash-alt mr-2" aria-hidden="true"></i> *@
+                        Cancelar
+                    </a>
+                </div>
+                <div class="col-12 order-first col-sm-8">
+                    <div class="form-group" style="margin-bottom:8px;">
+                        <div class="p-t-10">
+                            <button class="btn btn-custom col-12 btn-sm" id="btnGuardarGasto" type="submit">
+                                @if (!Actualizando)
+                                {
+                                    <Text> Guardar <i class="fas fa-save ml-1"></i></Text>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-circle-notch fa-spin"></i><text> Procesando...</text>
+                                }
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+    
+}
+
+@code{
+
+    [Parameter] public Guid? gastoId { get; set; }
+    protected string tituloAccion = "Alta de Gasto";
+    public EditarGastoDTO Model { get; set; }    
+    bool Actualizando = false;
+    string returnUrl = "./";
+    MensajeModal modalElim;
+
+    protected async override Task OnInitializedAsync()
+    {
+        
+
+        if(gastoId != null)
+        {
+            tituloAccion = "Edición de Gasto";
+        }
+
+        var httpResponse = await repositorio.Get<EditarGastoDTO>($"api/gasto/obtenerModeloGasto/{gastoId}");
+        if (httpResponse.Error)
+        {
+            Model = null;
+            await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+        }
+        else
+        {            
+            Model = httpResponse.Response;     
+            StateHasChanged();        
+            await js.IniciarBootstrapSelect("lstConceptosDisponibles");        
+            //el html que inyecta bootstra-select no se notifica del cambio de seleccion del modelo, se establce a mano.        
+            await js.ActualizarValorBootstrapSelect("lstConceptosDisponibles", Model.ConceptoID?.ToString() ?? "");        
+            await js.Focus("lstConceptosDisponibles");
+        }
+    }  
+
+
+    async Task Actualizar()
+    {        
+        Actualizando = true;
+        var httpResponse = await repositorio.Post<EditarGastoDTO>("api/gasto/editargasto", Model);
+        if (httpResponse.Error)
+        {
+            await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+        }
+        else
+        {
+            await VolverAPaginaCorrespondiente();
+
+        }
+        Actualizando = false;
+    } 
+    
+
+      void AbortarModalEliminacion()
+    {
+        modalElim.Close();
+    }
+    async Task PreguntarEliminarGasto()    
+    {
+        
+        await js.Focus("btnEliminarItem-no");
+        modalElim.Open();
+    }
+
+    async Task EliminarGasto()
+    {
+        var httpResponse = await repositorio.Delete($"api/gasto/eliminar/{Model.GastoID}");
+            if (httpResponse.Error)
+            {
+                await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+            }
+            else
+            {
+                modalElim.Close();
+                await VolverAPaginaCorrespondiente();
+            }
+    }
+
+      async Task VolverAPaginaCorrespondiente()
+    {
+        var localstoragereturn = await js.GetFromLocalStorage("returnUrlGasto");
+        if(!string.IsNullOrWhiteSpace(localstoragereturn))
+        {
+            returnUrl = localstoragereturn;
+            await js.RemoveFromLocalStorage("returnUrlGasto");
+
+        }        
+        navigationManager.NavigateTo(returnUrl);
+    }
+
+    async void IDisposable.Dispose()
+    {
+        var localstoragereturn = await js.GetFromLocalStorage("returnUrlGasto");
+        if(!string.IsNullOrWhiteSpace(localstoragereturn))
+        {           
+            await js.RemoveFromLocalStorage("returnUrlGasto");
+        }        
+    }
+    
+}

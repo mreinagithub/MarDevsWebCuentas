@@ -1,0 +1,126 @@
+﻿@page "/Periodo/{periodoId:guid?}"
+
+@inject IJSRuntime js
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensajes
+@inject NavigationManager navigationManager
+@inject ErrorHandler errorHandler
+
+@attribute [Authorize]
+
+<Title Value="MarDevs - Periodo"></Title>
+
+
+<div class="row">
+    <div class="col-6">
+        <h5>@tituloAccion</h5>
+    </div>
+</div>
+
+@if (Model == null)
+{
+    <Waiting></Waiting>
+}
+else
+{
+
+    <div id="editarPeriodoForm">
+        <EditForm Model="Model" OnValidSubmit="Actualizar" autocomplete="off">
+            <DataAnnotationsValidator />           
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group mb-1">
+                        <label class="control-label small mb-0 font-weight-bold">Fecha</label>
+                        <span class="small" style="display:inline-block">
+                            <ValidationMessage For="@(() => Model.FechaDesde)" />
+                        </span> 
+                        <InputDate @bind-Value="@Model.FechaDesde" class="form-control" id="txtFechaDesde"></InputDate>
+                    </div>
+                </div>
+            </div>
+            <div class="row border-secondary mb-0" style="justify-content:space-between;">
+                <div class="col-12 order-sm-first  col-sm-4">
+                    <a type="button" class="btn btn-custom-secondary col-12 btn-sm" id="btnCancelar" style="margin-bottom:8px;"
+                            href="javascript:void(0);" @onclick="VolverAPaginaCorrespondiente">
+                        @*<i class="fas fa-trash-alt mr-2" aria-hidden="true"></i> *@
+                        Cancelar
+                    </a>
+                </div>
+                <div class="col-12 order-first col-sm-8">
+                    <div class="form-group" style="margin-bottom:8px;">
+                        <div class="p-t-10">
+                            <button class="btn btn-custom col-12 btn-sm" id="btnGuardarGasto" type="submit">
+                                @if (!Actualizando)
+                                {
+                                    <Text> Guardar <i class="fas fa-save ml-1"></i></Text>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-circle-notch fa-spin"></i><text> Procesando...</text>
+                                }
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+    
+}
+
+@code {
+
+      [Parameter] public Guid? periodoId { get; set; }
+    protected string tituloAccion = "Alta de Periodo";
+    public EditarPeriodoDTO Model { get; set; }    
+    bool Actualizando = false;
+    string returnUrl = "./Periodos";
+
+    protected async override Task OnInitializedAsync()
+    {
+        if(periodoId != null)
+        {
+            tituloAccion = "Edición de Periodo";
+
+           
+
+        }
+
+
+        var httpResponse = await repositorio.Get<EditarPeriodoDTO>($"api/periodo/obtenerModeloPeriodo/{periodoId}");
+        if (httpResponse.Error)
+        {
+            Model = null;
+            await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+        }
+        else
+        {            
+            Model = httpResponse.Response;     
+            StateHasChanged();                    
+            await js.Focus("txtFechaDesde");
+        }
+    }  
+
+
+    async Task Actualizar()
+    {        
+        Actualizando = true;
+        var httpResponse = await repositorio.Post<EditarPeriodoDTO>("api/periodo/editarPeriodo", Model);
+        if (httpResponse.Error)
+        {
+            await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+        }
+        else
+        {
+            VolverAPaginaCorrespondiente();
+
+        }
+        Actualizando = false;
+    } 
+
+    void VolverAPaginaCorrespondiente()
+    {
+         navigationManager.NavigateTo(returnUrl);            
+    }
+
+}

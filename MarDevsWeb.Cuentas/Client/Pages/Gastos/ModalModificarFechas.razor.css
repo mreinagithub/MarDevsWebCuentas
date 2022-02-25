@@ -1,0 +1,17 @@
+﻿
+
+
+.modal-header-form {
+    display: contents;
+}
+
+.modal-title-form {
+    text-align: center;
+}
+
+/*Si el explorador es edge*/
+@supports (-ms-ime-align:auto) {
+    .modal-header-form {
+        display: block;
+    }
+}

@@ -22,7 +22,10 @@ namespace MarDevsWeb.Cuentas.Server
             {
                 ConfigurarLogger();
                 Log.Information("Hola, Blazor Server!!");
-                CreateHostBuilder(args).Build().Run();
+                CreateHostBuilder(args)
+                    .UseSerilog()
+                    .Build()
+                    .Run();
             }
             catch (Exception ex)
             {
@@ -31,16 +34,14 @@ namespace MarDevsWeb.Cuentas.Server
             finally
             {
                 Log.CloseAndFlush();
-            }
-            CreateHostBuilder(args).Build().Run();
+            }            
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>()
-                    .UseSerilog();
+                    webBuilder.UseStartup<Startup>();                    
                 });
 
         public static void ConfigurarLogger()
@@ -61,7 +62,7 @@ namespace MarDevsWeb.Cuentas.Server
                             .Enrich.FromLogContext()
                             .MinimumLevel.Debug()
                             .MinimumLevel.Override("Microsoft", LogEventLevel.Error)
-                            .Filter.ByExcluding(levent => levent.Exception is Excepciones.ExcepcionNegocios) //No incluir excepciones propias                            
+                            .Filter.ByExcluding(levent => levent.Exception is Excepciones.ExcepcionBase) //No incluir excepciones propias                            
                             .WriteTo.Console()
                             .WriteTo.File(path,
                                     restrictedToMinimumLevel: LogEventLevel.Error, //Poner en ERROR luego de las pruebas // Minimum Log level
@@ -76,11 +77,12 @@ namespace MarDevsWeb.Cuentas.Server
                             {
                                 MailServer = "smtp.gmail.com",
                                 Port = 587,
-                                NetworkCredentials = new NetworkCredential("fullcarmultimarcauai@gmail.com", "Fc070621!"),
-                                FromEmail = "fullcarmultimarcauai@gmail.com",
+                                NetworkCredentials = new NetworkCredential("infomardevs@gmail.com", "Imd@1686"),                                
+                                FromEmail = "infomardevs@gmail.com",
                                 ToEmail = destinatariosNotificacion,
                                 EnableSsl = true,
-                                EmailSubject = "MarDevs Gestión Web - Reporte de error"
+                                EmailSubject = "MarDevs Cuentas - Reporte de error"
+                                
 
                             },
                                     outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} - [{Level:u3}] - Usuario: {User} - {Message:lj}{NewLine}{Exception}",
