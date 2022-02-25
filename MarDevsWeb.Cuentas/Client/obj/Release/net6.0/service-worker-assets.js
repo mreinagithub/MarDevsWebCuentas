@@ -825,11 +825,11 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-WUopcWPc47QwXvQFtMTUnNo48gR+b8xuCOQto76DGtg=",
+      "hash": "sha256-0tAlzRsZLBwQdmbZDc8ZcLz8x65pdwE9xyJb8ASHxGA=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-4idH1E0mXgHT0njQ4VV7m7oIhDUIOyF1cdCBGsycCUs=",
+      "hash": "sha256-DZNy\/Z5Yi4rlgIQpg\/+uvsbTyOHn+\/DtjFibjR\/AtQs=",
       "url": "_framework\/MarDevsWeb.Cuentas.Client.dll"
     },
     {
@@ -1061,5 +1061,5 @@
       "url": "_content\/Microsoft.AspNetCore.Components.Web.Extensions\/headManager.js"
     }
   ],
-  "version": "BBNB9Or9"
+  "version": "dvLIC1UU"
 };

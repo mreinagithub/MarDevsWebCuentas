@@ -7,6 +7,8 @@
 @inject ILoginService loginService
 @inject IMostrarMensajes mostrarMensajes
 @inject IJSRuntime js
+@inject AuthenticationStateProvider authProvider
+
 
 @using MarDevsWeb.Cuentas.Client.Auth
 
@@ -66,16 +68,26 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var ultusrlog = await loginService.ObtenerUltimoUsuarioLogueado();
 
-        if(!string.IsNullOrWhiteSpace(ultusrlog))
+        //Si ya estoy logueado me voy al home
+        var authState = await authProvider.GetAuthenticationStateAsync();
+        if (authState.User.Identity.IsAuthenticated)
         {
-            userInfo.Email = ultusrlog;
-            await js.Focus("txtPassId");
+            navigationManager.NavigateTo("./");
         }
         else
         {
-            await js.Focus("txtLogonId");
+            var ultusrlog = await loginService.ObtenerUltimoUsuarioLogueado();
+
+            if (!string.IsNullOrWhiteSpace(ultusrlog))
+            {
+                userInfo.Email = ultusrlog;
+                await js.Focus("txtPassId");
+            }
+            else
+            {
+                await js.Focus("txtLogonId");
+            }
         }
     }
 

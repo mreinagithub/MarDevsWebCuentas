@@ -218,6 +218,6 @@ namespace MarDevsWeb.Cuentas.Client.Auth
                 return "Anónimo";
             else
                 return claims.FirstOrDefault(c => c.Type == "NombrePila").Value;
-        }
+        }        
     }
 }

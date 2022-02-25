@@ -769,7 +769,7 @@
       "url": "Imagenes\/UsuarioDefault.jpg"
     },
     {
-      "hash": "sha256-id+QqXFfkLa6AtTLVyyVvXShaIuy0o8uSsbHvHIERkQ=",
+      "hash": "sha256-7FXNIpT\/hfWw+0DnXzDt5bmIWl0LyN225S0y7wEYRcw=",
       "url": "index.html"
     },
     {
@@ -1613,11 +1613,11 @@
       "url": "_framework\/MarDevsWeb.Cuentas.Shared.pdb"
     },
     {
-      "hash": "sha256-LbNZ8MH7Fx7\/Yj952VYjjLtgF2FWgwKGnX\/6WBbM0MQ=",
+      "hash": "sha256-4idH1E0mXgHT0njQ4VV7m7oIhDUIOyF1cdCBGsycCUs=",
       "url": "_framework\/MarDevsWeb.Cuentas.Client.dll"
     },
     {
-      "hash": "sha256-C5M7QppjiBvSAA6vhOf1g3BxlmA4CkVZy0QiBc3DKPw=",
+      "hash": "sha256-W43qGpgn2REBzj1xYB3gMilF79lwIb+3suxKvaTSxwY=",
       "url": "_framework\/MarDevsWeb.Cuentas.Client.pdb"
     },
     {
@@ -1625,7 +1625,7 @@
       "url": "_framework\/blazor.webassembly.js"
     },
     {
-      "hash": "sha256-E3VeQnUc4x\/RAHVoObY+oz6sn7+j\/FIXPmJ6lTkKJyI=",
+      "hash": "sha256-LrLEp9bXx6JlX7PAgfZIQJttUlw1GystL5CzdXTJauc=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -1633,5 +1633,5 @@
       "url": "_content\/Microsoft.AspNetCore.Components.Web.Extensions\/headManager.js"
     }
   ],
-  "version": "Dj9VqeKM"
+  "version": "4nggHUyC"
 };
