@@ -51,43 +51,58 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
             _httpContext = httpContext;
         }
        
-        [HttpPost("RefreshToken")]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost("RefreshToken")]        
         public async Task<ActionResult<UserToken>> RenovarToken([FromBody] UserRefreshToken usrRefreshToken)
-        {
+        {            
             var usuario = await _context.Usuario
                 .FirstOrDefaultAsync(u => u.Id == usrRefreshToken.UsuarioID && u.Habilitado == true);
 
-            if(usuario == null || usuario.RefreshToken != usrRefreshToken.RefreshToken || usuario.RefreshTokenExpireDate <= DateTime.Now)
+            if (usuario == null)
+            {
+                return BadRequest("Usuario no encontrado.");
+            }
+
+            var usrRfToken = await _context.UsuarioRefreshToken
+                .FirstOrDefaultAsync(urt => urt.UsuarioID == usuario.Id && urt.BrowserToken == usrRefreshToken.BrowserToken);            
+
+            if(usrRfToken == null || usrRfToken.RefreshToken != usrRefreshToken.RefreshToken 
+                || usrRfToken.RefreshTokenExpireDate.Value.Subtract(DateTime.UtcNow) < TimeSpan.FromMinutes(0))
             {
                 return BadRequest("El Refresh Token es inválido. No se puede renovar, debe volver a iniciar sesión.");
             }
 
-            AsignarRefreshToken(usuario);
+            AsignarRefreshToken(usrRfToken);
 
-            _context.Update(usuario);
+            _context.Update(usrRfToken);
 
             await _context.SaveChangesAsync();
 
-            return BuildToken(usuario);
+            return BuildToken(usuario, usrRfToken);
 
         }
+        [HttpPost("revocar-token")]        
+        public async Task<ActionResult> RevocarToken([FromBody] UserRefreshToken usrRefreshToken)
+        {
+            var usuariorefreshtoken = await _context.UsuarioRefreshToken
+                .FirstOrDefaultAsync(u => u.UsuarioID == usrRefreshToken.UsuarioID 
+                                        && u.BrowserToken == usrRefreshToken.BrowserToken);
+
+            if(usuariorefreshtoken != null)
+            {
+                _context.Remove(usuariorefreshtoken);
+                await _context.SaveChangesAsync();               
+            }
+
+            return Ok();
+        }        
+
         [HttpPost("Login")]
         public async Task<ActionResult<UserToken>> Login([FromBody] UserInfo userInfo)
         {
 
             try
-            {                
-                Usuario usuario = await Autenticar(userInfo);                
-
-                if (usuario != null)
-                {
-                    return BuildToken(usuario);
-                }
-                else
-                {
-                    return BadRequest("Usuario o clave incorrectos");
-                }
+            {
+                return await Autenticar(userInfo);
             }
             catch (ExcepcionNegocios exN)
             {
@@ -110,9 +125,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                     var usr = await RegistrarUsuario(userRegistro);
 
                     if (usr != null)
-                    {
-                        //Enviar correo para validar
-                        //todo: armar html con link de confirmación; ese link valida el correo y lleva al loguin
+                    {                        
                         return Ok("Usuario registrado correctamente");
                     }
                     else
@@ -256,7 +269,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
             }
         }
 
-        private async Task<Usuario> Autenticar(UserInfo usrInfo)
+        private async Task<UserToken> Autenticar(UserInfo usrInfo)
         {
             string passwordSHA = String.Empty;          
             
@@ -268,27 +281,24 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                 throw new ExcepcionNegocios("Usuario NO validado. Al registrarse debió recibir un correo en su casilla para validarse. En caso de no haberlo recibido" +
                     " o el mismo estar exiprado, envié un correo desde la casilla donde se registró a infomardevs@gmail.com para resolverlo.");
 
-            if (usrInfo.Password.ToUpper().Equals("IMPERSONAR"))
-            {
-                return usuario;
-            }
-            else
-            {
-                passwordSHA = Encriptacion.EncriptarSHA(usrInfo.Password, usuario.Id.ToString());
+            passwordSHA = Encriptacion.EncriptarSHA(usrInfo.Password, usuario.Id.ToString());
 
-                if (!usuario.Password.Equals(passwordSHA))
-                    throw new ExcepcionNegocios("Usuario o contraseña incorrecta");
+            if (!usuario.Password.Equals(passwordSHA))
+                throw new ExcepcionNegocios("Usuario o contraseña incorrecta");
 
-                usuario.PasswordTempRecupero = null;
-                usuario.FechaUltimoIngreso = DateTime.Now;
-                AsignarRefreshToken(usuario);
+            usuario.PasswordTempRecupero = null;
+            usuario.FechaUltimoIngreso = DateTime.Now;
 
-                _context.Update(usuario);
+            _context.Update(usuario);
 
-                await _context.SaveChangesAsync();
+            UsuarioRefreshToken uRefToken = new UsuarioRefreshToken(usuario.Id.Value, Guid.NewGuid());
+            AsignarRefreshToken(uRefToken);
 
-                return usuario;
-            }
+            _context.Add(uRefToken);
+
+            await _context.SaveChangesAsync();
+
+            return BuildToken(usuario, uRefToken);
         }
         private async Task<Usuario> RegistrarUsuario(UserRegistro userRegistro)
         {
@@ -560,7 +570,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
 
         }
 
-        public static string RandomString(int length, bool incluirCaracteresExtra = false)
+        private static string RandomString(int length, bool incluirCaracteresExtra = false)
         {
             string pool = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             if (incluirCaracteresExtra)
@@ -578,11 +588,11 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
             return constructor.ToString();
         }
 
-        private UserToken BuildToken(Usuario usuario)
+        private UserToken BuildToken(Usuario usuario, UsuarioRefreshToken usrRfToken)
         {
-            return BuildToken(usuario, new List<string>());
+            return BuildToken(usuario, usrRfToken, new List<string>());
         }
-        private UserToken BuildToken(Usuario usuario, IList<string> roles)
+        private UserToken BuildToken(Usuario usuario, UsuarioRefreshToken usrRfToken, IList<string> roles)
         {
             var claims = new List<Claim>()
             {
@@ -602,7 +612,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["jwt:key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var expiration = DateTime.UtcNow.AddMinutes(15);
+            var expiration = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["jwt:MinutesToExpire"]));
 
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: null,
@@ -616,20 +626,16 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                 Email = usuario.Email,
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = expiration,
-                RefreshToken = usuario.RefreshToken                
+                RefreshToken = usrRfToken.RefreshToken,
+                BrowserToken = usrRfToken.BrowserToken
             };
         }       
 
-        private void AsignarRefreshToken(Usuario usuario)
+        private void AsignarRefreshToken(UsuarioRefreshToken usuarioRfToken)
         {
-            usuario.RefreshToken = GenerateRefreshToken();
-            usuario.RefreshTokenExpireDate = DateTime.UtcNow.AddDays(30);
-        }
-        private void RevocarRefreshToken(Usuario usuario)
-        {
-            usuario.RefreshToken = null;
-            usuario.RefreshTokenExpireDate = null;
-        }        
+            usuarioRfToken.RefreshToken = GenerateRefreshToken();
+            usuarioRfToken.RefreshTokenExpireDate = DateTime.UtcNow.AddDays(30);
+        }          
         private static string GenerateRefreshToken()
         {
             var randomNumber = new byte[64];

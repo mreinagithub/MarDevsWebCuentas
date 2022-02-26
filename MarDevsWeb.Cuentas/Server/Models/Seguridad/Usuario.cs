@@ -35,8 +35,7 @@ namespace MarDevsWeb.Cuentas.Server.Models.Seguridad
         public virtual DateTime? FechaUltimoCambioPassword { get; set; }
 
         public string PasswordTempRecupero { get; set; } = null;
-        public string RefreshToken { get; set; } = null;
-        public DateTime? RefreshTokenExpireDate { get; set; } = null;
+       
 
         #endregion
 

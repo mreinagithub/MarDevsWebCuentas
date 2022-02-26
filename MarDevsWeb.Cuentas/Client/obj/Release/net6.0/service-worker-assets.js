@@ -825,15 +825,15 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-0tAlzRsZLBwQdmbZDc8ZcLz8x65pdwE9xyJb8ASHxGA=",
+      "hash": "sha256-0EI55iPZu\/4R0AVUKmB82DpkDqQrmqsaKeDDLQ1Var4=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-DZNy\/Z5Yi4rlgIQpg\/+uvsbTyOHn+\/DtjFibjR\/AtQs=",
+      "hash": "sha256-kIqVbMIOSvJcFZpo1RPEorYtE2setu5Gl51haMGK3go=",
       "url": "_framework\/MarDevsWeb.Cuentas.Client.dll"
     },
     {
-      "hash": "sha256-xKMFiOHwoE3N38FFkNE3Mkr1XsURsG26hze94R1Qi+o=",
+      "hash": "sha256-wIICMl+t07RO9fIx5aixAJzBH4DAOm6lBy2jUaRfl5c=",
       "url": "_framework\/MarDevsWeb.Cuentas.Shared.dll"
     },
     {
@@ -1061,5 +1061,5 @@
       "url": "_content\/Microsoft.AspNetCore.Components.Web.Extensions\/headManager.js"
     }
   ],
-  "version": "dvLIC1UU"
+  "version": "2oDbBUVX"
 };

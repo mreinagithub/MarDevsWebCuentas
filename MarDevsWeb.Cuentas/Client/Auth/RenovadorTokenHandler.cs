@@ -27,7 +27,7 @@ namespace MarDevsWeb.Cuentas.Client.Auth
         /// </summary>
         public IList<string> EndpointsIgnorados { get; set; }
 
-        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {                       
             var uri = request.RequestUri;
             if (!EndpointsIgnorados.Any(i => uri.LocalPath.EndsWith(i)))
@@ -35,11 +35,11 @@ namespace MarDevsWeb.Cuentas.Client.Auth
                 var loginService = serviceProvider.GetService(typeof(ILoginService));
                 if (loginService != null && loginService is ILoginService)
                 {
-                    (loginService as ILoginService).VerificarYRenovarToken();
+                    await (loginService as ILoginService).VerificarYRenovarToken();
                 };
             }            
             
-            return base.SendAsync(request, cancellationToken);
+            return await base.SendAsync(request, cancellationToken);
         }
 
 

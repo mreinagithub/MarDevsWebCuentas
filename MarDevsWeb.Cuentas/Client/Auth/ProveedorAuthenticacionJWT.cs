@@ -18,9 +18,10 @@ namespace MarDevsWeb.Cuentas.Client.Auth
     public class ProveedorAuthenticacionJWT : AuthenticationStateProvider, ILoginService
     {
 
-        public static readonly string TOKENKEY = "clave_token";
+        public static readonly string TOKENKEY = "jwt_token";
         public static readonly string EXPIRATIONTOKENKEY = "expiracion_token";
         public static readonly string REFRESH_TOKEN = "refresh_token";
+        public static readonly string BROWSER_IDENTIFIER = "browser_id";
         public static readonly string ULTIMO_USUARIO_LOGUEADO = "ultimo_usr_logueado";
         private readonly IJSRuntime js;
         private readonly HttpClient httpClient;
@@ -73,12 +74,18 @@ namespace MarDevsWeb.Cuentas.Client.Auth
             var userId = Convert.ToInt32(claims.FirstOrDefault(c => c.Type == "unique_name").Value);
 
             var refreshToken = await js.GetFromLocalStorage(REFRESH_TOKEN);
+            var browserToken = await js.GetFromLocalStorage(BROWSER_IDENTIFIER);
+
+            if (string.IsNullOrWhiteSpace(browserToken))
+                return null;
 
             var userRefreshDT = new UserRefreshToken
             {
                 UsuarioID = userId,
                 Token = token,
-                RefreshToken = refreshToken
+                RefreshToken = refreshToken,
+                BrowserToken = Guid.Parse(browserToken)
+
             };
 
             Console.WriteLine("Renovando token...");
@@ -93,6 +100,7 @@ namespace MarDevsWeb.Cuentas.Client.Auth
             await js.SetInLocalStorage(TOKENKEY, nuevoToken.Token);
             await js.SetInLocalStorage(EXPIRATIONTOKENKEY, nuevoToken.Expiration.ToString());
             await js.SetInLocalStorage(REFRESH_TOKEN, nuevoToken.RefreshToken);
+            await js.SetInLocalStorage(BROWSER_IDENTIFIER, nuevoToken.BrowserToken.ToString());
 
             return nuevoToken.Token;            
         }
@@ -155,6 +163,7 @@ namespace MarDevsWeb.Cuentas.Client.Auth
             await js.RemoveFromLocalStorage(TOKENKEY);
             await js.RemoveFromLocalStorage(EXPIRATIONTOKENKEY);
             await js.RemoveFromLocalStorage(REFRESH_TOKEN);
+            await js.RemoveFromLocalStorage(BROWSER_IDENTIFIER);
             httpClient.DefaultRequestHeaders.Authorization = null;
 
         }
@@ -166,6 +175,7 @@ namespace MarDevsWeb.Cuentas.Client.Auth
             await js.SetInLocalStorage(EXPIRATIONTOKENKEY, userToken.Expiration.ToString());
             await js.SetInLocalStorage(ULTIMO_USUARIO_LOGUEADO, userToken.Email);
             await js.SetInLocalStorage(REFRESH_TOKEN, userToken.RefreshToken);
+            await js.SetInLocalStorage(BROWSER_IDENTIFIER, userToken.BrowserToken.ToString());
 
             var authState = ConstruirAuthenticationState(userToken.Token);
             NotifyAuthenticationStateChanged(Task.FromResult(authState));
@@ -174,13 +184,33 @@ namespace MarDevsWeb.Cuentas.Client.Auth
         }
         public async Task Logout()
         {
+            var token = await js.GetFromLocalStorage(TOKENKEY);
+
+            int userId = 0;
+            var claims = ParseClaimsFromJwt(token);
+            if (claims != null || claims.Count() > 0 || claims.Any(c => c.Type == "unique_name"))
+                userId = Convert.ToInt32(claims.FirstOrDefault(c => c.Type == "unique_name").Value);            
+
+            var refreshToken = await js.GetFromLocalStorage(REFRESH_TOKEN);
+            var browserToken = await js.GetFromLocalStorage(BROWSER_IDENTIFIER);
+
+            var userRefreshDT = new UserRefreshToken
+            {
+                UsuarioID = userId,
+                Token = token,
+                RefreshToken = refreshToken,
+                BrowserToken = Guid.Parse(browserToken)
+
+            };
+            await repositorio.Post("api/cuenta/revocar-token", userRefreshDT);
+
             await Limpiar();
             NotifyAuthenticationStateChanged(Task.FromResult(Anonimo));
         }
         public async Task VerificarYRenovarToken()
         {
 
-            Console.WriteLine("Verificando token...");
+            //Console.WriteLine("Verificando token...");
             var token = await js.GetFromLocalStorage(TOKENKEY);
             var timeExpirationString = await js.GetFromLocalStorage(EXPIRATIONTOKENKEY);
             if (string.IsNullOrEmpty(token))

@@ -1605,19 +1605,19 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-c6Jhx+maWtr9rGI2gL09jh2I2ikqyXC+wmdXPwcBuBE=",
+      "hash": "sha256-wcffGKUKFDfyDl7NEMG1+ULb1yp+o\/y7coyARqn6wHs=",
       "url": "_framework\/MarDevsWeb.Cuentas.Shared.dll"
     },
     {
-      "hash": "sha256-pdEcuEVPJ+wEEbYRGYL23LNL+Lu9FUbYjKf+Lp2pNio=",
+      "hash": "sha256-cwJex3L4qPtxeitV1iSucEyv7pSFVejAUvmy6uI\/QzM=",
       "url": "_framework\/MarDevsWeb.Cuentas.Shared.pdb"
     },
     {
-      "hash": "sha256-clAHoCCv3kLv3C7LzldxvCEMxL9EwHZnXlgxccebT9c=",
+      "hash": "sha256-CHiLp2Lx9Ygt9vGjln+e8UI63lTAoEO72dBIN1EbgFk=",
       "url": "_framework\/MarDevsWeb.Cuentas.Client.dll"
     },
     {
-      "hash": "sha256-vojV3TFrdxlKoJ6K2ukJPibxUA6gIkBDUAYltg8uDJY=",
+      "hash": "sha256-alRDsP8JqANG0pKtRGG4mj5JcaZJaKfHKJqJWP+D8fE=",
       "url": "_framework\/MarDevsWeb.Cuentas.Client.pdb"
     },
     {
@@ -1625,7 +1625,7 @@
       "url": "_framework\/blazor.webassembly.js"
     },
     {
-      "hash": "sha256-pbJKr0l8JCqBlyVtLKe1oAc79DO0aYz4RsX9\/XLjfns=",
+      "hash": "sha256-txqbuhXN3K2HwQnGjqKcLbalazYtgh7RnJOwkbQgNWk=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -1633,5 +1633,5 @@
       "url": "_content\/Microsoft.AspNetCore.Components.Web.Extensions\/headManager.js"
     }
   ],
-  "version": "Lu\/O9L0K"
+  "version": "Rqm93oZA"
 };

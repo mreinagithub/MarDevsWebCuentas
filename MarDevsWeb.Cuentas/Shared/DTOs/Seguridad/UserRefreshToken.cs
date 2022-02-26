@@ -12,5 +12,6 @@ namespace MarDevsWeb.Cuentas.Shared.DTOs
         public int UsuarioID { get; set; }
         public string Token { get; set; }
         public string RefreshToken { get; set; }
+        public Guid BrowserToken { get; set; }
     }
 }

@@ -7,8 +7,8 @@
   "linkerEnabled": true,
   "resources": {
     "assembly": {
-      "MarDevsWeb.Cuentas.Client.dll": "sha256-DZNy\/Z5Yi4rlgIQpg\/+uvsbTyOHn+\/DtjFibjR\/AtQs=",
-      "MarDevsWeb.Cuentas.Shared.dll": "sha256-xKMFiOHwoE3N38FFkNE3Mkr1XsURsG26hze94R1Qi+o=",
+      "MarDevsWeb.Cuentas.Client.dll": "sha256-kIqVbMIOSvJcFZpo1RPEorYtE2setu5Gl51haMGK3go=",
+      "MarDevsWeb.Cuentas.Shared.dll": "sha256-wIICMl+t07RO9fIx5aixAJzBH4DAOm6lBy2jUaRfl5c=",
       "Microsoft.AspNetCore.Authorization.dll": "sha256-I+4S9HtdZkUcRegx+2LFiGeCsaoTq8zTkABxK5dglsc=",
       "Microsoft.AspNetCore.Components.Authorization.dll": "sha256-73SQ3x6VGGTTauOfUurQPp4ws3h0l60CmMH+GAVwn2Y=",
       "Microsoft.AspNetCore.Components.dll": "sha256-iVlMwjPoeMJrXoDT64392ReajQv6W60D9bnhGLvtP+s=",

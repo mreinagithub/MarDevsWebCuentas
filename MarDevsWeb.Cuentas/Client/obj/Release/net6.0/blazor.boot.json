@@ -202,15 +202,15 @@
       "mscorlib.dll": "sha256-c1dVVfosFaf5aiS3brr2amBi1Ue0kg6mqECzmCbGyfA=",
       "netstandard.dll": "sha256-+9Yr\/gSP3tCZAMbOdAcGhHGuMcyg\/AaxVKtt3tGsvao=",
       "System.Private.CoreLib.dll": "sha256-SnxOe5QK250duVAQOw0iWr1sODhUuVEUykExQyQ\/WSk=",
-      "MarDevsWeb.Cuentas.Shared.dll": "sha256-xKMFiOHwoE3N38FFkNE3Mkr1XsURsG26hze94R1Qi+o=",
-      "MarDevsWeb.Cuentas.Client.dll": "sha256-DZNy\/Z5Yi4rlgIQpg\/+uvsbTyOHn+\/DtjFibjR\/AtQs="
+      "MarDevsWeb.Cuentas.Shared.dll": "sha256-wIICMl+t07RO9fIx5aixAJzBH4DAOm6lBy2jUaRfl5c=",
+      "MarDevsWeb.Cuentas.Client.dll": "sha256-kIqVbMIOSvJcFZpo1RPEorYtE2setu5Gl51haMGK3go="
     },
     "extensions": null,
     "lazyAssembly": null,
     "libraryInitializers": null,
     "pdb": {
-      "MarDevsWeb.Cuentas.Shared.pdb": "sha256-X5Bf1QPNIf97san\/bUMzbkjf6yZLgdDZTpMcCcm7B8I=",
-      "MarDevsWeb.Cuentas.Client.pdb": "sha256-HC7D0x8SDOMIM17JwtUY1+PBhbJbN5CG1YOCMCzWDX8="
+      "MarDevsWeb.Cuentas.Shared.pdb": "sha256-\/Ljw7QFIfNCGy6OWuxsBp2Q8wTTzwSy8GgBGa95sgrY=",
+      "MarDevsWeb.Cuentas.Client.pdb": "sha256-YiciuompODpNtZ9T5jpOk86MB\/hriWefHuMCxvvYdDo="
     },
     "runtime": {
       "dotnet.6.0.2.7u0wnxi7qh.js": "sha256-wbTVn69TU0+WI83iB+kky8tf\/BjZdYJeM0rUP96ur\/c=",
