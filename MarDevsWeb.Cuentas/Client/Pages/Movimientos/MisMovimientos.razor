@@ -1,4 +1,4 @@
-﻿@page "/MisGastos"
+﻿@page "/MisMovimientos"
 
 
 @inject IJSRuntime js
@@ -12,26 +12,32 @@
 @attribute [Authorize]
 
 
-<Title Value="MarDevs - Mis Gastos"></Title>
+<Title Value="MarDevs - Mis Movimientos"></Title>
 
 
 <div class="row">
     <div class="col-6">
-        <h5>Mis Gastos</h5>
+        <h5>Mis Movimientos</h5>
     </div>
 </div>
 
 <div class="row">
-    <div class="col-xl-4 col-lg-4 col-4 col-sm-4">
-        <p>@textoFiltro</p>
+    <div class="col-6">
+        <p style="margin-bottom:0px;font-size:12px">@textoFiltro</p>
     </div>
-    <div class="col-xl-4 col-lg-4 col-4 col-sm-4">
-        <a href="javascript:void(0);" @onclick="AbrirModalSelectorFecha"><b>Modificar fechas</b></a>
-    </div>
-    <div class="col-xl-4 col-lg-4 col-4 col-sm-4">
-        <p class="float-right" style="color:#28a745; font-weight:bold;">@($"{importeTtlMostrado:C2}")</p>
+    <div class="col-6">
+        <p class="float-right" style="margin-bottom:0px;font-size:12px;">Saldo Inicial: @($"{saldoInicial:C2}")</p>
     </div>
 </div>
+<div class="row">
+    <div class="col-6">        
+        <a href="javascript:void(0);" @onclick="AbrirModalSelectorFiltro"><b>Modificar filtros</b></a>       
+    </div>    
+    <div class="col-6">
+        <p class="float-right" style="color:@colorTtlMostrado; margin-bottom:5px;">@($"{importeTtlMostrado:C2}")</p>
+    </div>
+</div>
+
 
 <BuscadorTexto @bind-TextoBusqueda="textoBusqueda" Buscar="Actualizar" placeholder="Concepto, Observaciones..." id="txtBusqueda"></BuscadorTexto>
 
@@ -43,50 +49,53 @@
 
 <button @onclick="ScrollTop" id="btnScrollTop" title="Ir arriba"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
 
-@if (PreviewGastos == null)
+@if (PreviewMovimientos == null)
 {
     <Waiting></Waiting>
 }
 else
 {
     <div class="">
-        <table class="table table-sm" id="tablaVerGastos">
+        <table class="table table-sm" id="tablaVerMovimientos">
             <tbody>
 
-                @foreach (var GastoPreview in PreviewGastos)
+                @foreach (var MovPreview in PreviewMovimientos)
                 {
-                    <MiGastoItem GastoPreview="GastoPreview" />
+                    <MiMovimientoItem MovimientoDTO="MovPreview" />
 
                 }
             </tbody>
         </table>
     </div>
 
-    <ModalModificarFechas @bind-FechaDesde="fechaDesde" @bind-FechaHasta="fechaHasta"                
+    <ModalModificarFiltros @bind-FechaDesde="fechaDesde" @bind-FechaHasta="fechaHasta" @bind-TipoMovimiento="tipoMovimiento"            
                 OtrosPeriodos = "otrosPeriodos"
                 ProcesarCambioFecha="ProcesarCambioDeFecha"
                 RestablecerFechasDefault ="RestablecerFechasDefault"
                 AlCancelarCambioFecha="CerrarModalSelectorFecha" >
-            </ModalModificarFechas>
+            </ModalModificarFiltros>
 }
 
 @code{
 
-    public List<GastoDTO> PreviewGastos { get; set; }
+    public List<MovimientoDTO> PreviewMovimientos { get; set; }
     IJSObjectReference modulo;
     int cantidadRegistros = 0;
     Dictionary<string, string> queryStringDict = new Dictionary<string, string>();    
     string textoBusqueda = "";
+    string tipoMovimiento = "TODOS";
     DateTime? fechaDesde = null;
     DateTime? fechaHasta = null;
     List<PeriodoDTO> otrosPeriodos = null;    
     string textoFiltro = "";
+    string colorTtlMostrado = "";
     decimal importeTtlMostrado = 0;
+    decimal saldoInicial = 0;
 
 
     protected async override Task OnInitializedAsync()
     {
-        modulo = await js.InvokeAsync<IJSObjectReference>("import", "./js/MisGastos.js");
+        modulo = await js.InvokeAsync<IJSObjectReference>("import", "./js/MisMovimientos.js");
 
         var url = navigationManager.Uri;
 
@@ -113,7 +122,7 @@ else
     private async Task Actualizar()
     {
         var queryStrings = GenerarQueryString();
-        navigationManager.NavigateTo("./MisGastos?" + queryStrings);
+        navigationManager.NavigateTo("./MisMovimientos?" + queryStrings);
         await BuscarRegistros(queryStrings);
     }
     private void LlenarCampos()
@@ -131,6 +140,10 @@ else
         {
             fechaHasta = DateTime.Parse(queryStringDict["fechaHasta"]);                        
         }
+        if(queryStringDict.ContainsKey("tipoMovimiento"))
+        {
+            tipoMovimiento = queryStringDict["tipoMovimiento"];
+        }
         ArmarTextoFiltro();
 
     }
@@ -140,6 +153,7 @@ else
         queryStringDict["textoBuscar"] = textoBusqueda;
         queryStringDict["fechaDesde"] = $"{fechaDesde:yyyy-MM-dd}";
         queryStringDict["fechaHasta"] = $"{fechaHasta:yyyy-MM-dd}";
+        queryStringDict["tipoMovimiento"] = tipoMovimiento;
 
         var valoresPorDefecto = new List<string>() { "" };
 
@@ -147,20 +161,22 @@ else
             .Where(x => !valoresPorDefecto.Contains(x.Value.ToLower()))
             .Select(x => $"{x.Key}={System.Web.HttpUtility.UrlEncode(x.Value)}").ToArray());
 
-
     }
     private async Task BuscarRegistros(string queryStrings)
     {
-        var httpResponse = await repositorio.Get<List<GastoDTO>>("api/gasto/buscar?" + queryStrings);
+        var httpResponse = await repositorio.Get<HeaderMovimientoDTO>("api/movimiento/buscar?" + queryStrings);
         if (httpResponse.Error)
         {
             await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
         }
         else
         {
-            PreviewGastos = httpResponse.Response;
-            cantidadRegistros = PreviewGastos.Count();
-            importeTtlMostrado = PreviewGastos.Sum(g => g.Importe);
+            var respuesta = httpResponse.Response;
+            PreviewMovimientos = respuesta.Movimientos;
+            saldoInicial = respuesta.SaldoInicial;
+            cantidadRegistros = PreviewMovimientos.Count();
+            importeTtlMostrado = PreviewMovimientos.Sum(g => (g.Tipo.ToLower().Equals("egreso") ? -1 : 1) * g.Importe);
+            colorTtlMostrado = importeTtlMostrado < 0 ? "#FF7276": "#28a745";
         }
     }
     private async Task ScrollTop()
@@ -173,7 +189,7 @@ else
 
     private async Task ArmarQueryDefault()
     {
-        var httpResponse = await repositorio.Get<DateTime>("api/gasto/obtenerFechaActual");
+        var httpResponse = await repositorio.Get<DateTime>("api/movimiento/obtenerFechaActual");
         if (httpResponse.Error)
         {
             await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
@@ -187,6 +203,7 @@ else
             {
                 fechaHasta = DateTime.Now.Date;
             }
+            tipoMovimiento = "TODOS";
         }
     }
     private void ArmarTextoFiltro()
@@ -200,9 +217,10 @@ else
         {
             textoFiltro += $" a {fechaHasta:dd/MM/yyyy}";
         }
+        textoFiltro += $" - Movimientos: {tipoMovimiento.ToUpper()}";
     }
 
-    async Task AbrirModalSelectorFecha()
+    async Task AbrirModalSelectorFiltro()
     {   
         //Refresco la lista de periodos
         var httpResponse = await repositorio.Get<List<PeriodoDTO>>("api/periodo/buscar");
@@ -215,7 +233,7 @@ else
             otrosPeriodos = httpResponse.Response;            
         }
         await js.SeleccionarValorSelectItem("lstPeriodosElegibles", "default");        
-        await js.MostrarModal("modarModificarFechasBusqueda");
+        await js.MostrarModal("modarModificarFiltrosBusqueda");
     }    
     async Task RestablecerFechasDefault()
     {
@@ -230,7 +248,7 @@ else
     }
     async Task CerrarModalSelectorFecha()
     {
-        await js.OcultarModal("modarModificarFechasBusqueda");
+        await js.OcultarModal("modarModificarFiltrosBusqueda");
     }
 
 }

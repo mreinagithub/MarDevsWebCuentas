@@ -1,6 +1,6 @@
 ﻿<div class="container">
     <!-- The Modal -->
-    <div class="modal fade" id="modarModificarFechasBusqueda">
+    <div class="modal fade" id="modarModificarFiltrosBusqueda">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <!-- Modal Header -->
@@ -8,12 +8,24 @@
                     <button type="button" id="btnCerrar" class="close mr-1" data-dismiss="modal"  @onclick="CancelarCambios">&times;</button>
                     <div class="modal-title modal-title-form">
                         @*<span><i class="fas fa-shopping-cart"></i></span>*@
-                        <b>Modificar fechas de búsqueda</b>
+                        <b>Modificar filtros de búsqueda</b>
                     </div>
 
                 </div>
-                <!-- Modal body -->
+                <!-- Modal body -->                 
                 <div class="modal-body" id="editarFormItemPedido">
+                    <div class="row">                            
+                        <div class="col-12">                                
+                             <div class="form-group mb-1">                                    
+                                 <label class="control-label small mb-0 font-weight-bold">Tipo Movimiento</label>                                                                                                                                
+                                 <select class="form-control " id="lstTiposMovimiento" autocomplete="off" @bind="@TipoMovimiento">                                        
+                                     <option value="TODOS">--TODOS--</option>
+                                     <option value="egreso">Egresos</option>
+                                     <option value="ingreso">Ingresos</option>
+                                 </select>                                             
+                             </div>                            
+                        </div>
+                    </div>
                     @if (OtrosPeriodos != null)
                     {
                         <div class="row">
@@ -56,7 +68,7 @@
                             <div class="col-8">
                                 <div class="p-t-10">
                                     <button class="btn btn-custom btn-sm col-12" id="btnActualizarFechasBusqueda" type="button" @onclick="ProcesarSeleccion">
-                                        Actualizar Fechas
+                                        Actualizar
                                     </button>
                                 </div>
                             </div>
@@ -78,10 +90,12 @@
 
 @code{
 
+    [Parameter] public string TipoMovimiento { get; set; }
     [Parameter] public DateTime? FechaDesde { get; set; }
     [Parameter] public DateTime? FechaHasta { get; set; }
     [Parameter] public List<PeriodoDTO> OtrosPeriodos { get; set; }    
 
+    [Parameter] public EventCallback<string> TipoMovimientoChanged { get; set; }
     [Parameter] public EventCallback<DateTime?> FechaDesdeChanged { get; set; }
     [Parameter] public EventCallback<DateTime?> FechaHastaChanged { get; set; }
     [Parameter] public EventCallback AlCancelarCambioFecha { get; set; }
@@ -112,8 +126,9 @@
         }
         else
         {
+            await TipoMovimientoChanged.InvokeAsync(TipoMovimiento);
             await FechaDesdeChanged.InvokeAsync(FechaDesde);
-            await FechaHastaChanged.InvokeAsync(FechaHasta);
+            await FechaHastaChanged.InvokeAsync(FechaHasta);            
             await ProcesarCambioFecha.InvokeAsync();    
         }        
     }

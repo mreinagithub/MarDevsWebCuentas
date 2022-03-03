@@ -26,7 +26,22 @@ else
 
     <div id="editarConceptoForm">
         <EditForm Model="Model" OnValidSubmit="Actualizar" autocomplete="off">
-            <DataAnnotationsValidator />           
+            <DataAnnotationsValidator /> 
+            <div class="row">                            
+                <div class="col-12">                                
+                    <div class="form-group mb-1">                                    
+                        <label class="control-label small mb-0 font-weight-bold">Tipo</label>       
+                        <span class="small" style="display:inline-block">
+                            <ValidationMessage For="@(() => Model.TipoConcepto)" />
+                        </span> 
+                        <select class="form-control" @bind="Model.TipoConcepto" id="lstTipoConcepto" autocomplete="off">
+                            <option value="">--Seleccione--</option>                                        
+                            <option value="Egreso">Egreso</option>
+                            <option value="Ingreso">Ingreso</option>
+                        </select>
+                    </div>
+                </div>  
+            </div>
             <div class="row">
                 <div class="col-12">
                     <div class="form-group mb-1">
@@ -35,6 +50,23 @@ else
                             <ValidationMessage For="@(() => Model.Descripcion)" />
                         </span> 
                         <InputText @bind-Value="@Model.Descripcion" class="form-control" id="txtDescripcion"></InputText>
+                    </div>
+                </div>
+            </div>
+             <div class="row">
+                <div class="col-12">
+                    <div class="form-group mb-1">
+                        <label class="control-label small mb-0 font-weight-bold">Rubro</label>                                                            
+                        <span class="small" style="display:inline-block">
+                            <ValidationMessage For="@(() => Model.RubroID)" />
+                        </span>
+                        <select class="form-control" @bind="Model.RubroID" id="lstRubrosDisponibles" autocomplete="off">
+                            <option selected value="">--Sin Rubro Asignado--</option>
+                            @foreach (var r in Model.RubrosDisponibles)
+                            {
+                                <option value="@r.RubroID">@r.Descripcion</option>
+                            }                                    
+                        </select>                                     
                     </div>
                 </div>
             </div>
@@ -49,7 +81,7 @@ else
                 <div class="col-12 order-first col-sm-8">
                     <div class="form-group" style="margin-bottom:8px;">
                         <div class="p-t-10">
-                            <button class="btn btn-custom col-12 btn-sm" id="btnGuardarGasto" type="submit">
+                            <button class="btn btn-custom col-12 btn-sm" id="btnGuardarConcepto" type="submit">
                                 @if (!Actualizando)
                                 {
                                     <Text> Guardar <i class="fas fa-save ml-1"></i></Text>

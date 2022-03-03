@@ -88,11 +88,18 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                 return _context.Concepto.Where(c => c.CreadoPor == YO).AsQueryable();
             }
         }
-        protected IQueryable<Gasto> GastosUsuario
+        protected IQueryable<Movimiento> MovimientoUsuario
         {
             get
             {
-                return _context.Gasto.Where(g => g.CreadoPor == YO).AsQueryable();
+                return _context.Movimiento.Where(g => g.CreadoPor == YO).AsQueryable();
+            }
+        }
+        protected IQueryable<Rubro> RubrosUsuario
+        {
+            get
+            {
+                return _context.Rubro.Where(r => r.CreadoPor == YO).AsQueryable();
             }
         }
 

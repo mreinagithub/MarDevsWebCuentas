@@ -27,12 +27,17 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
         public async Task<ActionResult<List<ConceptoDTO>>> Get()
         {
 
-            var queryable = ConceptosUsuario;
+            var queryable = ConceptosUsuario
+                .Include(c => c.Rubro)
+                .OrderBy(c => c.Tipo);            
 
             return await queryable.Select(c => new ConceptoDTO
             {
                 Id = c.Id.Value,
-                Descripcion = c.Descripcion
+                Tipo = c.Tipo,
+                Descripcion = c.Descripcion,
+                Rubro = (c.Rubro == null ? "" : c.Rubro.Descripcion)
+               
             }).ToListAsync();
         }
         [HttpGet("obtenerModeloConcepto/{conceptoId?}")]
@@ -48,8 +53,18 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                     throw new ExcepcionNegocios("El concepto que intenta modificar no fue encontrado.");
 
                 modelo.ConceptoId = concepto.Id.Value;
+                modelo.TipoConcepto = concepto.Tipo;
                 modelo.Descripcion = concepto.Descripcion;
+                modelo.RubroID = concepto.RubroID;
             }
+
+            var rubros = RubrosUsuario;
+            rubros = rubros.OrderBy(c => c.Descripcion);
+            modelo.RubrosDisponibles = await rubros.Select(c => new RubrosDisponiblesDTO
+            {
+                RubroID = c.Id.Value,
+                Descripcion = c.Descripcion
+            }).ToListAsync();
 
             return modelo;
 
@@ -68,19 +83,30 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                         concepto = await ConceptosUsuario.FirstOrDefaultAsync(c => c.Id == conceptoEditar.ConceptoId);
                         if (concepto == null)
                             throw new ExcepcionNegocios("No se encontró el concepto a editar.");
+                        if(concepto.Tipo != conceptoEditar.TipoConcepto)
+                        {
+                            var fueUsado = await MovimientoUsuario.AnyAsync(g => g.ConceptoID == concepto.Id.Value);
+                            if(fueUsado)
+                                throw new ExcepcionNegocios("No puede modificar el tipo de concepto ya que este fue usado en al menos un movimiento.");
+                        }
                     }
                     else
                     {
                         concepto = new Concepto();
                     }
 
+                    conceptoEditar.TipoConcepto = conceptoEditar.TipoConcepto.Trim();
                     conceptoEditar.Descripcion = conceptoEditar.Descripcion.Trim();
 
                     var existe = await ConceptosUsuario.AnyAsync(c => c.Id != concepto.Id && c.Descripcion.Equals(conceptoEditar.Descripcion));
                     if (existe)
                         throw new ExcepcionNegocios("Ya existe un concepto con la misma descripción.\nNo puede cargar otro.");
+                                        
 
+                    concepto.Tipo = conceptoEditar.TipoConcepto;
                     concepto.Descripcion = conceptoEditar.Descripcion;
+                    concepto.RubroID = conceptoEditar.RubroID;
+
 
                     if (concepto.Id != null)
                     {
@@ -123,9 +149,9 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                 if (concepto == null)
                     throw new ExcepcionNegocios("No se encontró el concepto a eliminar.");
 
-                var existe = await GastosUsuario.AnyAsync(g => g.ConceptoID == concepto.Id.Value);
+                var existe = await MovimientoUsuario.AnyAsync(g => g.ConceptoID == concepto.Id.Value);
                 if(existe)
-                    throw new ExcepcionNegocios("No puede eliminar el concepto seleccionado porque ya fue utilizado en al menos un gasto de sus cuentas.");
+                    throw new ExcepcionNegocios("No puede eliminar el concepto seleccionado porque ya fue utilizado en al menos un movimiento de sus cuentas.");
 
 
                 _context.Remove(concepto);

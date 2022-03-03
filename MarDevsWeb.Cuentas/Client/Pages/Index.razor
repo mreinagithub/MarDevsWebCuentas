@@ -22,24 +22,43 @@
 
 }
 
-<div class="row">
+<div class="row">         
     <div class="col-12 col-md-6 contenedor-imagen-izquierda">
-        <a href="Gasto" class="imagen-seleccionable img-vertical" id="agregarGastoId" style="text-decoration:none !important; color:black;">
-            <Tarjeta Titulo="Agregar Gasto" TextoLinea1="Carga rápida de gasto.">
+        <a href="ingreso" class="imagen-seleccionable img-vertical" id="agregarIngesoId" style="text-decoration:none !important; color:black;">
+            <Tarjeta Titulo="Ingreso" TextoLinea1="Carga de nuevo ingreso." ColorTitulo="#28a745;">
                 <RenderIcono>
-                    <i class="fas fa-plus mr-2"></i>
+                    <i class="fas fa-plus mr-0"></i>
                 </RenderIcono>
             </Tarjeta>
         </a>
-         <a href="Gasto" class="imagen-seleccionable img-horizonal" id="agregarGastoId" style="text-decoration:none !important; color:black;">
-            <Tarjeta Titulo="Agregar Gasto" TextoLinea1="Carga rápida de gasto.">
+         <a href="ingreso" class="imagen-seleccionable img-horizonal" id="agregarIngesoId" style="text-decoration:none !important; color:black;">
+            <Tarjeta Titulo="Ingreso" TextoLinea1="Carga de nuevo ingreso." ColorTitulo="#28a745;">
                 <RenderIcono>
-                    <i class="fas fa-plus mr-2"></i>
+                    <i class="fas fa-plus mr-0"></i>
                 </RenderIcono>
             </Tarjeta>
         </a>
-    </div>
+    </div> 
     <div class="col-12 col-md-6 contenedor-imagen-derecha">
+        <a href="egreso" class="imagen-seleccionable img-vertical" id="agregarEgresoId" style="text-decoration:none !important; color:black;">
+            <Tarjeta Titulo="Egreso" TextoLinea1="Carga de nuevo egreso." ColorTitulo="#FF7276">
+                <RenderIcono>
+                    <i class="fas fa-minus mr-0"></i>
+                </RenderIcono>
+            </Tarjeta>
+        </a>
+         <a href="egreso" class="imagen-seleccionable img-horizonal" id="agregarEgresoId" style="text-decoration:none !important; color:black;">
+            <Tarjeta Titulo="Egreso" TextoLinea1="Carga de nuevo egreso." ColorTitulo = "#FF7276">
+                <RenderIcono>
+                    <i class="fas fa-minus mr-0"></i>
+                </RenderIcono>
+            </Tarjeta>
+        </a>
+    </div>   
+</div>
+    
+<div class="row">
+    <div class="col-12">
 
         @if(Model == null)
         {
@@ -50,17 +69,17 @@
         }
         else
         {            
-             <a href="MisGastos" class="imagen-seleccionable img-vertical" id="resumenGastosId" style="text-decoration:none !important; color:black;">
-                 <Tarjeta Titulo="Gastos a la fecha" TextoLinea1="@textoGastosLinea1" TextoLinea2="@textoGastosLinea2">
+             <a href="MisMovimientos" class="imagen-seleccionable img-vertical" id="resumenId" style="text-decoration:none !important; color:black; margin-top:15px;">
+                 <Tarjeta Titulo="@fechaDesde" TextoLinea1="@saldoInicial" TextoLinea2="@ingresos" TextoLinea3="@egresos" ColorLinea2="#28a745" ColorLinea3= "#FF7276">
                     <RenderIcono>
-                        <i class="fas fa-comment-dollar mr-2"></i>
+                        <i class="fas fa-comment-dollar mr-0"></i>
                     </RenderIcono>
                 </Tarjeta>          
             </a>
-             <a href="MisGastos" class="imagen-seleccionable img-horizonal" id="resumenGastosId" style="text-decoration:none !important; color:black;">
-                <Tarjeta Titulo="Gastos a la fecha" TextoLinea1="@textoGastosLinea1" TextoLinea2="@textoGastosLinea2">
+             <a href="MisMovimientos" class="imagen-seleccionable img-horizonal" id="resumenId" style="text-decoration:none !important; color:black;">
+                <Tarjeta Titulo="@fechaDesde" TextoLinea1="@saldoInicial" TextoLinea2="@ingresos" TextoLinea3="@egresos" ColorLinea2="#28a745" ColorLinea3= "#FF7276">
                     <RenderIcono>
-                        <i class="fas fa-comment-dollar mr-2"></i>
+                        <i class="fas fa-comment-dollar mr-0"></i>
                     </RenderIcono>
                 </Tarjeta>          
             </a>       
@@ -72,12 +91,13 @@
 
 @code{
     string NombrePila { get; set; }
-    protected ResumenHomeDTO Model { get; set; } = null;
-    public EditarGastoDTO EditarGasto { get; set; }
+    protected ResumenHomeDTO Model { get; set; } = null;    
 
 
-    private string textoGastosLinea1 = "";
-    private string textoGastosLinea2 = "";
+    private string saldoInicial = "";
+    private string ingresos = "";
+    private string egresos = "";
+    private string fechaDesde = "";
 
     protected async override Task OnInitializedAsync()
     {        
@@ -88,7 +108,7 @@
 
     async Task Actualizar()
     {
-        var httpReponse = await repositorio.Get<ResumenHomeDTO>("api/gasto/resumenHome");
+        var httpReponse = await repositorio.Get<ResumenHomeDTO>("api/movimiento/resumenHome");
         if (httpReponse.Error)
         {
             await errorHandler.MostrarError(httpReponse.HttpResponseMessage);
@@ -98,8 +118,10 @@
            
 
             Model = httpReponse.Response;
-            textoGastosLinea1 = $"Desde {Model.FechaDesde:dd/MM/yyyy}";
-            textoGastosLinea2 = $"Total Gastos: {Model.TotalGastos:C2}";
+            fechaDesde = $"Movimientos desde {Model.FechaDesde:dd/MM/yyyy}";
+            saldoInicial = $"Saldo Inicial: {Model.SaldoInicial:C2}";
+            ingresos = $"Total Ingresos: {Model.TotalIngresos:C2}";
+            egresos = $"Total Egresos: {Model.TotalEgresos:C2}";
 
         }
     }

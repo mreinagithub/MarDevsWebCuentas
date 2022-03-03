@@ -61,7 +61,8 @@ a, .btn-link {
     --color-primario: #008f39; /*#003670;*/
     --color-secundario: #666666;
     --color-terciario: #77dd77; /*#68aedf;*/
-    --color-cuaternario: #d9d7d7;   
+    --color-cuaternario: #d9d7d7;
+    --color-egresodinero: #FF7276;
 }
 
 
@@ -125,10 +126,10 @@ a, .btn-link {
 .bootstrap-select .dropdown-toggle:focus {
     outline: none !important;
 }
-
+/*
 .dropdown-menu .show {
     font-size: 12px;
-}
+}*/
 
 .dropdown-item:active {
     background-color: var(--color-primario);

@@ -54,8 +54,12 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29uY2VwdG9zXEVkaXRhckNvbmNlcHRvLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[H:/Documents/Google Drive/MARDEVS/Proyectos/MarDevsWeb.Cuentas/MarDevsWeb.Cuentas/Client/Pages/Gastos/EditarGasto.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcR2FzdG9zXEVkaXRhckdhc3RvLnJhem9y
+[H:/Documents/Google Drive/MARDEVS/Proyectos/MarDevsWeb.Cuentas/MarDevsWeb.Cuentas/Client/Pages/Movimientos/EditarEgreso.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTW92aW1pZW50b3NcRWRpdGFyRWdyZXNvLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/Documents/Google Drive/MARDEVS/Proyectos/MarDevsWeb.Cuentas/MarDevsWeb.Cuentas/Client/Pages/Movimientos/EditarIngreso.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTW92aW1pZW50b3NcRWRpdGFySW5ncmVzby5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [H:/Documents/Google Drive/MARDEVS/Proyectos/MarDevsWeb.Cuentas/MarDevsWeb.Cuentas/Client/Pages/Periodos/EditarPeriodo.razor]
@@ -64,6 +68,14 @@ build_metadata.AdditionalFiles.CssScope =
 
 [H:/Documents/Google Drive/MARDEVS/Proyectos/MarDevsWeb.Cuentas/MarDevsWeb.Cuentas/Client/Pages/Periodos/PeriodoItem.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGVyaW9kb3NcUGVyaW9kb0l0ZW0ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/Documents/Google Drive/MARDEVS/Proyectos/MarDevsWeb.Cuentas/MarDevsWeb.Cuentas/Client/Pages/Rubros/EditarRubro.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUnVicm9zXEVkaXRhclJ1YnJvLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[H:/Documents/Google Drive/MARDEVS/Proyectos/MarDevsWeb.Cuentas/MarDevsWeb.Cuentas/Client/Pages/Rubros/RubroItem.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUnVicm9zXFJ1YnJvSXRlbS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [H:/Documents/Google Drive/MARDEVS/Proyectos/MarDevsWeb.Cuentas/MarDevsWeb.Cuentas/Client/Shared/EmptyLayout.razor]
@@ -90,25 +102,29 @@ build_metadata.AdditionalFiles.CssScope = b-ymfm43o10w
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29uY2VwdG9zXENvbmNlcHRvcy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-v7q7pg3q05
 
-[H:/Documents/Google Drive/MARDEVS/Proyectos/MarDevsWeb.Cuentas/MarDevsWeb.Cuentas/Client/Pages/Gastos/MiGastoItem.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcR2FzdG9zXE1pR2FzdG9JdGVtLnJhem9y
-build_metadata.AdditionalFiles.CssScope = b-5705ksbrjs
-
-[H:/Documents/Google Drive/MARDEVS/Proyectos/MarDevsWeb.Cuentas/MarDevsWeb.Cuentas/Client/Pages/Gastos/MisGastos.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcR2FzdG9zXE1pc0dhc3Rvcy5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = b-qlxxbnvtdc
-
-[H:/Documents/Google Drive/MARDEVS/Proyectos/MarDevsWeb.Cuentas/MarDevsWeb.Cuentas/Client/Pages/Gastos/ModalModificarFechas.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcR2FzdG9zXE1vZGFsTW9kaWZpY2FyRmVjaGFzLnJhem9y
-build_metadata.AdditionalFiles.CssScope = b-autt11839o
-
 [H:/Documents/Google Drive/MARDEVS/Proyectos/MarDevsWeb.Cuentas/MarDevsWeb.Cuentas/Client/Pages/Index.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-9frg9um0tx
 
+[H:/Documents/Google Drive/MARDEVS/Proyectos/MarDevsWeb.Cuentas/MarDevsWeb.Cuentas/Client/Pages/Movimientos/MiMovimientoItem.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTW92aW1pZW50b3NcTWlNb3ZpbWllbnRvSXRlbS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-ygp22lyls6
+
+[H:/Documents/Google Drive/MARDEVS/Proyectos/MarDevsWeb.Cuentas/MarDevsWeb.Cuentas/Client/Pages/Movimientos/MisMovimientos.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTW92aW1pZW50b3NcTWlzTW92aW1pZW50b3MucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-0nkadwttr2
+
+[H:/Documents/Google Drive/MARDEVS/Proyectos/MarDevsWeb.Cuentas/MarDevsWeb.Cuentas/Client/Pages/Movimientos/ModalModificarFiltros.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTW92aW1pZW50b3NcTW9kYWxNb2RpZmljYXJGaWx0cm9zLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-59icmxhti0
+
 [H:/Documents/Google Drive/MARDEVS/Proyectos/MarDevsWeb.Cuentas/MarDevsWeb.Cuentas/Client/Pages/Periodos/Periodos.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGVyaW9kb3NcUGVyaW9kb3MucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-2fi3oex7t9
+
+[H:/Documents/Google Drive/MARDEVS/Proyectos/MarDevsWeb.Cuentas/MarDevsWeb.Cuentas/Client/Pages/Rubros/Rubros.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUnVicm9zXFJ1YnJvcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-iz3gcrowzg
 
 [H:/Documents/Google Drive/MARDEVS/Proyectos/MarDevsWeb.Cuentas/MarDevsWeb.Cuentas/Client/Shared/BuscadorTexto.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEJ1c2NhZG9yVGV4dG8ucmF6b3I=

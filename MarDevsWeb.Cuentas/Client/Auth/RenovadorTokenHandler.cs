@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -35,10 +37,9 @@ namespace MarDevsWeb.Cuentas.Client.Auth
                 var loginService = serviceProvider.GetService(typeof(ILoginService));
                 if (loginService != null && loginService is ILoginService)
                 {
-                    await (loginService as ILoginService).VerificarYRenovarToken();
-                };
-            }            
-            
+                    await (loginService as ILoginService).VerificarYRenovarToken(request);                    
+                }                
+            }
             return await base.SendAsync(request, cancellationToken);
         }
 

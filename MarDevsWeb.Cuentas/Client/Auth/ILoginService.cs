@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace MarDevsWeb.Cuentas.Client.Auth
@@ -11,7 +12,7 @@ namespace MarDevsWeb.Cuentas.Client.Auth
 
         Task Login(UserToken userToken);
         Task Logout();
-        Task VerificarYRenovarToken();
+        Task VerificarYRenovarToken(HttpRequestMessage request);
 
         Task<string> ObtenerUltimoUsuarioLogueado();
         Task<string> ObtenerNombrePilaUsuario();

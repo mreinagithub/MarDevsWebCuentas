@@ -35,8 +35,9 @@ namespace MarDevsWeb.Cuentas.Server
         //Negocio
         public DbSet<Periodo> Periodo { get; set; }
         public DbSet<FlagsCuentas> FlagsCuentas { get; set; }
+        public DbSet<Rubro> Rubro { get; set; }
         public DbSet<Concepto> Concepto { get; set; }
-        public DbSet<Gasto> Gasto { get; set; }
+        public DbSet<Movimiento> Movimiento { get; set; }
 
 
     }   

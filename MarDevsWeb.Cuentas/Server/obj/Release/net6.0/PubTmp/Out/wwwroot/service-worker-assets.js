@@ -509,7 +509,7 @@
       "url": "bootstrap-select\/js\/i18n\/defaults-zh_TW.min.js"
     },
     {
-      "hash": "sha256-MRW+67gIoXefQY7N3TywGJIrpHdI0ckoTgT2t+FIjb4=",
+      "hash": "sha256-l\/Z6F80iL\/+OG1PXRCjg9LjzRrYhkfXWlR5wnuEwQYU=",
       "url": "css\/app.css"
     },
     {
@@ -741,10 +741,6 @@
       "url": "font-awesome\/webfonts\/fa-solid-900.woff2"
     },
     {
-      "hash": "sha256-A9sHMLgS+DRVRlN13HWLYWDAb\/6W6Pggmg2HMrzt7Zc=",
-      "url": "Imagenes\/Cliente\/BannerModuloPedidos.png"
-    },
-    {
       "hash": "sha256-iB+KXyxzfQ5E9CrWAs4oRHv5XVqltqgBGZDAKfMTRDA=",
       "url": "Imagenes\/LogoMarDevs-192.png"
     },
@@ -778,11 +774,15 @@
     },
     {
       "hash": "sha256-yBwuMU1mRZ0BkyOkzegV8f90Gqan78ggLH339OQ5fSY=",
-      "url": "js\/MisGastos.js"
+      "url": "js\/MisMovimientos.js"
     },
     {
       "hash": "sha256-yBwuMU1mRZ0BkyOkzegV8f90Gqan78ggLH339OQ5fSY=",
       "url": "js\/Periodos.js"
+    },
+    {
+      "hash": "sha256-yBwuMU1mRZ0BkyOkzegV8f90Gqan78ggLH339OQ5fSY=",
+      "url": "js\/Rubros.js"
     },
     {
       "hash": "sha256-SI5Dumzrx4A9gvWdK8rnZW4RvYEILU1WOpqJvRk7Y7s=",
@@ -825,15 +825,15 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-0EI55iPZu\/4R0AVUKmB82DpkDqQrmqsaKeDDLQ1Var4=",
+      "hash": "sha256-uuZAj2oIze4bjfGIo87OTWG\/ou9fWEjuR6eNZ\/5obfw=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-kIqVbMIOSvJcFZpo1RPEorYtE2setu5Gl51haMGK3go=",
+      "hash": "sha256-SgxNE5dhOTd+4btnRrONfWO9rS5gHSEchdrcMBHbNEc=",
       "url": "_framework\/MarDevsWeb.Cuentas.Client.dll"
     },
     {
-      "hash": "sha256-wIICMl+t07RO9fIx5aixAJzBH4DAOm6lBy2jUaRfl5c=",
+      "hash": "sha256-+qayyfuZdTbCd7e\/y8GYDcJTjQHflQ8ZtpTvYz++G3Q=",
       "url": "_framework\/MarDevsWeb.Cuentas.Shared.dll"
     },
     {
@@ -949,7 +949,7 @@
       "url": "_framework\/System.Collections.Specialized.dll"
     },
     {
-      "hash": "sha256-zO0FWgPyosnZG726Y+KVufpiN2jsY7L571N+j25xL8Q=",
+      "hash": "sha256-Be\/cRV\/uQQvAsrHRSDKJHYcakFIqbg6om1gr1YPgQEk=",
       "url": "_framework\/System.ComponentModel.Annotations.dll"
     },
     {
@@ -1033,7 +1033,7 @@
       "url": "_framework\/System.Text.Json.dll"
     },
     {
-      "hash": "sha256-44EFIrgaJx8ZIlt9FnXnSi48vwfM83h7pvVFjHiWui8=",
+      "hash": "sha256-ItrWvwy5lkd3AuluOHgV3xcRqPCRl6hA5pGFOhOHEPo=",
       "url": "_framework\/System.Text.RegularExpressions.dll"
     },
     {
@@ -1053,7 +1053,7 @@
       "url": "_framework\/System.Web.HttpUtility.dll"
     },
     {
-      "hash": "sha256-2VOHYRler8Ak6N4vKP0zWQIkCJAlMLFbIV34A8fNqcQ=",
+      "hash": "sha256-JICsfcm2SVnEHT+ILKoCgy5ok4VK9Gc0kDNQrcYg6GE=",
       "url": "MarDevsWeb.Cuentas.Client.styles.css"
     },
     {
@@ -1061,5 +1061,5 @@
       "url": "_content\/Microsoft.AspNetCore.Components.Web.Extensions\/headManager.js"
     }
   ],
-  "version": "2oDbBUVX"
+  "version": "2NAr3l\/r"
 };

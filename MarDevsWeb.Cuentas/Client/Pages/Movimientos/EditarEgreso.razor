@@ -1,4 +1,4 @@
-﻿@page "/Gasto/{gastoId:guid?}"
+﻿@page "/egreso/{egresoId:guid?}"
 
 @inject IJSRuntime js
 @inject IRepositorio repositorio
@@ -10,7 +10,7 @@
 
 @attribute [Authorize]
 
-<Title Value="MarDevs - Gasto"></Title>
+<Title Value="MarDevs - Egreso"></Title>
 
 <div class="row">
     <div class="col-12">
@@ -24,25 +24,25 @@
 }
 else
 {
-    @if (gastoId != null)
+    @if (egresoId != null)
     {
         <div class="row">
             <div class="col-12">
-                <a class="btn btn-danger btn-sm float-right" href="javascript:void(0)" @onclick="PreguntarEliminarGasto">Eliminar</a>
+                <a class="btn btn-danger btn-sm float-right" href="javascript:void(0)" @onclick="PreguntarEliminarEgreso" title="Eliminar..."><i class="fa fa-trash" aria-hidden="true"></i></a>
             </div>
         </div>
 
           <MensajeModal @ref="modalElim" AlCerrarModal="AbortarModalEliminacion" ModalTitle="Pregunta">
                 <ModalRenderBody>
-                    <p>¿Confirma que desea <b>ELIMINAR</b> el gasto?</p>
+                    <p>¿Confirma que desea <b>ELIMINAR</b> el egreso?</p>
                 </ModalRenderBody>
                 <ModalRenderFooter>
-                    <button type="button" class="btn btn-custom" data-dismiss="modal" id="btnEliminarItem-si" @onclick="EliminarGasto">Si</button>
+                    <button type="button" class="btn btn-custom" data-dismiss="modal" id="btnEliminarItem-si" @onclick="EliminarEgreso">Si</button>
                     <button type="button" class="btn btn-custom-secondary" data-dismiss="modal" id="btnEliminarItem-no" @onclick="AbortarModalEliminacion">No</button>
                 </ModalRenderFooter>
             </MensajeModal>
     }
-    <div id="editarGastoForm">
+    <div id="editarEgersoForm">
         <EditForm Model="Model" OnValidSubmit="Actualizar" autocomplete="off">
             <DataAnnotationsValidator />
             <div class="row">
@@ -101,15 +101,14 @@ else
             <div class="row border-secondary mb-0" style="justify-content:space-between;">
                 <div class="col-12 order-sm-first  col-sm-4">
                     <a type="button" class="btn btn-custom-secondary col-12 btn-sm" id="btnCancelar" style="margin-bottom:8px;"
-                            href="javascript:void(0);" @onclick="VolverAPaginaCorrespondiente">
-                        @*<i class="fas fa-trash-alt mr-2" aria-hidden="true"></i> *@
+                            href="javascript:void(0);" @onclick="VolverAPaginaCorrespondiente">                        
                         Cancelar
                     </a>
                 </div>
                 <div class="col-12 order-first col-sm-8">
                     <div class="form-group" style="margin-bottom:8px;">
                         <div class="p-t-10">
-                            <button class="btn btn-custom col-12 btn-sm" id="btnGuardarGasto" type="submit">
+                            <button class="btn btn-custom col-12 btn-sm" id="btnGuardarEgreso" type="submit">
                                 @if (!Actualizando)
                                 {
                                     <Text> Guardar <i class="fas fa-save ml-1"></i></Text>
@@ -130,9 +129,9 @@ else
 
 @code{
 
-    [Parameter] public Guid? gastoId { get; set; }
-    protected string tituloAccion = "Alta de Gasto";
-    public EditarGastoDTO Model { get; set; }    
+    [Parameter] public Guid? egresoId { get; set; }
+    protected string tituloAccion = "Nuevo Egreso";
+    public EditarEgresoDTO Model { get; set; }    
     bool Actualizando = false;
     string returnUrl = "./";
     MensajeModal modalElim;
@@ -141,12 +140,12 @@ else
     {
         
 
-        if(gastoId != null)
+        if(egresoId != null)
         {
-            tituloAccion = "Edición de Gasto";
+            tituloAccion = "Edición de Egreso";
         }
 
-        var httpResponse = await repositorio.Get<EditarGastoDTO>($"api/gasto/obtenerModeloGasto/{gastoId}");
+        var httpResponse = await repositorio.Get<EditarEgresoDTO>($"api/movimiento/obtenerModeloEgreso/{egresoId}");
         if (httpResponse.Error)
         {
             Model = null;
@@ -167,7 +166,7 @@ else
     async Task Actualizar()
     {        
         Actualizando = true;
-        var httpResponse = await repositorio.Post<EditarGastoDTO>("api/gasto/editargasto", Model);
+        var httpResponse = await repositorio.Post<EditarEgresoDTO>("api/movimiento/editar-egreso", Model);
         if (httpResponse.Error)
         {
             await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
@@ -185,16 +184,16 @@ else
     {
         modalElim.Close();
     }
-    async Task PreguntarEliminarGasto()    
+    async Task PreguntarEliminarEgreso()    
     {
         
         await js.Focus("btnEliminarItem-no");
         modalElim.Open();
     }
 
-    async Task EliminarGasto()
+    async Task EliminarEgreso()
     {
-        var httpResponse = await repositorio.Delete($"api/gasto/eliminar/{Model.GastoID}");
+        var httpResponse = await repositorio.Delete($"api/movimiento/eliminar/{Model.EgresoID}");
             if (httpResponse.Error)
             {
                 await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
@@ -208,11 +207,11 @@ else
 
       async Task VolverAPaginaCorrespondiente()
     {
-        var localstoragereturn = await js.GetFromLocalStorage("returnUrlGasto");
+        var localstoragereturn = await js.GetFromLocalStorage("returnUrlMovimiento");
         if(!string.IsNullOrWhiteSpace(localstoragereturn))
         {
             returnUrl = localstoragereturn;
-            await js.RemoveFromLocalStorage("returnUrlGasto");
+            await js.RemoveFromLocalStorage("returnUrlMovimiento");
 
         }        
         navigationManager.NavigateTo(returnUrl);
@@ -220,10 +219,10 @@ else
 
     async void IDisposable.Dispose()
     {
-        var localstoragereturn = await js.GetFromLocalStorage("returnUrlGasto");
+        var localstoragereturn = await js.GetFromLocalStorage("returnUrlMovimiento");
         if(!string.IsNullOrWhiteSpace(localstoragereturn))
         {           
-            await js.RemoveFromLocalStorage("returnUrlGasto");
+            await js.RemoveFromLocalStorage("returnUrlMovimiento");
         }        
     }
     

@@ -111,7 +111,7 @@ namespace MarDevsWeb.Cuentas.Client.Auth
         private AuthenticationState ConstruirAuthenticationState(string token)
         {
             httpClient.DefaultRequestHeaders.Authorization =
-               new AuthenticationHeaderValue("bearer", token);
+               new AuthenticationHeaderValue("bearer", token);            
 
             return new AuthenticationState(
                 new ClaimsPrincipal(
@@ -207,9 +207,9 @@ namespace MarDevsWeb.Cuentas.Client.Auth
             await Limpiar();
             NotifyAuthenticationStateChanged(Task.FromResult(Anonimo));
         }
-        public async Task VerificarYRenovarToken()
+        public async Task VerificarYRenovarToken(HttpRequestMessage request)
         {
-
+                        
             //Console.WriteLine("Verificando token...");
             var token = await js.GetFromLocalStorage(TOKENKEY);
             var timeExpirationString = await js.GetFromLocalStorage(EXPIRATIONTOKENKEY);
@@ -230,11 +230,17 @@ namespace MarDevsWeb.Cuentas.Client.Auth
                         NotifyAuthenticationStateChanged(Task.FromResult(Anonimo));
                     else
                     {
-                        var authState = ConstruirAuthenticationState(nuevoToken);
-                        NotifyAuthenticationStateChanged(Task.FromResult(authState));
+                        var authState = ConstruirAuthenticationState(nuevoToken);                        
+                        NotifyAuthenticationStateChanged(Task.FromResult(authState));  
+                        //Actualizamos el request vigente
+                        if(request != null)
+                        {
+                            request.Headers.Authorization = new AuthenticationHeaderValue("bearer", nuevoToken);
+                        }
+                        
                     }
                 }
-            }   
+            }            
         }
         public async Task<string> ObtenerUltimoUsuarioLogueado()
         {

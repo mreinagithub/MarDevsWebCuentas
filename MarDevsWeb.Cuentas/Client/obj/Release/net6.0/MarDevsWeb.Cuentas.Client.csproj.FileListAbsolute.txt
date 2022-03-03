@@ -860,10 +860,11 @@ H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuenta
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Release\net6.0\MarDevsWeb.Cuentas.Client.dll
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Release\net6.0\ref\MarDevsWeb.Cuentas.Client.dll
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Release\net6.0\MarDevsWeb.Cuentas.Client.pdb
-H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Release\net6.0\scopedcss\Pages\Gastos\MiGastoItem.razor.rz.scp.css
-H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Release\net6.0\scopedcss\Pages\Gastos\MisGastos.razor.rz.scp.css
-H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Release\net6.0\scopedcss\Pages\Gastos\ModalModificarFechas.razor.rz.scp.css
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Release\net6.0\scopedcss\Pages\Conceptos\Conceptos.razor.rz.scp.css
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Release\net6.0\scopedcss\Pages\Periodos\Periodos.razor.rz.scp.css
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Release\net6.0\scopedcss\Shared\CenterLayout.razor.rz.scp.css
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Release\net6.0\scopedcss\Shared\CustomNotAuthorized.razor.rz.scp.css
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Release\net6.0\scopedcss\Pages\Movimientos\MiMovimientoItem.razor.rz.scp.css
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Release\net6.0\scopedcss\Pages\Movimientos\MisMovimientos.razor.rz.scp.css
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Release\net6.0\scopedcss\Pages\Movimientos\ModalModificarFiltros.razor.rz.scp.css
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Release\net6.0\scopedcss\Pages\Rubros\Rubros.razor.rz.scp.css

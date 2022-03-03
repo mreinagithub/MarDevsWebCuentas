@@ -1,0 +1,122 @@
+﻿@page "/Rubro/{rubroId:guid?}"
+
+@inject IJSRuntime js
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensajes
+@inject NavigationManager navigationManager
+@inject ErrorHandler errorHandler
+
+@attribute [Authorize]
+
+<Title Value="MarDevs - Rubro"></Title>
+
+
+<div class="row">
+    <div class="col-6">
+        <h5>@tituloAccion</h5>
+    </div>
+</div>
+
+@if (Model == null)
+{
+    <Waiting></Waiting>
+}
+else
+{
+
+    <div id="editarConceptoForm">
+        <EditForm Model="Model" OnValidSubmit="Actualizar" autocomplete="off">
+            <DataAnnotationsValidator />             
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group mb-1">
+                        <label class="control-label small mb-0 font-weight-bold">Descripción</label>
+                        <span class="small" style="display:inline-block">
+                            <ValidationMessage For="@(() => Model.Descripcion)" />
+                        </span> 
+                        <InputText @bind-Value="@Model.Descripcion" class="form-control" id="txtDescripcion"></InputText>
+                    </div>
+                </div>
+            </div>            
+            <div class="row border-secondary mb-0" style="justify-content:space-between;">
+                <div class="col-12 order-sm-first  col-sm-4">
+                    <a type="button" class="btn btn-custom-secondary col-12 btn-sm" id="btnCancelar" style="margin-bottom:8px;"
+                            href="javascript:void(0);" @onclick="VolverAPaginaCorrespondiente">
+                        @*<i class="fas fa-trash-alt mr-2" aria-hidden="true"></i> *@
+                        Cancelar
+                    </a>
+                </div>
+                <div class="col-12 order-first col-sm-8">
+                    <div class="form-group" style="margin-bottom:8px;">
+                        <div class="p-t-10">
+                            <button class="btn btn-custom col-12 btn-sm" id="btnGuardarRubro" type="submit">
+                                @if (!Actualizando)
+                                {
+                                    <Text> Guardar <i class="fas fa-save ml-1"></i></Text>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-circle-notch fa-spin"></i><text> Procesando...</text>
+                                }
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+    
+}
+
+@code {
+
+      [Parameter] public Guid? rubroId { get; set; }
+    protected string tituloAccion = "Alta de Rubro";
+    public EditarRubroDTO Model { get; set; }    
+    bool Actualizando = false;
+    string returnUrl = "./Rubros";
+
+    protected async override Task OnInitializedAsync()
+    {
+        if(rubroId != null)
+        {
+            tituloAccion = "Edición de Rubro";
+        }
+
+        var httpResponse = await repositorio.Get<EditarRubroDTO>($"api/rubro/obtenerModeloRubro/{rubroId}");
+        if (httpResponse.Error)
+        {
+            Model = null;
+            await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+        }
+        else
+        {            
+            Model = httpResponse.Response;     
+            StateHasChanged();                    
+            await js.Focus("txtDescripcion");
+        }
+    }  
+
+
+    async Task Actualizar()
+    {        
+        Actualizando = true;
+        var httpResponse = await repositorio.Post<EditarRubroDTO>("api/rubro/editar-rubro", Model);
+        if (httpResponse.Error)
+        {
+            await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+        }
+        else
+        {
+            VolverAPaginaCorrespondiente();
+
+        }
+        Actualizando = false;
+    } 
+
+    void VolverAPaginaCorrespondiente()
+    {
+         navigationManager.NavigateTo(returnUrl);            
+    }
+
+}

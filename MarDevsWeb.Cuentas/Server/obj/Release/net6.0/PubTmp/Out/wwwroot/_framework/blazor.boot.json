@@ -7,8 +7,8 @@
   "linkerEnabled": true,
   "resources": {
     "assembly": {
-      "MarDevsWeb.Cuentas.Client.dll": "sha256-kIqVbMIOSvJcFZpo1RPEorYtE2setu5Gl51haMGK3go=",
-      "MarDevsWeb.Cuentas.Shared.dll": "sha256-wIICMl+t07RO9fIx5aixAJzBH4DAOm6lBy2jUaRfl5c=",
+      "MarDevsWeb.Cuentas.Client.dll": "sha256-SgxNE5dhOTd+4btnRrONfWO9rS5gHSEchdrcMBHbNEc=",
+      "MarDevsWeb.Cuentas.Shared.dll": "sha256-+qayyfuZdTbCd7e\/y8GYDcJTjQHflQ8ZtpTvYz++G3Q=",
       "Microsoft.AspNetCore.Authorization.dll": "sha256-I+4S9HtdZkUcRegx+2LFiGeCsaoTq8zTkABxK5dglsc=",
       "Microsoft.AspNetCore.Components.Authorization.dll": "sha256-73SQ3x6VGGTTauOfUurQPp4ws3h0l60CmMH+GAVwn2Y=",
       "Microsoft.AspNetCore.Components.dll": "sha256-iVlMwjPoeMJrXoDT64392ReajQv6W60D9bnhGLvtP+s=",
@@ -37,7 +37,7 @@
       "System.Collections.dll": "sha256-mUVPIUFDRXc+yq3Q1o9TzwJeQG3CMqsmnzyR8aCmgZI=",
       "System.Collections.NonGeneric.dll": "sha256-QLreRTl5sYSKNfiiSlFmET66oaafALY0Zbu0oZyxJL4=",
       "System.Collections.Specialized.dll": "sha256-zL8WZ9i1XuZZ3ZaaPHWRKWsxtJRH1qxN2B9Bk6mqSqk=",
-      "System.ComponentModel.Annotations.dll": "sha256-zO0FWgPyosnZG726Y+KVufpiN2jsY7L571N+j25xL8Q=",
+      "System.ComponentModel.Annotations.dll": "sha256-Be\/cRV\/uQQvAsrHRSDKJHYcakFIqbg6om1gr1YPgQEk=",
       "System.ComponentModel.dll": "sha256-TOeHn27zzrK+mlIlyYwc4whFVZeMr12ZGFQFSUsxBzA=",
       "System.ComponentModel.Primitives.dll": "sha256-Ytr\/pnBoJzf\/p1A7exhk7+S\/oZuYXws7Utpg1SDbvqc=",
       "System.ComponentModel.TypeConverter.dll": "sha256-c8k41LoGVHUXBHFeFnBvjHQ1ovuSeICoLZ1+AKwnl+A=",
@@ -58,7 +58,7 @@
       "System.Security.Claims.dll": "sha256-MQTqZLU6d7zZIaxTI9JXeM48UPUimm6UOrqnMblgCVM=",
       "System.Text.Encodings.Web.dll": "sha256-rzFuMXwq2ZVLfojxA8YTR2Xwk9cIdpBRQwD7kKsSp0Y=",
       "System.Text.Json.dll": "sha256-OSpd5btvVrNKBEwlEUPqjiIwtGw\/8fLfjtQUgyIsvz8=",
-      "System.Text.RegularExpressions.dll": "sha256-44EFIrgaJx8ZIlt9FnXnSi48vwfM83h7pvVFjHiWui8=",
+      "System.Text.RegularExpressions.dll": "sha256-ItrWvwy5lkd3AuluOHgV3xcRqPCRl6hA5pGFOhOHEPo=",
       "System.Threading.dll": "sha256-LCaIfY33VlKuHv0ZJJ5HlUzFY0Om7RqsNR4AfqLkjyA=",
       "System.Threading.Tasks.dll": "sha256-DxLl1MfLOZ394sOJ5GDvGmzp6v\/M+998ms\/J6KnVE4g=",
       "System.Threading.Timer.dll": "sha256-Ommu1UvHqw6A4LK4V9Fw\/wOb7kKGxHcaG00MMjDDSRw=",

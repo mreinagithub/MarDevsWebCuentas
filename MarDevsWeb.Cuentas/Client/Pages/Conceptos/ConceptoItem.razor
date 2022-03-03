@@ -2,9 +2,11 @@
 @inject IJSRuntime js
 
 <tr>
-    <td> @ConceptoDTO.Descripcion</td>   
-    <td><a class="btn btn-custom-secondary btn-sm" href="javascript:void(0)" @onclick="EditarConcepto">Editar</a>
-        <a class="btn btn-danger btn-sm" href="javascript:void(0)" @onclick="(() => EliminarConcepto.InvokeAsync(ConceptoDTO))">Eliminar</a></td>
+    <td>@ConceptoDTO.Tipo</td>
+    <td>@ConceptoDTO.Descripcion</td>   
+    <td>@ConceptoDTO.Rubro</td>
+    <td><a class="btn btn-custom-secondary btn-sm" href="javascript:void(0)" @onclick="EditarConcepto" title="Editar..."><i class="fas fa-edit"></i></a>
+        <a class="btn btn-danger btn-sm" href="javascript:void(0)" @onclick="(() => EliminarConcepto.InvokeAsync(ConceptoDTO))" title="Eliminar..."><i class="fa fa-trash" aria-hidden="true"></i></a></td>
 </tr>
 
 

@@ -1,5 +1,5 @@
 /*Boton flotante scrollUp*/
-#btnScrollTop[b-qlxxbnvtdc] {
+#btnScrollTop[b-0nkadwttr2] {
     display: none;
     position: fixed;
     bottom: 10px;
@@ -15,13 +15,13 @@
     border-radius: 50px;
 }
 
-    #btnScrollTop:hover[b-qlxxbnvtdc] {
+    #btnScrollTop:hover[b-0nkadwttr2] {
         background-color: #666666;
     }
 
 
 /*Muestra cantidad de registros*/
-.infoRegistrosEncontrados[b-qlxxbnvtdc] {
+.infoRegistrosEncontrados[b-0nkadwttr2] {
     float: right !important;
     font-size: 14px;
     font-weight: bold;
@@ -33,16 +33,16 @@
 
 /*Buscador*/
 /*SIMULACION PARA ELIMINAR TEXTO DEL INPUT DE BUSQUEDA*/
-.form-group.position-relative input[b-qlxxbnvtdc] {
+.form-group.position-relative input[b-0nkadwttr2] {
     padding-right: 32px;
 }
 
-.form-group-custom-align[b-qlxxbnvtdc] {
+.form-group-custom-align[b-0nkadwttr2] {
     padding-left: 0px;
     margin-bottom: 0px;
 }
 
-.form-clear[b-qlxxbnvtdc] {
+.form-clear[b-0nkadwttr2] {
     align-items: center;
     bottom: 8px;
     color: rgba(0, 0, 0, .54);

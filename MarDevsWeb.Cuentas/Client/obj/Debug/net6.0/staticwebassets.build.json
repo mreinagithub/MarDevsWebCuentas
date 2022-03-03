@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Vbugn4wUcxgDE0Zt56uJwWB9KPgOIop/NMqiLLPxOLQ=",
+  "Hash": "XKzLPUmsOEkpyZWmrEDyNprNEhmTyiCfkgqtFe6WtP4=",
   "Source": "MarDevsWeb.Cuentas.Client",
   "BasePath": "/",
   "Mode": "Root",
@@ -10336,23 +10336,6 @@
       "OriginalItemSpec": "wwwroot\\font-awesome\\webfonts\\fa-solid-900.woff2"
     },
     {
-      "Identity": "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Client\\wwwroot\\Imagenes\\Cliente\\BannerModuloPedidos.png",
-      "SourceId": "MarDevsWeb.Cuentas.Client",
-      "SourceType": "Discovered",
-      "ContentRoot": "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Client\\wwwroot\\",
-      "BasePath": "/",
-      "RelativePath": "Imagenes/Cliente/BannerModuloPedidos.png",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\Imagenes\\Cliente\\BannerModuloPedidos.png"
-    },
-    {
       "Identity": "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Client\\wwwroot\\Imagenes\\LogoMarDevs-192.png",
       "SourceId": "MarDevsWeb.Cuentas.Client",
       "SourceType": "Discovered",
@@ -10489,12 +10472,12 @@
       "OriginalItemSpec": "wwwroot\\js\\Conceptos.js"
     },
     {
-      "Identity": "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Client\\wwwroot\\js\\MisGastos.js",
+      "Identity": "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Client\\wwwroot\\js\\MisMovimientos.js",
       "SourceId": "MarDevsWeb.Cuentas.Client",
       "SourceType": "Discovered",
       "ContentRoot": "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Client\\wwwroot\\",
       "BasePath": "/",
-      "RelativePath": "js/MisGastos.js",
+      "RelativePath": "js/MisMovimientos.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -10503,7 +10486,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\js\\MisGastos.js"
+      "OriginalItemSpec": "wwwroot\\js\\MisMovimientos.js"
     },
     {
       "Identity": "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Client\\wwwroot\\js\\Periodos.js",
@@ -10521,6 +10504,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\Periodos.js"
+    },
+    {
+      "Identity": "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Client\\wwwroot\\js\\Rubros.js",
+      "SourceId": "MarDevsWeb.Cuentas.Client",
+      "SourceType": "Discovered",
+      "ContentRoot": "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Client\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "js/Rubros.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\Rubros.js"
     },
     {
       "Identity": "H:\\Documents\\Google Drive\\MARDEVS\\Proyectos\\MarDevsWeb.Cuentas\\MarDevsWeb.Cuentas\\Client\\wwwroot\\js\\Utilidades.js",

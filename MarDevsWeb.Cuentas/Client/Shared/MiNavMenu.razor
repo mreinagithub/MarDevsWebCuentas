@@ -3,7 +3,7 @@
 
 <AuthorizeView>
 
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="padding-bottom:0px;">
         <div class="container-fluid">
 
             <div class="custom-logo">
@@ -17,17 +17,18 @@
             <div class="dropdown show float-right">
 
                 <a class="nav-link" href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img src="./Imagenes/UsuarioDefault.jpg" alt="user" class="rounded-circle" width="31">
+                    <img src="./Imagenes/UsuarioDefault.jpg" alt="user" class="rounded-circle" width="40">
                 </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="font-size:15px;">
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="font-size:18px;">
                     <span style="padding-left:15px; padding-right:15px; font-weight:bold; text-align:center;"> @context.User.Claims.FirstOrDefault(c => c.Type.Equals("NombreAMostrar")).Value</span>
+                    <div class="dropdown-divider"></div>                                     
+                    <a class="dropdown-item dropdown-item-custom" href="Periodos"><i class="fa fa-calendar m-r-5" aria-hidden="true"></i> Periodos</a>
+                    <a class="dropdown-item dropdown-item-custom" href="Rubros"><i class="fa fa-th-list" aria-hidden="true"></i> Rubros</a>
+                    <a class="dropdown-item dropdown-item-custom" href="Conceptos"><i class="fa fa-book" aria-hidden="true"></i> Conceptos</a>
                     <div class="dropdown-divider"></div>                 
-                    <a style="padding-left:15px;" class="dropdown-item" href="Periodos"><i class="fa fa-calendar m-r-5" aria-hidden="true"></i> Periodos</a>
-                    <a style="padding-left:15px;" class="dropdown-item" href="Conceptos"><i class="fa fa-book" aria-hidden="true"></i> Conceptos</a>
-                    <div class="dropdown-divider"></div>                 
-                    <a style="padding-left:15px;" class="dropdown-item" href="ModificarClave"><i class="fas fa-key m-r-5"></i> Modificar Clave</a>
+                    <a class="dropdown-item dropdown-item-custom" href="ModificarClave"><i class="fas fa-key m-r-5"></i> Modificar Clave</a>
                     <div class="dropdown-divider"></div>
-                    <a style="padding-left:15px;" class="dropdown-item" href="javascript:void(0)" @onclick="MostrarModalCierreSesion" id="cerrarSesionform"><i class="fas fa-power-off m-r-5"></i> Cerrar Sesión</a>
+                    <a class="dropdown-item dropdown-item-custom" href="javascript:void(0)" @onclick="MostrarModalCierreSesion" id="cerrarSesionform"><i class="fas fa-power-off m-r-5"></i> Cerrar Sesión</a>
                 </div>
             </div>
         </div>

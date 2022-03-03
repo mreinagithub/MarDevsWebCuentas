@@ -509,7 +509,7 @@
       "url": "bootstrap-select\/js\/i18n\/defaults-zh_TW.min.js"
     },
     {
-      "hash": "sha256-MRW+67gIoXefQY7N3TywGJIrpHdI0ckoTgT2t+FIjb4=",
+      "hash": "sha256-l\/Z6F80iL\/+OG1PXRCjg9LjzRrYhkfXWlR5wnuEwQYU=",
       "url": "css\/app.css"
     },
     {
@@ -741,10 +741,6 @@
       "url": "font-awesome\/webfonts\/fa-solid-900.woff2"
     },
     {
-      "hash": "sha256-A9sHMLgS+DRVRlN13HWLYWDAb\/6W6Pggmg2HMrzt7Zc=",
-      "url": "Imagenes\/Cliente\/BannerModuloPedidos.png"
-    },
-    {
       "hash": "sha256-iB+KXyxzfQ5E9CrWAs4oRHv5XVqltqgBGZDAKfMTRDA=",
       "url": "Imagenes\/LogoMarDevs-192.png"
     },
@@ -778,11 +774,15 @@
     },
     {
       "hash": "sha256-yBwuMU1mRZ0BkyOkzegV8f90Gqan78ggLH339OQ5fSY=",
-      "url": "js\/MisGastos.js"
+      "url": "js\/MisMovimientos.js"
     },
     {
       "hash": "sha256-yBwuMU1mRZ0BkyOkzegV8f90Gqan78ggLH339OQ5fSY=",
       "url": "js\/Periodos.js"
+    },
+    {
+      "hash": "sha256-yBwuMU1mRZ0BkyOkzegV8f90Gqan78ggLH339OQ5fSY=",
+      "url": "js\/Rubros.js"
     },
     {
       "hash": "sha256-SI5Dumzrx4A9gvWdK8rnZW4RvYEILU1WOpqJvRk7Y7s=",
@@ -793,7 +793,7 @@
       "url": "manifest.json"
     },
     {
-      "hash": "sha256-2VOHYRler8Ak6N4vKP0zWQIkCJAlMLFbIV34A8fNqcQ=",
+      "hash": "sha256-JICsfcm2SVnEHT+ILKoCgy5ok4VK9Gc0kDNQrcYg6GE=",
       "url": "MarDevsWeb.Cuentas.Client.styles.css"
     },
     {
@@ -1605,19 +1605,19 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-wIICMl+t07RO9fIx5aixAJzBH4DAOm6lBy2jUaRfl5c=",
+      "hash": "sha256-+qayyfuZdTbCd7e\/y8GYDcJTjQHflQ8ZtpTvYz++G3Q=",
       "url": "_framework\/MarDevsWeb.Cuentas.Shared.dll"
     },
     {
-      "hash": "sha256-\/Ljw7QFIfNCGy6OWuxsBp2Q8wTTzwSy8GgBGa95sgrY=",
+      "hash": "sha256-7ZeCdpn7nL7RlnsoQnU6jZ3TfyrqfW4E9r50gb6jTM0=",
       "url": "_framework\/MarDevsWeb.Cuentas.Shared.pdb"
     },
     {
-      "hash": "sha256-n48nDBFxWT22IObtuxEjvFBDrtY0qOgNYTfnx6HVkvU=",
+      "hash": "sha256-KVpq7UHrj9WYmn3eGjf+2kA3MBar6mgiskS0uiEpGkM=",
       "url": "_framework\/MarDevsWeb.Cuentas.Client.dll"
     },
     {
-      "hash": "sha256-8b2pGHqJVXewPcIK6jHcHg8GjnPSapsIjeHEFmHfXcs=",
+      "hash": "sha256-Vui49QXzw4\/cqdG7huDzy9e2h9NGA2KoFUibZ4zEopQ=",
       "url": "_framework\/MarDevsWeb.Cuentas.Client.pdb"
     },
     {
@@ -1625,7 +1625,7 @@
       "url": "_framework\/blazor.webassembly.js"
     },
     {
-      "hash": "sha256-CHMFw5ubNSrnD7C6YIQs6UmlGOTJoWdtdTCQrmOAHpk=",
+      "hash": "sha256-qOLT5G\/tbtasEwpAzOE\/\/TrbrDMIxRz2KH9Fky92f4o=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -1633,5 +1633,5 @@
       "url": "_content\/Microsoft.AspNetCore.Components.Web.Extensions\/headManager.js"
     }
   ],
-  "version": "RXqPMUrG"
+  "version": "ajC7saWG"
 };

@@ -1,0 +1,21 @@
+﻿@inject NavigationManager navigationManager
+@inject IJSRuntime js
+
+<tr>    
+    <td>@RubroDTO.Descripcion</td>       
+    <td><a class="btn btn-custom-secondary btn-sm" href="javascript:void(0)" @onclick="EditarRubro" title="Editar..."><i class="fas fa-edit"></i></a>
+        <a class="btn btn-danger btn-sm" href="javascript:void(0)" @onclick="(() => EliminarRubro.InvokeAsync(RubroDTO))" title="Eliminar..."><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+</tr>
+
+
+@code{
+
+    [Parameter] public RubroDTO RubroDTO { get; set; }
+    [Parameter] public EventCallback<RubroDTO> EliminarRubro { get; set; }
+
+    private void EditarRubro()
+    {       
+        navigationManager.NavigateTo($"./rubro/{RubroDTO.Id}");
+    }
+    
+}

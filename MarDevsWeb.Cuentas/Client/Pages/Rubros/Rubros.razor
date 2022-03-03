@@ -1,0 +1,144 @@
+﻿@page "/Rubros"
+
+@inject IJSRuntime js
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensajes
+@inject NavigationManager navigationManager
+@inject ErrorHandler errorHandler
+
+
+
+@attribute [Authorize]
+
+
+<Title Value="MarDevs - Rubros"></Title>
+
+
+<div class="row">
+    <div class="col-6">
+        <h5>Rubros</h5>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-6 mb-1">
+        <button class="btn btn-custom btn-sm" id="btnNuevoRubro" type="button" @onclick="AltaRubro" >
+                                            Nuevo Rubro
+        </button>
+    </div>
+    <div class="col-6">
+        <label class="infoRegistrosEncontrados">Registros: @cantidadRegistros</label>
+    </div>
+</div>
+
+<button @onclick="ScrollTop" id="btnScrollTop" title="Ir arriba"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
+
+@if (RubrosDTO == null)
+{
+    <Waiting></Waiting>
+}
+else
+{
+    <div class="">
+        <table class="table table-sm" id="tablaVerRubros">
+            <thead>
+                <tr>                    
+                    <th>Descripción</th>                         
+                    <th></th>                    
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var r in RubrosDTO)
+                {
+                    <RubroItem RubroDTO="r" EliminarRubro="PreguntarEliminarRubro" />
+
+                }
+            </tbody>
+        </table>
+    </div>
+
+     <MensajeModal @ref="modalElim" AlCerrarModal="AbortarModalEliminacion" ModalTitle="Pregunta">
+                <ModalRenderBody>
+                    <p>¿Confirma que desea <b>ELIMINAR</b> el rubro '@rubroDescEliminar'?</p>
+                </ModalRenderBody>
+                <ModalRenderFooter>
+                    <button type="button" class="btn btn-custom" data-dismiss="modal" id="btnEliminarItem-si" @onclick="EliminarRubro">Si</button>
+                    <button type="button" class="btn btn-custom-secondary" data-dismiss="modal" id="btnEliminarItem-no" @onclick="AbortarModalEliminacion">No</button>
+                </ModalRenderFooter>
+            </MensajeModal>
+}
+
+
+
+@code 
+{
+
+    int cantidadRegistros = 0;
+    IJSObjectReference modulo;
+    public List<RubroDTO> RubrosDTO { get; set; } = null;
+    MensajeModal modalElim;
+    Guid rubroIdEliminar;
+    string rubroDescEliminar = "";
+
+    protected async override Task OnInitializedAsync()
+    {
+        modulo = await js.InvokeAsync<IJSObjectReference>("import", "./js/Rubros.js");
+        await BuscarRegistros();
+    }
+
+    private async Task ScrollTop()
+    {
+        if (modulo != null)
+        {
+            await modulo.InvokeVoidAsync("ScrollTop");
+        }
+
+    }  
+
+    private async Task BuscarRegistros()
+    {
+        var httpResponse = await repositorio.Get<List<RubroDTO>>("api/rubro/buscar");
+        if (httpResponse.Error)
+        {
+            await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+        }
+        else
+        {
+            RubrosDTO = httpResponse.Response;
+            cantidadRegistros = RubrosDTO.Count();
+        }
+    }
+
+    private void AltaRubro()
+    {
+        navigationManager.NavigateTo("./Rubro");
+    }
+
+    void AbortarModalEliminacion()
+    {
+        modalElim.Close();
+    }
+    async Task PreguntarEliminarRubro(RubroDTO rubrodto)    
+    {
+        rubroIdEliminar = rubrodto.Id;
+        rubroDescEliminar = rubrodto.Descripcion;
+        await js.Focus("btnEliminarItem-no");
+        modalElim.Open();
+    }
+
+    async Task EliminarRubro()
+    {
+        var httpResponse = await repositorio.Delete($"api/rubro/eliminar/{rubroIdEliminar}");
+            if (httpResponse.Error)
+            {
+                await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+            }
+            else
+            {
+                modalElim.Close();
+                 await BuscarRegistros();
+            }
+    }
+
+}

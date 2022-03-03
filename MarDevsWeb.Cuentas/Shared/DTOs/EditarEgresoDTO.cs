@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace MarDevsWeb.Cuentas.Shared.DTOs
 {
-    public class EditarGastoDTO
+    public class EditarEgresoDTO
     {
-        public Guid? GastoID { get; set; } = null;        
+        public Guid? EgresoID { get; set; } = null;        
         public IEnumerable<ConceptoDisponibleDTO> ConceptosDisponibles { get; set; }
         [Display(Name = "Concepto")]
-        [Required(ErrorMessage = "Debe indicar el concepoto del gasto")]
+        [Required(ErrorMessage = "Debe indicar el concepoto del egreso")]
         public Guid? ConceptoID { get; set; }
         [Display(Name = "Importe")]
         [Required(ErrorMessage = "Debe indicar el importe")]

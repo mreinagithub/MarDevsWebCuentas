@@ -1,17 +1,17 @@
 
 
 
-.modal-header-form[b-autt11839o] {
+.modal-header-form[b-59icmxhti0] {
     display: contents;
 }
 
-.modal-title-form[b-autt11839o] {
+.modal-title-form[b-59icmxhti0] {
     text-align: center;
 }
 
 /*Si el explorador es edge*/
 @supports (-ms-ime-align:auto) {
-    .modal-header-form[b-autt11839o] {
+    .modal-header-form[b-59icmxhti0] {
         display: block;
     }
 }

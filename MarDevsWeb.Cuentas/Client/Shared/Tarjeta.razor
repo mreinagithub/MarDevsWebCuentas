@@ -1,22 +1,38 @@
 ﻿            
-<div class="card card-extras shadow p-3 mb-5 bg-white rounded">
+<div class="card card-extras shadow p-3 bg-white rounded" style="margin-bottom:5px;">
     <div class="card-body">
-        <h5 class="card-title card-extras-title">@RenderIcono @Titulo</h5>                
-        <p class="card-text mb-0">@TextoLinea1</p>       
-        <p class="card-text mb-0">@TextoLinea2</p>       
+        <h5 class="card-title" style="color:@ColorTitulo">@RenderIcono @Titulo</h5>                
+        <p class="card-text mb-0" style="color:@ColorLinea1">@TextoLinea1</p>       
+        <p class="card-text mb-0" style="color:@ColorLinea2">@TextoLinea2</p>       
+        <p class="card-text mb-0" style="color:@ColorLinea3">@TextoLinea3</p>     
+        <p class="card-text mb-0" style="color:@ColorLinea4">@TextoLinea4</p>  
     </div>                     
 </div>  
 
 
-@code {    
+@code {
 
 
     [Parameter]
     public string Titulo { get; set; } = "";
     [Parameter]
+    public string ColorTitulo { get; set; } = "#000000";
+    [Parameter]
     public string TextoLinea1 { get; set; } = "";
     [Parameter]
+    public string ColorLinea1 { get; set; } = "#000000";
+    [Parameter]
     public string TextoLinea2 { get; set; } = "";
+    [Parameter]
+    public string ColorLinea2 { get; set; } = "#000000";
+    [Parameter]
+    public string TextoLinea3 { get; set; } = "";
+    [Parameter]
+    public string ColorLinea3 { get; set; } = "#000000";
+    [Parameter]
+    public string TextoLinea4 { get; set; } = "";
+    [Parameter]
+    public string ColorLinea4 { get; set; } = "#000000";
 
     [Parameter]
     public RenderFragment RenderIcono { get; set; }

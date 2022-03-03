@@ -1,0 +1,47 @@
+﻿@inject NavigationManager navigationManager
+@inject IJSRuntime js
+
+<tr>
+    <td>
+        <a style="text-decoration:none;color:black;" @onclick="EditarMovimiento" href="javascript:void();"  >        
+            <div style="margin-top:10px;">
+                <div class="row">
+                    <div class="col-3 text-nowrap">
+                         <b>@MovimientoDTO.Fecha.ToString("dd/MM/yyyy")</b>
+                    </div>
+                    <div class="col-3 text-nowrap">
+                       <b>@MovimientoDTO.Concepto</b>
+                    </div>
+                    <div class="col-6 text-nowrap">
+                        <b class="float-right" style="color:@(MovimientoDTO.Tipo.ToLower()=="egreso" ? "#FF7276": "#28a745;")">@MovimientoDTO.Importe.ToString("C2")</b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        @MovimientoDTO.Observaciones
+                    </div>
+                </div>                
+            </div>
+        </a>
+    </td>
+</tr>
+
+
+@code{
+
+    [Parameter] public MovimientoDTO MovimientoDTO { get; set; }
+
+    string page = "";
+
+    private void EditarMovimiento()
+    {
+        js.SetInLocalStorage("returnUrlMovimiento", navigationManager.Uri);
+
+        if (MovimientoDTO.Tipo.ToLower().Equals("egreso"))
+            page = "egreso";
+        else
+            page = "ingreso";
+
+        navigationManager.NavigateTo($"./{page}/{MovimientoDTO.Id}");
+    }
+}

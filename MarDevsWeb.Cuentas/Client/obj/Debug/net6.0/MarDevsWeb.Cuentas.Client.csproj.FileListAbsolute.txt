@@ -842,11 +842,12 @@ H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuenta
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Debug\net6.0\staticwebassets.development.json
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Debug\net6.0\scopedcss\Pages\Auth\Login.razor.rz.scp.css
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Debug\net6.0\scopedcss\Pages\Conceptos\Conceptos.razor.rz.scp.css
-H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Debug\net6.0\scopedcss\Pages\Gastos\MiGastoItem.razor.rz.scp.css
-H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Debug\net6.0\scopedcss\Pages\Gastos\MisGastos.razor.rz.scp.css
-H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Debug\net6.0\scopedcss\Pages\Gastos\ModalModificarFechas.razor.rz.scp.css
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Debug\net6.0\scopedcss\Pages\Index.razor.rz.scp.css
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Debug\net6.0\scopedcss\Pages\Movimientos\MiMovimientoItem.razor.rz.scp.css
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Debug\net6.0\scopedcss\Pages\Movimientos\MisMovimientos.razor.rz.scp.css
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Debug\net6.0\scopedcss\Pages\Movimientos\ModalModificarFiltros.razor.rz.scp.css
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Debug\net6.0\scopedcss\Pages\Periodos\Periodos.razor.rz.scp.css
+H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Debug\net6.0\scopedcss\Pages\Rubros\Rubros.razor.rz.scp.css
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Debug\net6.0\scopedcss\Shared\BuscadorTexto.razor.rz.scp.css
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Debug\net6.0\scopedcss\Shared\CenterLayout.razor.rz.scp.css
 H:\Documents\Google Drive\MARDEVS\Proyectos\MarDevsWeb.Cuentas\MarDevsWeb.Cuentas\Client\obj\Debug\net6.0\scopedcss\Shared\CustomError.razor.rz.scp.css
