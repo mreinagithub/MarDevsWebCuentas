@@ -11,6 +11,7 @@ namespace MarDevsWeb.Cuentas.Shared.DTOs
 
         public decimal SaldoInicial { get; set; }
         public List<MovimientoDTO> Movimientos { get; set; }
+        public decimal Saldo { get; set; }
     }
 
     public class MovimientoDTO

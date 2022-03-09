@@ -1,0 +1,122 @@
+﻿@page "/Parametros"
+
+@inject IJSRuntime js
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensajes
+@inject NavigationManager navigationManager
+@inject ErrorHandler errorHandler
+
+@attribute [Authorize]
+
+<Title Value="MarDevs - Parámetros"></Title>
+
+
+<div class="row">
+    <div class="col-6">
+        <h5>Parámetros</h5>
+    </div>
+</div>
+
+@if (Model == null)
+{
+    <Waiting></Waiting>
+}
+else
+{
+
+    <p>
+        Mostrar saldo acumulador entre periodos significa que el sistema calculará y mostrará un <b>Saldo inicial</b> para cada periodo que se calcula sumando el neto de sus ingresos y egresos hasta el día anterior
+        a la fecha de inicio del periodo vigente.
+    </p>
+    <p>
+        Por default, este parámetro está habilitado. Si lo deshabilita, el sistema dejará de mostrar dicha información; lo que significa que los periodos son interpretados como compartimentos estáncos 
+        sin relación entre ellos.
+    </p>
+
+    <div id="editarParametroForm">
+        <EditForm Model="Model" OnValidSubmit="Actualizar" autocomplete="off">
+            <DataAnnotationsValidator />           
+            <div class="row mb-3" >
+                <div class="col-12" style="margin-left: 20px;">
+                      <div class="form-group mx-sm-3 mb-2">                        
+                        <input type="checkbox" class="form-check-input" id="mostrarSaldosId" @bind="Model.MostrarSaldoAcumuladoEntrePeriodos" />                                                  
+                        <label class="form-check-label" for="mostrarSaldosId">
+                            Mostrar Saldo acumulado entre períodos                           
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row border-secondary mb-0" style="justify-content:space-between;">
+                <div class="col-12 order-sm-first  col-sm-4">
+                    <a type="button" class="btn btn-custom-secondary col-12 btn-sm" id="btnCancelar" style="margin-bottom:8px;"
+                            href="javascript:void(0);" @onclick="VolverAPaginaCorrespondiente">
+                        @*<i class="fas fa-trash-alt mr-2" aria-hidden="true"></i> *@
+                        Cancelar
+                    </a>
+                </div>
+                <div class="col-12 order-first col-sm-8">
+                    <div class="form-group" style="margin-bottom:8px;">
+                        <div class="p-t-10">
+                            <button class="btn btn-custom col-12 btn-sm" id="btnGuardarParametros" type="submit">
+                                @if (!Actualizando)
+                                {
+                                    <Text> Guardar <i class="fas fa-save ml-1"></i></Text>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-circle-notch fa-spin"></i><text> Procesando...</text>
+                                }
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+    
+}
+
+@code {      
+    
+    public ParametrosDTO Model { get; set; }    
+    bool Actualizando = false;    
+
+    protected async override Task OnInitializedAsync()
+    {       
+        var httpResponse = await repositorio.Get<ParametrosDTO>($"api/parametro/obtenerModeloParametro");
+        if (httpResponse.Error)
+        {
+            Model = null;
+            await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+        }
+        else
+        {            
+            Model = httpResponse.Response;     
+            StateHasChanged();                    
+            //await js.Focus("txtFechaDesde");
+        }
+    }  
+
+
+    async Task Actualizar()
+    {        
+        Actualizando = true;
+        var httpResponse = await repositorio.Post<ParametrosDTO>("api/parametro/editar-parametros", Model);
+        if (httpResponse.Error)
+        {
+            await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+        }
+        else
+        {
+            VolverAPaginaCorrespondiente();
+
+        }
+        Actualizando = false;
+    } 
+
+    void VolverAPaginaCorrespondiente()
+    {
+         navigationManager.NavigateTo("./");            
+    }
+
+}

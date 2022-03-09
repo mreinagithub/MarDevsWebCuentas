@@ -17,24 +17,45 @@
 
 <div class="row">
     <div class="col-6">
-        <h5>Mis Movimientos</h5>
+        <h5 style="margin-bottom:0px;">Mis Movimientos</h5>
     </div>
 </div>
 
+<TextoAyuda CookieMostrarInicialmente="helpMustMisMovimientosBeDeployed">
+    <FragmentoAyuda>
+        <p><b>Consulte sus movimientos.</b></p>
+        <p style="margin-bottom:5px;">Lista sus movimientos para un periodo dado (por default el actual). Puede cambiar el periodo haciendo click en "Modificar filtros"</p>
+        <p>Haciendo click sobre cualquier movimiento de la lista puede acceder a la pantalla de modificación del mismo.</p>
+    </FragmentoAyuda>    
+</TextoAyuda>
+
 <div class="row">
-    <div class="col-6">
-        <p style="margin-bottom:0px;font-size:12px">@textoFiltro</p>
+    <div class="col-12">
+        <p style="margin-bottom:0px;font-size:14px; font-weight:bold;">@textoFiltro</p>
     </div>
-    <div class="col-6">
+    @*<div class="col-6">
         <p class="float-right" style="margin-bottom:0px;font-size:12px;">Saldo Inicial: @($"{saldoInicial:C2}")</p>
-    </div>
+    </div>*@
 </div>
-<div class="row">
+<div class="row" style="margin-bottom:3px;">
     <div class="col-6">        
         <a href="javascript:void(0);" @onclick="AbrirModalSelectorFiltro"><b>Modificar filtros</b></a>       
     </div>    
     <div class="col-6">
-        <p class="float-right" style="color:@colorTtlMostrado; margin-bottom:5px;">@($"{importeTtlMostrado:C2}")</p>
+        <div class="float-right">
+            <span style="color:@colorTtlMostrado; margin-bottom:5px; font-weight:bold;">@($"{importeTtlMostrado:C2}")</span>
+             <div class="dropdown show float-right">
+                <a class="btn btn-info btn-sm btn-mas-info-saldos" href="javascript:void(0)" id="navbarDropdownSaldos" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-info"></i>            
+                </a>
+                 <div class="dropdown-menu dropdown-menu-right" style="background-color:#f5f5f5;" aria-labelledby="navbarDropdownSaldos">
+                    <p class="text-nowrap dropdown-item-saldos-custom" style="padding-left:15px; padding-right:15px; font-weight:bold; text-align:center;">Resumen de Movimientos</p>
+                    <div class="dropdown-divider"></div>                    
+                    <p class="text-nowrap dropdown-item-saldos-custom">Ingresos: <b class="float-right">@($"{ingresos:C2}")</b></p>                    
+                    <p class="text-nowrap dropdown-item-saldos-custom">Egresos: <b class="float-right">@($"{egresos:C2}")</b></p>                    
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -90,7 +111,8 @@ else
     string textoFiltro = "";
     string colorTtlMostrado = "";
     decimal importeTtlMostrado = 0;
-    decimal saldoInicial = 0;
+    decimal egresos = 0;
+    decimal ingresos = 0;
 
 
     protected async override Task OnInitializedAsync()
@@ -173,7 +195,8 @@ else
         {
             var respuesta = httpResponse.Response;
             PreviewMovimientos = respuesta.Movimientos;
-            saldoInicial = respuesta.SaldoInicial;
+            egresos = PreviewMovimientos.Where(m => m.Tipo.ToLower().Equals("egreso")).Sum(m => m.Importe);
+            ingresos = PreviewMovimientos.Where(m => m.Tipo.ToLower().Equals("ingreso")).Sum(m => m.Importe);
             cantidadRegistros = PreviewMovimientos.Count();
             importeTtlMostrado = PreviewMovimientos.Sum(g => (g.Tipo.ToLower().Equals("egreso") ? -1 : 1) * g.Importe);
             colorTtlMostrado = importeTtlMostrado < 0 ? "#FF7276": "#28a745";
@@ -223,7 +246,7 @@ else
     async Task AbrirModalSelectorFiltro()
     {   
         //Refresco la lista de periodos
-        var httpResponse = await repositorio.Get<List<PeriodoDTO>>("api/periodo/buscar");
+        var httpResponse = await repositorio.Get<List<PeriodoDTO>>("api/periodo/obtenerParaSeleccionar");
         if (httpResponse.Error)
         {
             await errorHandler.MostrarError(httpResponse.HttpResponseMessage);

@@ -1,0 +1,66 @@
+﻿
+@inject IJSRuntime js
+
+<a href="javascript:void(0)" @onclick="CambiarVisibilidadHelp" style="color:black;">
+    <p class="header-text" style="margin-bottom:0px;">        
+        <span style="font-size: 20px;">                   
+            <b><i class="@arrowDirection"></i></b>        
+        </span>        
+    </p>
+</a>
+
+
+<div class="row" id="detalleHelp" style="@display; margin-bottom:5px;">
+        <div class="col-12">            
+            <div style="background-color:#ffffed; border:thin; border-radius:10%;">
+                <div style="padding:10px; font-size: 14px;">
+                   @FragmentoAyuda 
+                </div>
+            </div>
+        </div>
+</div>
+
+
+@code {
+    [Parameter] public RenderFragment FragmentoAyuda { get; set; }
+
+    [Parameter] public string CookieMostrarInicialmente { get; set; } = "genericCookieMostrarInicialmente";
+
+    string display = "display:none;";
+    bool mostrando = false;
+    string arrowDown = "fas fa-angle-double-down";
+    string arrowUp = "fas fa-angle-double-up";
+    string arrowDirection = "fas fa-angle-double-down";
+
+    protected async override Task OnInitializedAsync()
+    {
+
+        var value = await js.GetFromCookie(CookieMostrarInicialmente);
+        if(string.IsNullOrWhiteSpace(value))
+        {            
+            await js.SetInCookie(CookieMostrarInicialmente, "notShow", 365000);            
+
+            mostrando = true;
+            display = "";
+            arrowDirection = arrowUp;            
+        }       
+        
+    }    
+
+    void CambiarVisibilidadHelp()
+    {
+        if (mostrando)
+        {
+            display = "display:none;";
+            arrowDirection = arrowDown;
+        }
+        else
+        {
+            display = "";
+            arrowDirection = arrowUp;
+        }
+
+        mostrando = !mostrando;
+    }
+
+}

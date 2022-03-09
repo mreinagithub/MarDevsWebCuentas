@@ -1,0 +1,23 @@
+﻿
+.header-text {
+    display: flex;
+    flex-direction: row;
+}
+
+    
+.header-text:before /*, .header-text:after     */
+{        
+    content: "";        
+    flex: 1 1;        
+    border-bottom: 1px solid;        
+    margin: auto;
+}
+
+.header-text:before {
+    margin-right: 3px
+}
+
+/*.header-text:after {
+    margin-left: 10px
+}
+*/

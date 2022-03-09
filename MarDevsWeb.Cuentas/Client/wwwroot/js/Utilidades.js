@@ -63,3 +63,8 @@ function seleccionarSelectItem(id, valor) {
     //$('#' + id + ' option["'+valor+'"]').attr("selected", "selected");
     //[value="0"]
 }
+
+
+function CookiesSetCustom(id, value, expireDays) {
+    Cookies.set(id, value, { expires: expireDays });
+}

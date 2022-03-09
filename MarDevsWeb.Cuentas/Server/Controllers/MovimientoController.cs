@@ -26,15 +26,25 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
         public async Task<ResumenHomeDTO> GetResumen()
         {
 
+            var flags = _context.FlagsCuentas.FirstOrDefault();
+            if (flags == null)
+                throw new ExcepcionNegocios("No se lograron obtener los parámetros de aplicación. Si el problema persiste contacte al proveedor del sistema.");
+
             var resumen = new ResumenHomeDTO();
             resumen.FechaDesde = ObtenerFechaActual();
             var ttlEgresos = await MovimientoUsuario.Where(g => g.Fecha >= resumen.FechaDesde && g.Tipo.ToLower().Equals("egreso")).SumAsync(g => g.Importe);
             var ttlIngresos = await MovimientoUsuario.Where(g => g.Fecha >= resumen.FechaDesde && g.Tipo.ToLower().Equals("ingreso")).SumAsync(g => g.Importe);
-            var saldoInicial = await MovimientoUsuario.Where(g => g.Fecha < resumen.FechaDesde).SumAsync(g => g.Importe * (g.Tipo.ToLower().Equals("egreso") ? -1 : 1));
+            decimal saldoInicial = 0;
+            if (flags.MostrarSaldoAcumuladoEntrePeriodos)
+                saldoInicial = await MovimientoUsuario.Where(g => g.Fecha < resumen.FechaDesde).SumAsync(g => g.Importe * (g.Tipo.ToLower().Equals("egreso") ? -1 : 1));            
 
+            resumen.MostrarSaldoInicial = flags.MostrarSaldoAcumuladoEntrePeriodos;
+            
             resumen.SaldoInicial = saldoInicial;
             resumen.TotalIngresos = ttlIngresos;
-            resumen.TotalEgresos = ttlEgresos;            
+            resumen.TotalEgresos = ttlEgresos;
+            resumen.Saldo = saldoInicial + ttlIngresos - ttlEgresos;
+            
 
             return resumen;
 
@@ -59,7 +69,9 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
             if (fechaHasta != null)
                 queryable = queryable.Where(g => g.Fecha <= fechaHasta.Value);
 
-            queryable = queryable.OrderByDescending(p => p.Fecha);
+            queryable = queryable.OrderByDescending(p => p.Fecha).ThenByDescending(p => p.CreadoEl);
+
+                
                 
 
             var modelo = queryable.Select(p => new MovimientoDTO
@@ -74,13 +86,17 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
 
             decimal saldoInicial = 0;
             if(fechaDesde != null)
-                saldoInicial = await MovimientoUsuario.Where(g => g.Fecha < fechaDesde.Value).SumAsync(g => g.Importe * (g.Tipo.ToLower().Equals("egreso") ? -1 : 1));
+                saldoInicial = await MovimientoUsuario.Where(g => g.Fecha < fechaDesde.Value).SumAsync(g => g.Importe * (g.Tipo.ToLower().Equals("egreso") ? -1 : 1));            
 
             var header = new HeaderMovimientoDTO
             {
                 SaldoInicial = saldoInicial,
                 Movimientos = await modelo.ToListAsync()
             };
+
+            var sumMov = header.Movimientos.Sum(m => m.Importe * (m.Tipo.ToLower().Equals("egreso") ? -1 : 1));
+
+            //header.Saldo = header.SaldoInicial + sumMov;
 
             return header;
         }

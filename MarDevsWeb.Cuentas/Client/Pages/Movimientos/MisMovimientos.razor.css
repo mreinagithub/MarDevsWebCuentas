@@ -55,3 +55,18 @@
     z-index: 10;
     bottom: calc(1rem - 8px);
 }
+
+.btn-mas-info-saldos {
+    margin-bottom: 2px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-right: 1px;
+    /*padding-left: 1px;*/
+    margin-left:5px;
+}
+
+.dropdown-item-saldos-custom {
+    padding-left: 15px;
+    padding-right:15px;
+    margin-bottom: 5px;
+}

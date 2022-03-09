@@ -14,9 +14,16 @@
 
 <div class="row">
     <div class="col-12">
-        <h5>@tituloAccion</h5>
+        <h5 style="margin-bottom:0px;">@tituloAccion</h5>
     </div>    
 </div>
+
+<TextoAyuda CookieMostrarInicialmente="helpMustEgresoBeDeployed">
+    <FragmentoAyuda>
+        <p><b>Cree o edite un egreso.</b></p>
+        <p>Esta pantalla le permite agregar (o editar) un nuevo egreso; la fecha de este determinará el periodo donde se encuentre.</p>
+    </FragmentoAyuda>    
+</TextoAyuda>
 
 @if (Model == null)
 {
@@ -43,7 +50,7 @@ else
             </MensajeModal>
     }
     <div id="editarEgersoForm">
-        <EditForm Model="Model" OnValidSubmit="Actualizar" autocomplete="off">
+        <EditForm Model="Model" OnValidSubmit="Actualizar" autocomplete="off" accept-charset="utf-8">
             <DataAnnotationsValidator />
             <div class="row">
                 <div class="col-12">

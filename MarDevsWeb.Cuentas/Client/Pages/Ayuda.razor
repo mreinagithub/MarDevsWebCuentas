@@ -1,0 +1,61 @@
+﻿@page "/Ayuda"
+
+@attribute [Authorize]
+
+<Title Value="MarDevs - Ayuda"></Title>
+
+<h5>Ayuda</h5>
+
+<p><b>Conozca el sitio MarDevs Cuentas y sus características</b></p>
+
+<div style="font-size:14px;">
+<p>
+    Puede acceder a todas las opciones desde el menú en la parte superior derecha, haciendo click sobre la imagen del usuario.
+    <br />Descripción de los módulos que conforman nuestro sistema y sus características:
+</p>
+
+
+<p style="text-decoration:underline; margin-bottom:0px;"><b>Períodos</b></p>
+<p>
+    Son una forma de organizar sus gastos de forma temporal, puede organizarlos diariamente, semanalmente, mensualmente, o con la frecuencia que desee.
+    <br />Para gestionar los periodos solo es necesario ingresar la fecha de inicio de cada periodo y el sistema armará los bloques temporales salvo para el periodo cuya fecha de inicio sea mayor; en cuyo caso la fecha de finalización quedará abierta.
+    <br />En la pantalla de inicio siempre se tomará al periodo que coincida con la fecha actual.    
+</p>
+<p style="text-decoration:underline; margin-bottom:0px;"><b>Conceptos</b></p>
+<p>
+    Etiqueta a la cual se vincula un ingreso o egreso. Los conceptos dependerán de cuales sean los movimientos que desee registrar.
+    <br />A modo de ejemplo, podemos mencionar: Supermercado, Farmacia, Nafta, Luz, Gas, etc.
+</p>
+<p style="text-decoration:underline; margin-bottom:0px;"><b>Rubros</b></p>
+<p>
+    Opcionalmente puede crear rubros y vincularlos a conceptos; estos son una forma de agrupar sus movimientos.
+    <br />Nuevamente, como ejemplo podríamos decir que los conceptos de Luz y Gas podrían agruparse dentro del rubro "Servicios".    
+</p>
+<p style="text-decoration:underline; margin-bottom:0px;"><b>Ingresos</b></p>
+<p>
+    Aquí carga sus movimientos de ingreso, el sistema listará los conceptos que haya clasificado con el tipo "Ingreso".
+     Es necesario que al menos haya cargado un concepto de este tipo.
+</p>
+<p style="text-decoration:underline; margin-bottom:0px;"><b>Egresos</b></p>
+<p>
+    Aquí carga sus movimientos de egreso, el sistema listará los conceptos que haya clasificado con el tipo "Egreso".
+     Es necesario que al menos haya cargado un concepto de este tipo.
+</p>
+<p style="text-decoration:underline; margin-bottom:0px;"><b>Mis Movimientos</b></p>
+<p>
+    Muestra la lista de sus movimientos para un período determinado. Puede cambiar el período mostrado y los tipos de movimiento listados desde la opción "Modificar filtros".
+    <br />Por default, trae siempre el período vigente.
+</p>
+<p style="text-decoration:underline; margin-bottom:0px;"><b>Parámetros</b></p>
+<p>
+    <ul>
+        <li><span style="text-decoration:underline">Mostrar Saldo acumulado entre períodos:</span> 
+            este parámetro le permite determinar si el sistema deberá calcular y mostrar el saldo inicial al comienzo de cada período.
+            <br /> El saldo inicial es el neto de movimientos hasta el día anterior a dicho comienzo de período.
+        </li>
+    </ul>
+</p>
+
+</div>
+
+

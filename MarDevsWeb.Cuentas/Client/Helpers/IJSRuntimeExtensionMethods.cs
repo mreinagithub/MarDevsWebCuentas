@@ -37,6 +37,15 @@ namespace MarDevsWeb.Cuentas.Client.Helpers
         public static ValueTask<object> RemoveFromSessionStorage(this IJSRuntime js, string key)
             => js.InvokeAsync<object>("sessionStorage.removeItem", key);
 
+        public static ValueTask<object> SetInCookie(this IJSRuntime js, string key, string content, int expires = 30)
+           => js.InvokeAsync<object>("CookiesSetCustom", key, content, expires);
+
+        public static ValueTask<string> GetFromCookie(this IJSRuntime js, string key)
+            => js.InvokeAsync<string>("Cookies.get", key);
+
+        public static ValueTask<object> RemoveFromCookie(this IJSRuntime js, string key)
+            => js.InvokeAsync<object>("Cookies.remove", key);
+
         public static async ValueTask Focus(this IJSRuntime js, string elementId)
             => await js.InvokeVoidAsync("focusElement", elementId);
 

@@ -1,0 +1,10 @@
+# Carpetas de compilacion #
+MarDevsWeb.Cuentas/Shared/bin
+MarDevsWeb.Cuentas/Shared/obj
+MarDevsWeb.Cuentas/Server/obj
+MarDevsWeb.Cuentas/Server/bin
+MarDevsWeb.Cuentas/Server/MarDevsWeb.Cuentas.Server.csproj.user
+MarDevsWeb.Cuentas/Client/bin
+MarDevsWeb.Cuentas/Client/obj
+MarDevsWeb.Cuentas/Client/MarDevsWeb.Cuentas.Client.csproj.user
+.vs
