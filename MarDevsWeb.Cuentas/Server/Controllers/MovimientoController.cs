@@ -9,12 +9,13 @@ using MarDevsWeb.Cuentas.Server.Excepciones;
 using MarDevsWeb.Cuentas.Server.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace MarDevsWeb.Cuentas.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]    
     public class MovimientoController : MiBaseController
     {
         public MovimientoController(MarDevsContext context) : base(context)
@@ -26,7 +27,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
         public async Task<ResumenHomeDTO> GetResumen()
         {
 
-            var flags = _context.FlagsCuentas.FirstOrDefault();
+            var flags = PreferenciaUsuario;
             if (flags == null)
                 throw new ExcepcionNegocios("No se lograron obtener los parámetros de aplicación. Si el problema persiste contacte al proveedor del sistema.");
 
@@ -56,6 +57,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
 
             var queryable = MovimientoUsuario
                 .Include(g => g.Concepto)
+                .ThenInclude(c => c.Rubro)
                 .Where(g => g.CreadoPor == YO);
 
             if(!string.IsNullOrWhiteSpace(tipoMovimiento) && !tipoMovimiento.Equals("TODOS"))
@@ -80,6 +82,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                 Fecha = p.Fecha,
                 Tipo = p.Concepto.Tipo,
                 Concepto = p.Concepto.Descripcion,
+                Rubro = (p.Concepto.Rubro != null ? p.Concepto.Rubro.Descripcion : ""),
                 Importe = p.Importe,
                 Observaciones = p.Observaciones
             });

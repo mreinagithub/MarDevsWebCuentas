@@ -35,9 +35,18 @@ namespace MarDevsWeb.Cuentas.Server.Models.Seguridad
         public virtual DateTime? FechaUltimoCambioPassword { get; set; }
 
         public string PasswordTempRecupero { get; set; } = null;
-       
+
+        public string TipoAutenticacion { get; set; } = UsuarioTipoAutenticacion.LOCAL.ToString();
+        public string ImagenURL { get; set; }
+
 
         #endregion
 
+    }
+
+    public enum UsuarioTipoAutenticacion
+    {
+        LOCAL,
+        EXTER
     }
 }

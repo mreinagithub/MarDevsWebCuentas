@@ -1,4 +1,6 @@
 using MarDevsWeb.Cuentas.Server.Servicios;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -43,8 +45,8 @@ namespace MarDevsWeb.Cuentas.Server
             services.AddDbContext<MarDevsContext>(options =>
              options.UseSqlServer(connString));
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-             .AddJwtBearer(opt =>
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)                                
+             .AddJwtBearer(opt =>             
              opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
              {
                  ValidateIssuer = false,
@@ -54,7 +56,16 @@ namespace MarDevsWeb.Cuentas.Server
                  IssuerSigningKey = new SymmetricSecurityKey(
                      Encoding.UTF8.GetBytes(Configuration["jwt:key"])),
                  ClockSkew = TimeSpan.Zero
-             });
+             })
+              .AddCookie()
+                .AddGoogle(googleOpt =>
+                {
+                    googleOpt.ClientId = Configuration["Authentication:Google:ClientId"];
+                    googleOpt.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+                    googleOpt.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    googleOpt.ClaimActions.MapJsonKey("urn:google:picture", "picture","url");
+
+                });
 
             services.AddScoped<IMailService, MailService>();
 

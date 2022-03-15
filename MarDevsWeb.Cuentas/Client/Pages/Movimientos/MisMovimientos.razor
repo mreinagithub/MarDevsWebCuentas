@@ -63,7 +63,13 @@
 <BuscadorTexto @bind-TextoBusqueda="textoBusqueda" Buscar="Actualizar" placeholder="Concepto, Observaciones..." id="txtBusqueda"></BuscadorTexto>
 
 <div class="row">
-    <div class="col-12">
+    <div class="col-4">
+        <button class="btn btn-info btn-sm" @onclick="ExportarExcel"
+            style="margin-bottom:5px; padding:1px; padding-left:15px; padding-right:15px;">
+            <i class="fas fa-file-excel"></i>
+            </button>
+    </div>
+    <div class="col-8">
         <label class="infoRegistrosEncontrados">Registros: @cantidadRegistros</label>
     </div>
 </div>
@@ -272,6 +278,23 @@ else
     async Task CerrarModalSelectorFecha()
     {
         await js.OcultarModal("modarModificarFiltrosBusqueda");
+    }
+
+    async Task ExportarExcel()
+    {        
+        using (var package = new ExcelPackage())
+        {
+            var worksheet = package.Workbook.Worksheets.Add("movimientos");
+            var body = worksheet.Cells["A1:A1"].LoadFromCollection(
+                from m in PreviewMovimientos
+                select new { m.Fecha, m.Tipo, m.Concepto, m.Rubro, m.Importe, m.Observaciones }, true);            
+
+            worksheet.Cells[1, 1, 2 + body.Rows, 1].Style.Numberformat.Format = "dd/MM/yyyy";
+            worksheet.DefaultColWidth = 20;
+
+            await js.GuardarComo("movimientos.xlsx", package.GetAsByteArray());
+
+        }
     }
 
 }

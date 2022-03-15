@@ -203,6 +203,8 @@ namespace MarDevsWeb.Cuentas.Client.Auth
 
             };
             await repositorio.Post("api/cuenta/revocar-token", userRefreshDT);
+            //Por las dudas que haya cookie de google
+            await repositorio.Post("api/cuenta/GoogleLogout", "");
 
             await Limpiar();
             NotifyAuthenticationStateChanged(Task.FromResult(Anonimo));
@@ -248,12 +250,12 @@ namespace MarDevsWeb.Cuentas.Client.Auth
         }
         public async Task<string> ObtenerNombrePilaUsuario()
         {
-            var token = await js.GetFromLocalStorage(TOKENKEY);
-            var claims = ParseClaimsFromJwt(token);
-            if (claims == null || claims.Count() == 0 || !claims.Any(c => c.Type == "NombrePila"))
-                return "Anónimo";
+            var authState = await this.GetAuthenticationStateAsync();            
+            var nombrePila = authState?.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName);
+            if (nombrePila != null)
+                return nombrePila.Value;
             else
-                return claims.FirstOrDefault(c => c.Type == "NombrePila").Value;
+                return "Anónimo";
         }        
     }
 }

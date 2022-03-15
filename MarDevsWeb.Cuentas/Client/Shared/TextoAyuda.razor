@@ -1,7 +1,7 @@
 ﻿
 @inject IJSRuntime js
 
-<a href="javascript:void(0)" @onclick="CambiarVisibilidadHelp" style="color:black;">
+<a href="javascript:void(0)" @onclick="CambiarVisibilidadHelp" style="color:var(--color-letra)">
     <p class="header-text" style="margin-bottom:0px;">        
         <span style="font-size: 20px;">                   
             <b><i class="@arrowDirection"></i></b>        
@@ -12,8 +12,8 @@
 
 <div class="row" id="detalleHelp" style="@display; margin-bottom:5px;">
         <div class="col-12">            
-            <div style="background-color:#ffffed; border:thin; border-radius:10%;">
-                <div style="padding:10px; font-size: 14px;">
+            <div style="background-color:#ffffed; border:thin; border-radius:5%;">
+                <div style="padding:10px; font-size: 14px; color:black;">
                    @FragmentoAyuda 
                 </div>
             </div>

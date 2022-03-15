@@ -22,7 +22,9 @@ namespace MarDevsWeb.Cuentas.Server
                 .HasKey("UsuarioID", "TokenValidacion");
             modelBuilder.Entity<UsuarioRefreshToken>()
                .HasKey("UsuarioID", "BrowserToken");
-
+            modelBuilder.Entity<UsuarioPreferencia>()
+                .HasKey("UsuarioID");
+                
 
         }
 
@@ -31,6 +33,7 @@ namespace MarDevsWeb.Cuentas.Server
         public DbSet<FlagsSeguridad> FlagsSeguridad { get; set; }
         public DbSet<UsuarioValidacion> UsuarioValidacion { get; set; }
         public DbSet<UsuarioRefreshToken> UsuarioRefreshToken { get; set; }
+        public DbSet<UsuarioPreferencia> UsuarioPreferencia { get; set; }
 
         //Negocio
         public DbSet<Periodo> Periodo { get; set; }

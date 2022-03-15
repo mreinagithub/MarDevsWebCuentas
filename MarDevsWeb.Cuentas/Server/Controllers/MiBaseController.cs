@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MarDevsWeb.Cuentas.Server.Models;
+using System.Security.Claims;
+using MarDevsWeb.Cuentas.Server.Models.Seguridad;
 
 namespace MarDevsWeb.Cuentas.Server.Controllers
 {
@@ -27,6 +29,12 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
         public int YO
         {
             get { return Convert.ToInt32(User.Identity.Name); }
+            //get
+            //{
+            //    var email = User.Claims.FirstOrDefault(e => e.Type.Equals(ClaimTypes.Email)).Value.ToString();
+            //    int id = _context.Usuario.FirstOrDefault(u => u.Email.Equals(email)).Id.Value;
+            //    return id;
+            //}
         }
 
         #region WRAP EXCEPCIONES
@@ -100,6 +108,24 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
             get
             {
                 return _context.Rubro.Where(r => r.CreadoPor == YO).AsQueryable();
+            }
+        }
+        protected UsuarioPreferencia PreferenciaUsuario
+        {
+            get
+            {
+                var flags = _context.UsuarioPreferencia.Where(r => r.UsuarioID == YO).FirstOrDefault();
+                if(flags == null)
+                {
+                    flags = new UsuarioPreferencia();
+                    flags.UsuarioID = YO;
+                    flags.MostrarSaldoAcumuladoEntrePeriodos = true;
+                    flags.Tema = "CLARO";
+
+                    _context.Add(flags);
+                    _context.SaveChanges();
+                }
+                return flags;
             }
         }
 

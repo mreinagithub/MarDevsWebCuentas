@@ -107,6 +107,7 @@ namespace MarDevsWeb.Cuentas.Client
                 handler.EndpointsIgnorados.Add("/api/cuenta/registrar");
                 handler.EndpointsIgnorados.Add("/api/cuenta/login");
                 handler.EndpointsIgnorados.Add("/api/cuenta/validacion-correo");
+                handler.EndpointsIgnorados.Add("/api/cuenta/GoogleSignIn");                
 
 
                 return new HttpClient(handler)

@@ -1,5 +1,8 @@
 ﻿@inject IJSRuntime js
 @inject NavigationManager navigationManager
+@inject HttpClient httpClient
+
+@using System.IO
 
 <AuthorizeView>
 
@@ -17,10 +20,20 @@
             <div class="dropdown show float-right">
 
                 <a class="nav-link" href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img src="./Imagenes/UsuarioDefault.jpg" alt="user" class="rounded-circle" width="40">
+                    @{
+                        var imagenUsuario = @context.User.FindFirst("ImagenUsuario").Value;
+                        if(!string.IsNullOrWhiteSpace(imagenUsuario))
+                        {
+                            <img src="@imagenUsuario" alt="user" class="rounded-circle" width="40">
+                        }
+                        else
+                        {
+                            <img src="./Imagenes/UsuarioDefault.jpg" alt="user" class="rounded-circle" width="40">
+                        }
+                    }
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="font-size:15px;">
-                    <span style="padding-left:15px; padding-right:15px; font-weight:bold; text-align:center;"> @context.User.Claims.FirstOrDefault(c => c.Type.Equals("NombreAMostrar")).Value</span>
+                    <span style="padding-left:15px; padding-right:15px; font-weight:bold; text-align:center;"> @context.User.FindFirst(@"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress").Value</span>
                     <div class="dropdown-divider"></div>                                     
                     <a class="dropdown-item dropdown-item-custom" href="Periodos"><i class="fa fa-calendar m-r-5" aria-hidden="true"></i> Periodos</a>
                     <a class="dropdown-item dropdown-item-custom" href="Rubros"><i class="fa fa-th-list" aria-hidden="true"></i> Rubros</a>
@@ -32,7 +45,7 @@
                     <div class="dropdown-divider"></div>  
                     <a class="dropdown-item dropdown-item-custom" href="ModificarClave"><i class="fas fa-key m-r-5"></i> Modificar Clave</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item dropdown-item-custom" href="Parametros"><i class="fas fa-cog"></i> Parámetros</a>
+                    <a class="dropdown-item dropdown-item-custom" href="Preferencias"><i class="fas fa-cog"></i> Preferencias</a>
                     <a class="dropdown-item dropdown-item-custom" href="Ayuda"><i class="fas fa-question"></i> Ayuda</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item dropdown-item-custom" href="javascript:void(0)" @onclick="MostrarModalCierreSesion" id="cerrarSesionform"><i class="fas fa-power-off m-r-5"></i> Cerrar Sesión</a>
@@ -55,7 +68,60 @@
 
     [CascadingParameter] public Task<AuthenticationState> AuthenticationState { get; set; }
 
+
+    string email;
+    string imagen;
+
     private MensajeModal modal = new MensajeModal();
+
+    protected async override Task OnInitializedAsync()
+    {
+        //var authState = await AuthenticationState;
+        //if(authState.User.Identity.IsAuthenticated)
+        //{
+        //    email = authState.User.FindFirst(@"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress").Value ;
+        //    var imgurl = authState.User.FindFirst("ImagenUsuario").Value;
+        //    if(!string.IsNullOrWhiteSpace(imgurl))
+        //    {
+        //        imagen = await ConvertirURLToBase64String(imgurl);
+        //    }
+        //}
+        //StateHasChanged();
+    }
+
+    private async Task<string> ConvertirURLToBase64String(string url)
+    {
+        string returnImg = null;
+        try
+        {
+            using (Stream stream = await httpClient.GetStreamAsync(url))
+            {
+                if (stream == null)
+                    return returnImg;
+                byte[] buffer = new byte[16384];
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    while (true)
+                    {
+                        int num = await stream.ReadAsync(buffer, 0, buffer.Length);
+                        int read;
+                        if ((read = num) > 0)
+                            ms.Write(buffer, 0, read);
+                        else
+                            break;
+                    }
+                    returnImg = Convert.ToBase64String(ms.ToArray());
+                }
+                buffer = (byte[])null;
+            }
+            return returnImg;
+        }                    
+        catch
+        {
+            return null;
+        }
+    }
+
 
     private async Task MostrarModalCierreSesion()
     {

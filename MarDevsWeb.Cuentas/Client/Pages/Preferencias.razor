@@ -1,4 +1,4 @@
-﻿@page "/Parametros"
+﻿@page "/Preferencias"
 
 @inject IJSRuntime js
 @inject IRepositorio repositorio
@@ -8,12 +8,12 @@
 
 @attribute [Authorize]
 
-<Title Value="MarDevs - Parámetros"></Title>
+<Title Value="MarDevs - Preferencias"></Title>
 
 
 <div class="row">
     <div class="col-6">
-        <h5>Parámetros</h5>
+        <h5>Preferencias</h5>
     </div>
 </div>
 
@@ -22,21 +22,12 @@
     <Waiting></Waiting>
 }
 else
-{
-
-    <p>
-        Mostrar saldo acumulador entre periodos significa que el sistema calculará y mostrará un <b>Saldo inicial</b> para cada periodo que se calcula sumando el neto de sus ingresos y egresos hasta el día anterior
-        a la fecha de inicio del periodo vigente.
-    </p>
-    <p>
-        Por default, este parámetro está habilitado. Si lo deshabilita, el sistema dejará de mostrar dicha información; lo que significa que los periodos son interpretados como compartimentos estáncos 
-        sin relación entre ellos.
-    </p>
+{   
 
     <div id="editarParametroForm">
         <EditForm Model="Model" OnValidSubmit="Actualizar" autocomplete="off">
             <DataAnnotationsValidator />           
-            <div class="row mb-3" >
+            <div class="row" >
                 <div class="col-12" style="margin-left: 20px;">
                       <div class="form-group mx-sm-3 mb-2">                        
                         <input type="checkbox" class="form-check-input" id="mostrarSaldosId" @bind="Model.MostrarSaldoAcumuladoEntrePeriodos" />                                                  
@@ -44,12 +35,31 @@ else
                             Mostrar Saldo acumulado entre períodos                           
                         </label>
                     </div>
+                    <div style="font-size:13px;">
+                        <p style="margin-bottom:2px;">
+                            Mostrar saldo acumulador entre periodos significa que el sistema calculará y mostrará un <b>Saldo inicial</b> para cada periodo que se calcula sumando el neto de sus ingresos y egresos hasta el día anterior
+                            a la fecha de inicio del periodo vigente.
+                        </p>
+                        <p>
+                            Por default, este parámetro está habilitado. Si lo deshabilita, el sistema dejará de mostrar dicha información; lo que significa que los periodos son interpretados como compartimentos estáncos 
+                            sin relación entre ellos.
+                        </p>
+                    </div>
                 </div>
             </div>
+             <div class="col-12" style="padding:0px; margin-bottom:15px;">                                
+                    <div class="form-group mb-1">                                    
+                        <label class="control-label small mb-0 font-weight-bold">Tema</label>                              
+                        <select class="form-control" @bind="Model.Tema" id="lstTemas" autocomplete="off">                            
+                            <option value="CLARO">Claro</option>
+                            <option value="OSCURO">Oscuro</option>
+                        </select>
+                    </div>
+                </div>  
             <div class="row border-secondary mb-0" style="justify-content:space-between;">
                 <div class="col-12 order-sm-first  col-sm-4">
                     <a type="button" class="btn btn-custom-secondary col-12 btn-sm" id="btnCancelar" style="margin-bottom:8px;"
-                            href="javascript:void(0);" @onclick="VolverAPaginaCorrespondiente">
+                            href="javascript:void(0);" @onclick="() => VolverAPaginaCorrespondiente(false)">
                         @*<i class="fas fa-trash-alt mr-2" aria-hidden="true"></i> *@
                         Cancelar
                     </a>
@@ -76,8 +86,8 @@ else
     
 }
 
-@code {      
-    
+@code {
+
     public ParametrosDTO Model { get; set; }    
     bool Actualizando = false;    
 
@@ -107,16 +117,15 @@ else
             await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
         }
         else
-        {
-            VolverAPaginaCorrespondiente();
-
+        {           
+            VolverAPaginaCorrespondiente(true);
         }
         Actualizando = false;
     } 
 
-    void VolverAPaginaCorrespondiente()
+    void VolverAPaginaCorrespondiente(bool forceReload)
     {
-         navigationManager.NavigateTo("./");            
+         navigationManager.NavigateTo("./",forceReload);            
     }
 
 }

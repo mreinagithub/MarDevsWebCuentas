@@ -20,6 +20,10 @@ using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http;
 using System.Threading;
 using System.Security.Cryptography;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace MarDevsWeb.Cuentas.Server.Controllers
 {
@@ -249,6 +253,80 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                 throw WrapException(ex);
             }
         }
+      
+
+        [HttpGet("GoogleSignIn")]
+        public async Task GoogleSignIn()
+        {           
+
+            await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme,
+                new AuthenticationProperties { RedirectUri = "./GoogleRedirect"});
+        }
+        [HttpPost("GoogleBuildSession")]
+        public async Task<UserToken> GoogleResponse()
+        {
+            var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);           
+
+            if (result != null && result.Principal.Identity.IsAuthenticated)
+            {
+                var user = result.Principal;
+
+                var email = user.FindFirstValue(ClaimTypes.Email);
+                var usuario = await _context.Usuario.Where(u => u.Email.Equals(email)).FirstOrDefaultAsync();
+
+                if (usuario == null)
+                {
+                    usuario = new Usuario();
+                    usuario.Email = email;
+                    usuario.Password = "";
+                    usuario.Nombre = user.FindFirstValue(ClaimTypes.GivenName);
+                    usuario.Habilitado = true;
+                    usuario.EmailValidado = true;
+                    usuario.TipoAutenticacion = UsuarioTipoAutenticacion.EXTER.ToString();
+                    usuario.ImagenURL = user.FindFirstValue("urn:google:picture");
+
+                    _context.Add(usuario);
+
+                    await _context.SaveChangesAsync();
+
+                    string passNuevoSHA = Encriptacion.EncriptarSHA(email, usuario.Id.ToString());
+                    usuario.Password = passNuevoSHA;
+                    usuario.FechaUltimoCambioPassword = DateTime.Now;
+                }
+                else
+                {
+                    usuario.Habilitado = true;
+                    usuario.EmailValidado = true;
+                    usuario.Nombre = user.FindFirstValue(ClaimTypes.GivenName);
+                    usuario.TipoAutenticacion = UsuarioTipoAutenticacion.EXTER.ToString();
+                    usuario.ImagenURL = user.FindFirstValue("urn:google:picture");
+                }
+
+                usuario.FechaUltimoIngreso = DateTime.Now;
+                _context.Update(usuario);
+
+                await _context.SaveChangesAsync();
+
+                UsuarioRefreshToken uRefToken = new UsuarioRefreshToken(usuario.Id.Value, Guid.NewGuid());
+                AsignarRefreshToken(uRefToken);
+
+                _context.Add(uRefToken);
+
+                await _context.SaveChangesAsync();
+
+                return BuildToken(usuario, uRefToken);
+            }
+            else
+                throw new UnauthorizedAccessException();
+            
+        }       
+        [HttpPost("GoogleLogout")]
+        public async Task<IActionResult> LogOutUser()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return Ok();
+        }
+
 
         [HttpPost("ModificarClave")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -268,6 +346,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                 throw WrapException(ex);
             }
         }
+
 
         private async Task<UserToken> Autenticar(UserInfo usrInfo)
         {
@@ -598,8 +677,11 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
             {
                 new Claim(JwtRegisteredClaimNames.UniqueName, usuario.Id.Value.ToString()),
                 new Claim(ClaimTypes.Name, usuario.Id.Value.ToString()),
-                new Claim("NombrePila",usuario.Nombre),
-                new Claim("NombreAMostrar",usuario.Email),
+                new Claim(ClaimTypes.Email, usuario.Email),
+                new Claim(ClaimTypes.GivenName,usuario.Nombre),
+                new Claim("ImagenUsuario",usuario.ImagenURL ?? ""),
+                //new Claim("NombrePila",usuario.Nombre),
+                //new Claim("NombreAMostrar",usuario.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 

@@ -1,0 +1,36 @@
+﻿@layout EmptyLayout
+
+
+@page "/GoogleRedirect"
+
+@inject NavigationManager navigationManager
+@inject ILoginService loginService
+@inject IRepositorio repositorio
+@inject ErrorHandler errHandler
+
+@using MarDevsWeb.Cuentas.Client.Auth
+
+<Title Value="MarDevs - Google"></Title>
+
+
+<text>Redireccionando... </text>
+
+
+@code {
+
+    protected async override Task OnInitializedAsync()
+    {
+
+        var httpReponse = await repositorio.Post<string,UserToken>("api/cuenta/GoogleBuildSession","");
+        if (httpReponse.Error)
+        {
+            await errHandler.MostrarError(httpReponse.HttpResponseMessage);
+        }
+        else
+        {           
+            await loginService.Login(httpReponse.Response);
+            navigationManager.NavigateTo("./");
+        }
+    }
+
+}

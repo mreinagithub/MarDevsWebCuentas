@@ -20,8 +20,7 @@ namespace MarDevsWeb.Cuentas.Server.Models
         public string MailFrom { get; set; }        
         public string MailFromDisplayName { get; set; }        
         public bool HabilitarSSL { get; set; }
-
-        public bool MostrarSaldoAcumuladoEntrePeriodos { get; set; }
+        
 
     }
 }

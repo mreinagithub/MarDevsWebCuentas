@@ -64,5 +64,12 @@ namespace MarDevsWeb.Cuentas.Client.Helpers
         public static async ValueTask SeleccionarValorSelectItem(this IJSRuntime js, string elementId, string valor)
         => await js.InvokeVoidAsync("seleccionarSelectItem", elementId, valor);
 
+        public static async ValueTask EstablecerTemaAplicacion(this IJSRuntime js, string tema)
+            => await js.InvokeVoidAsync("SetTemaAplication", tema);
+
+        public static async ValueTask GuardarComo(this IJSRuntime js, string nombreArchivo, byte[] archivo)
+        {
+            await js.InvokeVoidAsync("saveAsFile", nombreArchivo, Convert.ToBase64String(archivo));
+        }
     }
 }

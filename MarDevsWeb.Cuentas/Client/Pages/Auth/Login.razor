@@ -54,8 +54,12 @@
         </button>
         <div  style="margin-top:15px;">                        
             <p><a href="javascript:void(0)" @onclick="RecuperarClave"><b>¿Olvidaste tu clave?</b></a></p>            
-            <p><a href="./registro"><b>¿Sos Nuevo? Registrate acá...</b></a></p>
-        </div>
+            <p><a href="./registro"><b>¿Sos Nuevo? Registrate acá...</b></a></p>                           
+        </div> 
+        <button type="button" class="btn btn-danger col-12" @onclick="AccesoGoogle">
+            <i class="fab fa-google"></i>
+                Accede con Google              
+            </button>      
     </div>
 </EditForm>
 
@@ -117,6 +121,11 @@
         await js.SetInSessionStorage("emailRecuClave", userInfo.Email);
         navigationManager.NavigateTo("./recuperar-clave");
 
+    }
+
+    private void AccesoGoogle()
+    {
+         navigationManager.NavigateTo("api/cuenta/GoogleSignIn", true);
     }
 
 }

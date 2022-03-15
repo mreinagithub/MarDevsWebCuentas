@@ -1,4 +1,5 @@
 ﻿using MarDevsWeb.Cuentas.Server.Excepciones;
+using MarDevsWeb.Cuentas.Server.Models.Seguridad;
 using MarDevsWeb.Cuentas.Shared.DTOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -21,17 +22,20 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
         }
 
         [HttpGet("obtenerModeloParametro")]
-        public async Task<ParametrosDTO> Get()
+        public ParametrosDTO Get()
         {
 
             var modelo = new ParametrosDTO();
 
-            var flags = await _context.FlagsCuentas.FirstOrDefaultAsync();
+
+            var flags = PreferenciaUsuario;
             if (flags == null)
-                throw new ExcepcionNegocios("No se lograron obtener los parámetros de aplicación");
-
-
+            {
+                throw new ExcepcionNegocios("No se lograron obtener las preferencias de usuario.");
+            }
+            
             modelo.MostrarSaldoAcumuladoEntrePeriodos = flags.MostrarSaldoAcumuladoEntrePeriodos;
+            modelo.Tema = flags.Tema;
 
             return modelo;
 
@@ -44,11 +48,12 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
             {
                 try
                 {
-                    var flags = await _context.FlagsCuentas.FirstOrDefaultAsync();
+                    var flags = PreferenciaUsuario;
                     if (flags == null)
-                        throw new ExcepcionNegocios("No se lograron obtener los parámetros de aplicación");
+                        throw new ExcepcionNegocios("No se lograron obtener las preferencias del usuario");
 
                     flags.MostrarSaldoAcumuladoEntrePeriodos = parametroDTO.MostrarSaldoAcumuladoEntrePeriodos;
+                    flags.Tema = parametroDTO.Tema;
 
                     await _context.SaveChangesAsync();
 
@@ -68,6 +73,18 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                 string err = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToString();
                 return BadRequest(err);
             }
+        }
+
+        [HttpGet("obtener-tema")]
+        //[AllowAnonymous]
+        public UserTemaDTO ObtenerTema()
+        {
+            var flags = PreferenciaUsuario;
+            if (flags != null)
+                return new UserTemaDTO { Tema = flags.Tema};
+            else
+                return new UserTemaDTO { Tema = "CLARO" };
+
         }
     }
 }

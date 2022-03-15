@@ -68,3 +68,25 @@ function seleccionarSelectItem(id, valor) {
 function CookiesSetCustom(id, value, expireDays) {
     Cookies.set(id, value, { expires: expireDays });
 }
+
+function SetTemaAplication(tema) {
+
+    if (tema == "OSCURO") {
+        $('#topmostPageId').addClass("modo-oscuro");
+        //$('#app').addClass("modo-oscuro");
+    }
+    else {
+        $('#topmostPageId').removeClass("modo-oscuro");
+        //$('#app').addClass("modo-oscuro");
+    }    
+}
+
+function saveAsFile(filename, bytesBase64){
+    var link = document.createElement('a');
+    link.innerText="CLIK ACA"
+    link.download = filename;
+    link.href = "data:application/octet-stream;base64, " + bytesBase64;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}

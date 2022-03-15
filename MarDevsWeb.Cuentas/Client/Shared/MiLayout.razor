@@ -3,6 +3,7 @@
 @*@inject MarDevsWeb.Cuentas.Client.Auth.RenovadorToken renovadorToken*@
 @inject IJSRuntime js
 @inject NavigationManager navigationManager
+@inject IRepositorio repositorio;
 
 @using System.Globalization; 
 
@@ -11,7 +12,7 @@
 
 <AuthorizeView>
     <Authorized>
-        <div class="wrapper">
+        <div class="wrapper" id="topmostPageId">
             <div id="content">
                 <MiNavMenu></MiNavMenu>
                 <div class="container mainpage">
@@ -21,7 +22,7 @@
                             </p>
                         </div>
                     </div>
-                    <main role="main" style="margin-top:-20px;">
+                    <main class="main" role="main" style="margin-top:-20px;">
                         @Body
                     </main>
                 </div>
@@ -39,15 +40,27 @@
 
     [CascadingParameter] public Task<AuthenticationState> AuthenticationState { get; set; }
 
-  
 
     protected override async Task OnInitializedAsync()
     {
+
 
         //await js.InicializarTimerInactivo(DotNetObjectReference.Create(this)); //Timer en javascript que si no detecta actividad por 10 minutos, revoca el token.
         //renovadorToken.Iniciar(); //Timer que corre cada 4 minutos para verificar y renovar el token si corresponde.
 
         CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("es-AR");
+
+        var auth = await AuthenticationState;
+        if (auth.User.Identity.IsAuthenticated)
+        {         
+            var response = await repositorio.Get<UserTemaDTO>("api/parametro/obtener-tema");                                  
+                if (!response.Error)
+                {       
+                    var temaUsuario = response.Response.Tema;                 
+                    await js.SetInLocalStorage("tema-aplicacion",temaUsuario);
+                    await js.EstablecerTemaAplicacion(temaUsuario);
+                }   
+        }       
     }
 
     //[JSInvokable]

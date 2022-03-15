@@ -4,25 +4,66 @@
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }*/
 
+:root {
+    /*COLORES PRIMARIOS*/
+    --fondo: white;
+    --color-letra: black;
+    --color-link: #0366d6;
+    --color-tarjeta: white;
+    --color-onhover: #d9d7d7;
+    /*--color-egresodinero: #FF7276;*/
+    --color-primario: #008f39;
+    --color-secundario: #666666;
+    /*--color-terciario: #77dd77;*/
+}
 
+.modo-oscuro {
+    --fondo: #2d2d2d;
+    --color-letra: white;
+    --color-link: #3ca4ff;
+    --color-tarjeta: #ffffed;
+}
 
 
 a, .btn-link {
-    color: #0366d6;
+    color: var(--color-link);
 }
 
+.table {
+    color: var(--color-letra);
+}
+
+div .main{
+    background-color:var(--fondo);
+    color:var(--color-letra);
+}
+
+div .modal-content {
+    background-color: var(--fondo);
+    color: var(--color-letra);
+}
+
+div .card.card-extras {
+    background-color: var(--color-tarjeta)!important;
+}
+
+/*div .card-extras > .card-body{
+    background-color:var(--color-tarjeta);
+}*/
+
+/*
 .btn-primary {
-    color: #fff;
+    color: var(--fondo);
     background-color: #1b6ec2;
     border-color: #1861ac;
 }
-
+*/
 .content {
     padding-top: 1.1rem;
 }
 
 .valid.modified:not([type=checkbox]) {
-    outline: 1px solid #26b050;
+    outline: 1px solid var(--color-primario);
 }
 
 .invalid {
@@ -55,36 +96,25 @@ a, .btn-link {
 
 /*MI CSS*/
 
-:root {
-    /*COLORES PRIMARIOS*/
-    --fondo: #fff;
-    --color-primario: #008f39; /*#003670;*/
-    --color-secundario: #666666;
-    --color-terciario: #77dd77; /*#68aedf;*/
-    --color-cuaternario: #d9d7d7;
-    --color-egresodinero: #FF7276;
-}
-
-
 
 .btn-custom,
 .btn-custom:focus {
     background-color: var(--color-primario);
-    color: #fff;
+    color: white;
 }
 
     .btn-custom:hover {
-        color: var(--color-cuaternario);
+        color: var(--color-onhover);
     }
 
 .btn-custom-secondary,
 .btn-custom-secondary:focus {
     background-color: var(--color-secundario);
-    color: #fff;
+    color: white;
 }
 
     .btn-custom-secondary:hover {
-        color: var(--color-cuaternario);
+        color: var(--color-onhover);
     }
 
 .form-control:focus,

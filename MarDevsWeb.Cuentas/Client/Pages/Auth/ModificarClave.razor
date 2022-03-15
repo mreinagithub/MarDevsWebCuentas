@@ -78,7 +78,7 @@
         if (authState.User.Identity.IsAuthenticated)
         {
             userModificarClave.UsuarioID = Convert.ToInt32(authState.User.Identity.Name);
-            NombreAMostrar = authState.User.Claims.FirstOrDefault(c => c.Type.Equals("NombreAMostrar")).Value;
+            NombreAMostrar = authState.User.FindFirst(@"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress").Value;
             await js.Focus("inputPasswordId");
         }
     }
