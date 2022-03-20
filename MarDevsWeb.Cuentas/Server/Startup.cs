@@ -105,8 +105,16 @@ namespace MarDevsWeb.Cuentas.Server
                 opt.SupportedUICultures = new List<CultureInfo> { defaultCulture };
             });
 
+            //Middleware para agregar el usuario logueado al logger de errores
+            app.Use(async (httpContext, next) =>
+            {
+                var userName = httpContext.User.Identity.IsAuthenticated ? httpContext.User.Identity.Name : "desconocido";
+                Serilog.Context.LogContext.PushProperty("User", !String.IsNullOrWhiteSpace(userName) ? userName : "desconocido");
+                await next.Invoke();
+            });
 
-            app.UseSerilogIngestion();
+
+            //app.UseSerilogIngestion();
 
             app.UseRouting();
             app.UseAuthentication();

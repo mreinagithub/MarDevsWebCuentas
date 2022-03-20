@@ -10,6 +10,7 @@ using MarDevsWeb.Cuentas.Server.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Threading;
 
 namespace MarDevsWeb.Cuentas.Server.Controllers
 {
@@ -37,22 +38,72 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
             var ttlIngresos = await MovimientoUsuario.Where(g => g.Fecha >= resumen.FechaDesde && g.Tipo.ToLower().Equals("ingreso")).SumAsync(g => g.Importe);
             decimal saldoInicial = 0;
             if (flags.MostrarSaldoAcumuladoEntrePeriodos)
-                saldoInicial = await MovimientoUsuario.Where(g => g.Fecha < resumen.FechaDesde).SumAsync(g => g.Importe * (g.Tipo.ToLower().Equals("egreso") ? -1 : 1));            
+                saldoInicial = await MovimientoUsuario.Where(g => g.Fecha < resumen.FechaDesde).SumAsync(g => g.Importe * (g.Tipo.ToLower().Equals("egreso") ? -1 : 1));
 
             resumen.MostrarSaldoInicial = flags.MostrarSaldoAcumuladoEntrePeriodos;
-            
+
             resumen.SaldoInicial = saldoInicial;
             resumen.TotalIngresos = ttlIngresos;
             resumen.TotalEgresos = ttlEgresos;
             resumen.Saldo = saldoInicial + ttlIngresos - ttlEgresos;
-            
+
 
             return resumen;
+        }
+        
+        [HttpGet("egreso-rubro-chart")]
+        public async Task<List<ResumenPorRubroDTO>> GetEgresoPorRubro()
+        {
+            var resumenPorRubroDTO = new List<ResumenPorRubroDTO>();
+            var fechaDesde = ObtenerFechaActual();
+
+            var query = from m in MovimientoUsuario where m.Tipo == "Egreso" && m.Fecha.Date >= fechaDesde.Date
+                        join c in ConceptosUsuario on m.ConceptoID equals c.Id
+                        join r in RubrosUsuario on c.RubroID equals r.Id into rub
+                        from rConVacios in rub.DefaultIfEmpty()                        
+                        group new { rConVacios, m } by new { Descripcion = rConVacios.Descripcion, Color = rConVacios.Color }
+                        into grp
+                        select new ResumenPorRubroDTO
+                        {
+                            Rubro = grp.Key.Descripcion ?? "[Sin Rubro]",
+                            Color = grp.Key.Color ?? "Black",
+                            Importe = grp.Sum(p => p.m.Importe)
+                        };
+
+            resumenPorRubroDTO = await query.ToListAsync();            
+
+            return resumenPorRubroDTO;
+
+        }
+        [HttpGet("ingreso-rubro-chart")]
+        public async Task<List<ResumenPorRubroDTO>> GetIngresoPorRubro()
+        {
+            var resumenPorRubroDTO = new List<ResumenPorRubroDTO>();
+            var fechaDesde = ObtenerFechaActual();
+
+            var query = from m in MovimientoUsuario
+                        where m.Tipo == "Ingreso" && m.Fecha.Date >= fechaDesde.Date
+                        join c in ConceptosUsuario on m.ConceptoID equals c.Id
+                        join r in RubrosUsuario on c.RubroID equals r.Id into rub
+                        from rConVacios in rub.DefaultIfEmpty()
+                        group new { rConVacios, m } by new { Descripcion = rConVacios.Descripcion, Color = rConVacios.Color }
+                        into grp
+                        select new ResumenPorRubroDTO
+                        {
+                            Rubro = grp.Key.Descripcion ?? "[Sin Rubro]",
+                            Color = grp.Key.Color ?? "Black",
+                            Importe = grp.Sum(p => p.m.Importe)
+                        };
+
+            resumenPorRubroDTO = await query.ToListAsync();
+
+            return resumenPorRubroDTO;
 
         }
 
+
         [HttpGet("buscar")]
-        public async Task<ActionResult<HeaderMovimientoDTO>> Get(DateTime? fechaDesde, DateTime? fechaHasta, string textoBuscar, string tipoMovimiento)
+        public async Task<ActionResult<HeaderMovimientoDTO>> Get(DateTime? fechaDesde, DateTime? fechaHasta, string textoBuscar, string tipoMovimiento, Guid? rubro = null)
         {
 
             var queryable = MovimientoUsuario
@@ -62,6 +113,9 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
 
             if(!string.IsNullOrWhiteSpace(tipoMovimiento) && !tipoMovimiento.Equals("TODOS"))
                 queryable = queryable.Where(g => g.Tipo.ToLower().Equals(tipoMovimiento.ToLower()));
+
+            if(rubro != null)
+                queryable = queryable.Where(q => q.Concepto.RubroID == rubro);
 
             if (!string.IsNullOrWhiteSpace(textoBuscar))
                 queryable = queryable.Where(g => g.Concepto.Descripcion.Contains(textoBuscar) || g.Observaciones.Contains(textoBuscar));
@@ -174,6 +228,9 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (egresoaeditar.Fecha.Date > DateTime.Today.Date)
+                    throw new ExcepcionNegocios("La fecha del egreso no puede ser futura.");
+
                 try
                 {
                     Movimiento gasto;
@@ -230,6 +287,9 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (ingresoEditar.Fecha.Date > DateTime.Today.Date)
+                    throw new ExcepcionNegocios("La fecha del ingreso no puede ser futura.");
+
                 try
                 {
                     Movimiento gasto;
@@ -308,7 +368,48 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
             }
         }
 
+        [HttpGet("obtener-listas-filtros")]
+        public async Task<ActionResult<ListasFiltroMovimientosDTO>> ObtenerListasFiltros()
+        {
+            //Periodos
+            var queryPeriodo = PeriodosUsuario;
+            var listPeriodos = new List<PeriodoDTO>();
+            PeriodoDTO nuevo;
+            foreach (var q in queryPeriodo)
+            {
+                nuevo = new PeriodoDTO
+                {
+                    Id = q.Id.Value,
+                    Desde = q.FechaDesde
+                };
 
+                var periodos = await queryPeriodo.Where(p => p.FechaDesde > nuevo.Desde).ToListAsync();
+                if (periodos != null)
+                {
+                    var periodo = periodos.MinBy(f => f.FechaDesde);
+                    if (periodo != null)
+                        nuevo.Hasta = periodo.FechaDesde.AddDays(-1);
+                    else
+                        nuevo.Hasta = (nuevo.Desde > DateTime.Now.Date ? nuevo.Desde : DateTime.Now.Date);
+                }
+                listPeriodos.Add(nuevo);
+            }
+
+            //Rubros
+            var queryRubro = RubrosUsuario;
+            var listaRubros = queryRubro.Select(r => new RubroDTO
+            {
+                Id = r.Id.Value,
+                Descripcion = r.Descripcion
+            }).ToList();
+
+
+            return new ListasFiltroMovimientosDTO
+            {
+                Periodos = listPeriodos.OrderBy(p => p.Desde).ToList(),
+                Rubros = listaRubros.OrderBy(r => r.Descripcion).ToList()        
+            };            
+        }
 
 
         [HttpGet("obtenerFechaActual")]

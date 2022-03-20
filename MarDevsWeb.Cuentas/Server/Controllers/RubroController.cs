@@ -32,12 +32,13 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
             return await queryable.Select(c => new RubroDTO
             {
                 Id = c.Id.Value,                
-                Descripcion = c.Descripcion                
+                Descripcion = c.Descripcion,
+                Color = c.Color ?? "#000000"
 
             }).ToListAsync();
         }
         [HttpGet("obtenerModeloRubro/{rubroId?}")]
-        public async Task<EditarRubroDTO> GetModeloConcepto(Guid? rubroId = null)
+        public async Task<EditarRubroDTO> GetModeloRubro(Guid? rubroId = null)
         {
 
             var modelo = new EditarRubroDTO();
@@ -49,7 +50,8 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                     throw new ExcepcionNegocios("El rubro que intenta modificar no fue encontrado.");
 
                 modelo.RubroId = rubro.Id.Value;             
-                modelo.Descripcion = rubro.Descripcion;                
+                modelo.Descripcion = rubro.Descripcion;
+                modelo.Color = rubro.Color;
             }         
 
             return modelo;
@@ -81,7 +83,8 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                     if (existe)
                         throw new ExcepcionNegocios("Ya existe un rubro con la misma descripción.\nNo puede cargar otro.");
                                         
-                    rubro.Descripcion = rubroEditar.Descripcion;                    
+                    rubro.Descripcion = rubroEditar.Descripcion;
+                    rubro.Color = rubroEditar.Color;
 
 
                     if (rubro.Id != null)
@@ -144,6 +147,13 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
             {
                 throw WrapException(ex);
             }
+        }
+        [HttpGet("obtener-descripcion")]
+        public async Task<object> ObtenerDescripcion(Guid rubroId)
+        {
+            var desc = (await RubrosUsuario.FirstOrDefaultAsync(r => r.Id == rubroId))?.Descripcion;
+
+            return desc;
         }
     }
 }

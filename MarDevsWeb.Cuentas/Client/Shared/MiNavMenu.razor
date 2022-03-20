@@ -68,26 +68,10 @@
 
     [CascadingParameter] public Task<AuthenticationState> AuthenticationState { get; set; }
 
-
-    string email;
-    string imagen;
+        
 
     private MensajeModal modal = new MensajeModal();
-
-    protected async override Task OnInitializedAsync()
-    {
-        //var authState = await AuthenticationState;
-        //if(authState.User.Identity.IsAuthenticated)
-        //{
-        //    email = authState.User.FindFirst(@"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress").Value ;
-        //    var imgurl = authState.User.FindFirst("ImagenUsuario").Value;
-        //    if(!string.IsNullOrWhiteSpace(imgurl))
-        //    {
-        //        imagen = await ConvertirURLToBase64String(imgurl);
-        //    }
-        //}
-        //StateHasChanged();
-    }
+   
 
     private async Task<string> ConvertirURLToBase64String(string url)
     {

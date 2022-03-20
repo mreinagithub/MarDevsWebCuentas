@@ -1,0 +1,74 @@
+﻿
+@using ChartJs.Blazor.PieChart
+ 
+ <div style="display:contents;">         
+                 <div class="card card-extras shadow p-3 bg-white rounded" style="margin-bottom:5px; margin-bottom:5px; padding:0px!important;">                                                                                
+                     <div class="card-body" style="padding:0px!important">                                                                                            
+                         <Chart Config="_pieConfig"></Chart>
+                     </div>                      
+                 </div>
+             </div>        
+
+
+    
+
+
+@code {
+    private PieConfig _pieConfig;
+
+    [Parameter] public bool ShowTitle { get; set; } = false;
+    [Parameter] public string Title { get; set; }
+    [Parameter] public List<string> Labels { get; set; } = new List<string>();
+    [Parameter] public List<object> Sources { get; set; } = new List<object>();
+    [Parameter] public IndexableOption<string> Colors { get; set; }
+
+    protected override void OnInitialized()
+    {
+        ConfigurePieConfig();
+    }
+    private void ConfigurePieConfig()
+    {
+
+        _pieConfig = new PieConfig();
+
+        _pieConfig.Options = new PieOptions
+            {
+
+                Responsive = true,
+                Title = new OptionsTitle
+                {
+                    Display = ShowTitle,
+                    Text = Title                    
+                },
+                Legend = new Legend
+                {
+                    Display = true,
+                    //FullWidth = true,
+                    Position = Position.Left,
+                    Labels = new LegendLabels
+                    {
+                        FontSize = 12,
+                        BoxWidth = 10,
+                        Padding = 2
+                    }
+                }
+            };
+
+        foreach (var party in Labels)
+        {
+            _pieConfig.Data.Labels.Add(party);
+        };
+
+        var dataSet = new PieDataset<object>(Sources)
+            {                
+                BackgroundColor = Colors
+            };
+
+            _pieConfig.Data.Datasets.Add(dataSet);
+
+
+    }
+
+}
+
+

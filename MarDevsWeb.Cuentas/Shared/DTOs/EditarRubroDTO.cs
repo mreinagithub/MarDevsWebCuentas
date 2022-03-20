@@ -13,5 +13,6 @@ namespace MarDevsWeb.Cuentas.Shared.DTOs
         [Required(ErrorMessage = "Campo descripción obligatorio")]
         [MaxLength(100, ErrorMessage = "La descripción debe tener como máximo 100 caractéres")]
         public string Descripcion { get; set; } = null;
+        public string Color { get; set; } = "#000000";
     }
 }

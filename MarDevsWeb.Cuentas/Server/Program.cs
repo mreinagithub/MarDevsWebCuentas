@@ -8,9 +8,7 @@ using Serilog.Sinks.Email;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace MarDevsWeb.Cuentas.Server
 {
@@ -76,15 +74,18 @@ namespace MarDevsWeb.Cuentas.Server
                             .WriteTo.Email(new EmailConnectionInfo
                             {
                                 MailServer = "smtp.gmail.com",
-                                Port = 587,
-                                NetworkCredentials = new NetworkCredential("infomardevs@gmail.com", "Imd@1686"),                                
+                                Port = 25,//465,//587,                                
+                                NetworkCredentials = new NetworkCredential("infomardevs@gmail.com", "Imd@1686"),
                                 FromEmail = "infomardevs@gmail.com",
+                                //EnableSsl = true,                                
+                                //MailServer = "mail.backoffice.com.ar",
+                                //Port = 2525,
+                                //NetworkCredentials = new NetworkCredential("drmcerrlogesp@daruma.com.ar", "Jpoq1915"),
+                                //FromEmail = "errlog@daruma.com.ar",
                                 ToEmail = destinatariosNotificacion,
-                                EnableSsl = true,
-                                EmailSubject = "MarDevs Cuentas - Reporte de error"
-                                
-
+                                EmailSubject = "MarDevs Cuentas - Reporte de error"                                
                             },
+                            batchPostingLimit: 1,
                                     outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} - [{Level:u3}] - Usuario: {User} - {Message:lj}{NewLine}{Exception}",
                                     restrictedToMinimumLevel: LogEventLevel.Error//LogEventLevel.Error // Minimum Log level
                                     )

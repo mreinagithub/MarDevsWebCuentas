@@ -95,12 +95,84 @@
     </div>
 </div> 
 
+<div>
+     <p style="border: 0.3px solid; margin-top:5px; margin-bottom:5px" />       
+     <h5>Estadísticas</h5>    
+     <p>Período actual</p>  
 
+
+   @*  <div class="row">
+         <div class="col-12 col-lg-6">                 
+
+             @if(EgresosGrafico == null)
+             {
+                 <Waiting></Waiting>
+             }
+             else
+             {
+                 <CustomChartBar ShowTitle = "true" Title = "Egresos" Labels = "labelsEgreso" Sources="sourcesEgreso" Colors="colorsEgreso">
+                    </CustomChartBar>    
+             }
+
+         </div>
+         <div class="col-12 col-lg-6">                  
+             @if(IngresosGrafico == null)
+             {
+                 <Waiting></Waiting>
+             }
+             else
+             {
+                 <CustomChartBar ShowTitle = "true" Title = "Ingresos" Labels = "labelsIngreso" Sources="sourcesIngreso" Colors="colorsIngreso">
+                    </CustomChartBar>    
+             }
+         </div>
+     </div>*@
+
+     <div class="row">
+         <div class="col-12 col-lg-6">                 
+
+             @if(EgresosGrafico == null)
+             {
+                 <Waiting></Waiting>
+             }
+             else
+             {
+                 <CustomChartPie ShowTitle = "true" Title = "Egresos" Labels = "labelsEgreso" Sources="sourcesEgreso" Colors="colorsEgreso">
+                    </CustomChartPie>    
+             }
+
+         </div>
+         <div class="col-12 col-lg-6">                  
+             @if(IngresosGrafico == null)
+             {
+                 <Waiting></Waiting>
+             }
+             else
+             {
+                 <CustomChartPie ShowTitle = "true" Title = "Ingresos" Labels = "labelsIngreso" Sources="sourcesIngreso" Colors="colorsIngreso">
+                    </CustomChartPie>    
+             }
+         </div>
+     </div>
+    
+
+</div>
+
+  
+  
 
 @code{
     string NombrePila { get; set; }
-    protected ResumenHomeDTO Model { get; set; } = null;    
+    protected ResumenHomeDTO Model { get; set; } = null;
+    protected List<ResumenPorRubroDTO> EgresosGrafico { get; set; } = null;
+    protected List<ResumenPorRubroDTO> IngresosGrafico { get; set; } = null;
 
+    private List<string> labelsEgreso = new List<string>();   // { "Alimentos", "Salud","Coche","Esparcimiento"};
+    private List<object> sourcesEgreso = new List<object>();  // { 18290.5, 3550.57, 12299.0, 3550.27 };
+    private IndexableOption<string> colorsEgreso; //{ "Red", "Blue", "Green", "#e817a6" };
+    private List<string> labelsIngreso = new List<string>();   // { "Alimentos", "Salud","Coche","Esparcimiento"};
+    private List<object> sourcesIngreso = new List<object>();  // { 18290.5, 3550.57, 12299.0, 3550.27 };
+    private IndexableOption<string> colorsIngreso; //{ "Red", "Blue", "Green", "#e817a6" };
 
     private string saldoInicial = "";
     private string ingresos = "";
@@ -112,8 +184,19 @@
     {        
         NombrePila = await loginService.ObtenerNombrePilaUsuario();
 
-        await Actualizar();
-    }
+        //Ejecución en paralelo
+        var actualizarResumenMovimientos = Actualizar();
+        var actualizarGraficoEgreso = GraficoEgresos();
+        var actualizarGraficoIngreso = GraficoIngresos();
+
+        await Task.WhenAll(actualizarResumenMovimientos, actualizarGraficoEgreso, actualizarGraficoIngreso);
+
+        //await Actualizar();
+        //await GraficoEgresos();
+        //await GraficoIngresos();
+    }    
+
+
 
     async Task Actualizar()
     {
@@ -140,6 +223,49 @@
             egresos = $"Total Egresos: {Model.TotalEgresos:C2}";
             saldo = $"Saldo actual: {Model.Saldo:C2}";
 
+            StateHasChanged();
+
+        }
+    }
+    async Task GraficoEgresos()
+    {
+        var httpReponse = await repositorio.Get<List<ResumenPorRubroDTO>>("api/movimiento/egreso-rubro-chart");
+        if (httpReponse.Error)
+        {
+            await errorHandler.MostrarError(httpReponse.HttpResponseMessage);
+        }
+        else
+        {
+
+
+            EgresosGrafico = httpReponse.Response;
+
+            labelsEgreso = EgresosGrafico.Select(e => e.Rubro).ToList();
+            sourcesEgreso = EgresosGrafico.Select(e => (object)e.Importe).ToList();
+            colorsEgreso = EgresosGrafico.Select(e => e.Color).ToArray();    
+            
+            StateHasChanged();
+        }
+    }
+     async Task GraficoIngresos()
+    {
+        var httpReponse = await repositorio.Get<List<ResumenPorRubroDTO>>("api/movimiento/ingreso-rubro-chart");
+        if (httpReponse.Error)
+        {
+            await errorHandler.MostrarError(httpReponse.HttpResponseMessage);
+        }
+        else
+        {
+
+
+            IngresosGrafico = httpReponse.Response;
+
+            labelsIngreso = IngresosGrafico.Select(e => e.Rubro).ToList();
+            sourcesIngreso = IngresosGrafico.Select(e => (object)e.Importe).ToList();
+            colorsIngreso = IngresosGrafico.Select(e => e.Color).ToArray();
+
+            StateHasChanged();
+            
         }
     }
 

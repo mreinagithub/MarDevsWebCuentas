@@ -83,10 +83,11 @@ function SetTemaAplication(tema) {
 
 function saveAsFile(filename, bytesBase64){
     var link = document.createElement('a');
-    link.innerText="CLIK ACA"
+    //link.innerText="CLIK ACA"
     link.download = filename;
     link.href = "data:application/octet-stream;base64, " + bytesBase64;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
 }
+

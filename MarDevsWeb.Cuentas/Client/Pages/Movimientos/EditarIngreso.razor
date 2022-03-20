@@ -77,7 +77,7 @@ else
                         <span class="small" style="display:inline-block">
                             <ValidationMessage For="@(() => Model.Fecha)" />
                         </span> 
-                        <InputDate @bind-Value="@Model.Fecha" class="form-control"></InputDate>
+                        <InputDate @bind-Value="@Model.Fecha" class="form-control" max="@($"{@DateTime.Today:yyyy-MM-dd}")"></InputDate>
                     </div>
                 </div>
             </div>

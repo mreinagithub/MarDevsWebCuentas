@@ -7,7 +7,8 @@ namespace MarDevsWeb.Cuentas.Server.Models
     {
         [Column("RubroID")]
         public override Guid? Id { get => base.Id; set => base.Id = value; }        
-        public string Descripcion { get; set; }        
+        public string Descripcion { get; set; }
+        public string Color { get; set; }
         public DateTime CreadoEl { get; set; }
         public int CreadoPor { get; set; }
     }

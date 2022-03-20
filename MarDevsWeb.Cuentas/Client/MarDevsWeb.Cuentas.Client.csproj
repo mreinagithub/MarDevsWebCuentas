@@ -4,9 +4,11 @@
     <TargetFramework>net6.0</TargetFramework>
 	 <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
 	 <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
+	 <UserSecretsId>913c947b-59bf-4cbd-a3d3-f8a80d4d574f</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ChartJs.Blazor.Fork" Version="2.0.2" />
     <PackageReference Include="EPPlus" Version="4.5.3.3" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web.Extensions" Version="5.0.0-preview9.20513.1" />
@@ -22,6 +24,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Shared\MarDevsWeb.Cuentas.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
 </Project>

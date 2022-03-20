@@ -26,6 +26,23 @@
                              </div>                            
                         </div>
                     </div>
+                    @if (Rubros != null)
+                    {
+                        <div class="row">                            
+                            <div class="col-12">                                
+                                <div class="form-group mb-1">                                    
+                                    <label class="control-label small mb-0 font-weight-bold">Rubro</label>                                                                                                                                
+                                    <select class="form-control " id="lstRubros" autocomplete="off" @bind="@Rubro">                                        
+                                        <option value="">--TODOS--</option>
+                                        @foreach (var rubro in Rubros)
+                                        {
+                                            <option value="@rubro.Id">@($"{rubro.Descripcion}")</option>
+                                        }  
+                                    </select>                                             
+                                </div>                            
+                            </div>
+                        </div>
+                    }
                     @if (OtrosPeriodos != null)
                     {
                         <div class="row">
@@ -64,11 +81,11 @@
                     {
                         <p style="text-align:left;color:red">@errorAlProcesar</p>
                     }
-                    <div class="row border-secondary">
+                    <div class="row border-secondary" style="margin-top:15px;">
                         <div class="col-4">                                
                             <div class="p-t-10">                                    
-                                <button class="btn btn-custom-secondary btn-sm col-12" id="btnRestablecerFechasDefault" type="button" @onclick="RestablecerFechasDefault">                                        
-                                    Restablecer                                    
+                                <button class="btn btn-custom-secondary btn-sm col-12" id="btnCancelar" type="button" @onclick="CancelarCambios">                                        
+                                    Cancelar                                    
                                 </button>
                             </div>                            
                         </div>                            
@@ -90,10 +107,13 @@
 @code{
 
     [Parameter] public string TipoMovimiento { get; set; }
+    [Parameter] public Guid? Rubro { get; set; }
     [Parameter] public DateTime? FechaDesde { get; set; }
     [Parameter] public DateTime? FechaHasta { get; set; }
     [Parameter] public List<PeriodoDTO> OtrosPeriodos { get; set; }    
+    [Parameter] public List<RubroDTO> Rubros { get; set; }
 
+    [Parameter] public EventCallback<Guid?> RubroChanged { get; set; }
     [Parameter] public EventCallback<string> TipoMovimientoChanged { get; set; }
     [Parameter] public EventCallback<DateTime?> FechaDesdeChanged { get; set; }
     [Parameter] public EventCallback<DateTime?> FechaHastaChanged { get; set; }
@@ -129,6 +149,7 @@
         }
         else
         {
+            await RubroChanged.InvokeAsync(Rubro);
             await TipoMovimientoChanged.InvokeAsync(TipoMovimiento);
             await FechaDesdeChanged.InvokeAsync(FechaDesde);
             await FechaHastaChanged.InvokeAsync(FechaHasta);            

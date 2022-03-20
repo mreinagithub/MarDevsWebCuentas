@@ -18,7 +18,7 @@ namespace MarDevsWeb.Cuentas.Shared.DTOs
         [Required(ErrorMessage = "Debe indicar el importe")]
         [Range(0.1, 999999, ErrorMessage = "El valor indicado es inválido")]
         public decimal? Importe { get; set; } = null;
-        [Required(ErrorMessage ="Campo fecha obligatorio")]
+        [Required(ErrorMessage ="Campo fecha obligatorio")]        
         public DateTime Fecha { get; set; } = DateTime.Now.Date;
         public string Observaciones { get; set; }
     }

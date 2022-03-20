@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace MarDevsWeb.Cuentas.Shared.DTOs
 {
-    public class RubroDTO
+    public class ListasFiltroMovimientosDTO
     {
-        public Guid Id { get; set; }        
-        public string Descripcion { get; set; }
-        public string Color { get; set; } = "#000000";
+        public List<PeriodoDTO> Periodos { get; set; }
+        public List<RubroDTO> Rubros { get; set; }
+
     }
 }

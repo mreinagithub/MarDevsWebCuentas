@@ -31,7 +31,11 @@
 
 <div class="row">
     <div class="col-12">
-        <p style="margin-bottom:0px;font-size:14px; font-weight:bold;">@textoFiltro</p>
+        <p style="margin-bottom:0px;font-size:14px; font-weight:bold;">@textoFiltro &nbsp;   
+            <a title="Restablecer filtros..." style="color:red; font-size:18px;" href="javascript:void(0)" @onclick="RestablecerFechasDefault">
+                <b><i class="fas fa-undo-alt"></i></b>                
+            </a>                
+        </p>
     </div>
     @*<div class="col-6">
         <p class="float-right" style="margin-bottom:0px;font-size:12px;">Saldo Inicial: @($"{saldoInicial:C2}")</p>
@@ -89,14 +93,14 @@ else
                 @foreach (var MovPreview in PreviewMovimientos)
                 {
                     <MiMovimientoItem MovimientoDTO="MovPreview" />
-
                 }
             </tbody>
         </table>
     </div>
 
-    <ModalModificarFiltros @bind-FechaDesde="fechaDesde" @bind-FechaHasta="fechaHasta" @bind-TipoMovimiento="tipoMovimiento"            
+    <ModalModificarFiltros @bind-FechaDesde="fechaDesde" @bind-FechaHasta="fechaHasta" @bind-TipoMovimiento="tipoMovimiento" @bind-Rubro="rubro"
                 OtrosPeriodos = "otrosPeriodos"
+                Rubros = "rubros"
                 ProcesarCambioFecha="ProcesarCambioDeFecha"
                 RestablecerFechasDefault ="RestablecerFechasDefault"
                 AlCancelarCambioFecha="CerrarModalSelectorFecha" >
@@ -111,9 +115,11 @@ else
     Dictionary<string, string> queryStringDict = new Dictionary<string, string>();    
     string textoBusqueda = "";
     string tipoMovimiento = "TODOS";
+    Guid? rubro = null;
     DateTime? fechaDesde = null;
     DateTime? fechaHasta = null;
-    List<PeriodoDTO> otrosPeriodos = null;    
+    List<PeriodoDTO> otrosPeriodos = null;
+    List<RubroDTO> rubros = null;
     string textoFiltro = "";
     string colorTtlMostrado = "";
     decimal importeTtlMostrado = 0;
@@ -172,6 +178,10 @@ else
         {
             tipoMovimiento = queryStringDict["tipoMovimiento"];
         }
+        if(queryStringDict.ContainsKey("rubro"))
+        {
+            rubro = Guid.Parse(queryStringDict["rubro"]);            
+        }
         ArmarTextoFiltro();
 
     }
@@ -182,6 +192,7 @@ else
         queryStringDict["fechaDesde"] = $"{fechaDesde:yyyy-MM-dd}";
         queryStringDict["fechaHasta"] = $"{fechaHasta:yyyy-MM-dd}";
         queryStringDict["tipoMovimiento"] = tipoMovimiento;
+        queryStringDict["rubro"] = $"{rubro}";
 
         var valoresPorDefecto = new List<string>() { "" };
 
@@ -233,9 +244,10 @@ else
                 fechaHasta = DateTime.Now.Date;
             }
             tipoMovimiento = "TODOS";
+            rubro = null;
         }
     }
-    private void ArmarTextoFiltro()
+    private async void ArmarTextoFiltro()
     {
         textoFiltro = "";
         if(fechaDesde != null)
@@ -247,19 +259,37 @@ else
             textoFiltro += $" a {fechaHasta:dd/MM/yyyy}";
         }
         textoFiltro += $" - Movimientos: {tipoMovimiento.ToUpper()}";
+        if (rubro == null)
+        {
+            textoFiltro += " - Rubros: TODOS";    
+        }
+        else
+        {            
+            var httpResponse = await repositorio.GetString($"api/rubro/obtener-descripcion?rubroId={rubro}");
+            if(!httpResponse.Error)
+            {   
+                textoFiltro += $" - Rubros: {httpResponse.Response}";
+            }
+            else
+            {
+                textoFiltro += $" - Rubros: NO DEFINIDO";    
+            }            
+        }
+
     }
 
     async Task AbrirModalSelectorFiltro()
     {   
         //Refresco la lista de periodos
-        var httpResponse = await repositorio.Get<List<PeriodoDTO>>("api/periodo/obtenerParaSeleccionar");
+        var httpResponse = await repositorio.Get<ListasFiltroMovimientosDTO>("api/movimiento/obtener-listas-filtros");
         if (httpResponse.Error)
         {
             await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
         }
         else
         {
-            otrosPeriodos = httpResponse.Response;            
+            otrosPeriodos = httpResponse.Response.Periodos;
+            rubros = httpResponse.Response.Rubros;
         }
         await js.SeleccionarValorSelectItem("lstPeriodosElegibles", "default");        
         await js.MostrarModal("modarModificarFiltrosBusqueda");
@@ -287,9 +317,15 @@ else
             var worksheet = package.Workbook.Worksheets.Add("movimientos");
             var body = worksheet.Cells["A1:A1"].LoadFromCollection(
                 from m in PreviewMovimientos
-                select new { m.Fecha, m.Tipo, m.Concepto, m.Rubro, m.Importe, m.Observaciones }, true);            
+                select new { m.Fecha, m.Tipo, m.Concepto, m.Rubro, m.Importe, m.Observaciones }, true);
+
+            var header = worksheet.Cells[1, 1, 1, 6];
+            header.Style.Font.Bold = true;
+            header.Style.Fill.PatternType = ExcelFillStyle.Solid;
+            header.Style.Fill.BackgroundColor.SetColor(Color.LightYellow);
 
             worksheet.Cells[1, 1, 2 + body.Rows, 1].Style.Numberformat.Format = "dd/MM/yyyy";
+            worksheet.Cells[1, 5, 2 + body.Rows, 5].Style.Numberformat.Format = "0.00";            
             worksheet.DefaultColWidth = 20;
 
             await js.GuardarComo("movimientos.xlsx", package.GetAsByteArray());

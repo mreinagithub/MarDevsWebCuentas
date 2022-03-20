@@ -153,36 +153,6 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
             }
         }
 
-        [HttpGet("obtenerParaSeleccionar")]
-        public async Task<ActionResult<List<PeriodoDTO>>> ObtenerParaSeleccionar()
-        {
-
-            var queryable = PeriodosUsuario;
-
-            var listPeriodos = new List<PeriodoDTO>();
-            PeriodoDTO nuevo;
-            foreach (var q in queryable)
-            {
-                nuevo = new PeriodoDTO
-                {
-                    Id = q.Id.Value,
-                    Desde = q.FechaDesde
-                };
-
-                var periodos = await queryable.Where(p => p.FechaDesde > nuevo.Desde).ToListAsync();
-                if (periodos != null)
-                {
-                    var periodo = periodos.MinBy(f => f.FechaDesde);
-                    if (periodo != null)
-                        nuevo.Hasta = periodo.FechaDesde.AddDays(-1);
-                    else
-                        nuevo.Hasta = (nuevo.Desde > DateTime.Now.Date ? nuevo.Desde : DateTime.Now.Date);
-                }                
-
-                listPeriodos.Add(nuevo);
-            }
-
-            return listPeriodos.OrderBy(p => p.Desde).ToList();
-        }
+      
     }
 }

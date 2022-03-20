@@ -37,7 +37,18 @@ else
                         <InputText @bind-Value="@Model.Descripcion" class="form-control" id="txtDescripcion"></InputText>
                     </div>
                 </div>
-            </div>            
+            </div>    
+             <div class="row">
+                <div class="col-12">
+                    <div class="form-group mb-1">
+                        <label class="control-label small mb-0 font-weight-bold">Color</label>
+                        <span class="small" style="display:inline-block">
+                            <ValidationMessage For="@(() => Model.Color)" />
+                        </span> 
+                        <InputText type="color" @bind-Value="@Model.Color" class="form-control" id="txtColor"></InputText>
+                    </div>
+                </div>
+            </div>       
             <div class="row border-secondary mb-0" style="justify-content:space-between;">
                 <div class="col-12 order-sm-first  col-sm-4">
                     <a type="button" class="btn btn-custom-secondary col-12 btn-sm" id="btnCancelar" style="margin-bottom:8px;"
