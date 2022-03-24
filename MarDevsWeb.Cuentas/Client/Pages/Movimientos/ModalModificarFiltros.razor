@@ -34,6 +34,7 @@
                                     <label class="control-label small mb-0 font-weight-bold">Rubro</label>                                                                                                                                
                                     <select class="form-control " id="lstRubros" autocomplete="off" @bind="@Rubro">                                        
                                         <option value="">--TODOS--</option>
+                                        <option value="[sin_rubro]">[SIN RUBRO]</option>
                                         @foreach (var rubro in Rubros)
                                         {
                                             <option value="@rubro.Id">@($"{rubro.Descripcion}")</option>
@@ -107,13 +108,13 @@
 @code{
 
     [Parameter] public string TipoMovimiento { get; set; }
-    [Parameter] public Guid? Rubro { get; set; }
+    [Parameter] public string Rubro { get; set; }
     [Parameter] public DateTime? FechaDesde { get; set; }
     [Parameter] public DateTime? FechaHasta { get; set; }
     [Parameter] public List<PeriodoDTO> OtrosPeriodos { get; set; }    
     [Parameter] public List<RubroDTO> Rubros { get; set; }
 
-    [Parameter] public EventCallback<Guid?> RubroChanged { get; set; }
+    [Parameter] public EventCallback<string> RubroChanged { get; set; }
     [Parameter] public EventCallback<string> TipoMovimientoChanged { get; set; }
     [Parameter] public EventCallback<DateTime?> FechaDesdeChanged { get; set; }
     [Parameter] public EventCallback<DateTime?> FechaHastaChanged { get; set; }

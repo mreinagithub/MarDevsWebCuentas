@@ -1,10 +1,12 @@
 ﻿
+@inject IJSRuntime js
+
 @using ChartJs.Blazor.PieChart
  
  <div style="display:contents;">         
                  <div class="card card-extras shadow p-3 bg-white rounded" style="margin-bottom:5px; margin-bottom:5px; padding:0px!important;">                                                                                
                      <div class="card-body" style="padding:0px!important">                                                                                            
-                         <Chart Config="_pieConfig"></Chart>
+                         <Chart Config="_pieConfig" SetupCompletedCallback="@SetupCompletedCallback"></Chart>
                      </div>                      
                  </div>
              </div>        
@@ -22,14 +24,26 @@
     [Parameter] public List<object> Sources { get; set; } = new List<object>();
     [Parameter] public IndexableOption<string> Colors { get; set; }
 
-    protected override void OnInitialized()
-    {
+
+    protected async override Task OnInitializedAsync()
+    {        
+
         ConfigurePieConfig();
     }
+
+    private async Task SetupCompletedCallback()
+    {        
+
+        await js.InvokeVoidAsync("datalabelsConfig",
+           _pieConfig.CanvasId);
+    }
+
+
+
     private void ConfigurePieConfig()
     {
 
-        _pieConfig = new PieConfig();
+        _pieConfig = new PieConfig();        
 
         _pieConfig.Options = new PieOptions
             {
@@ -38,7 +52,7 @@
                 Title = new OptionsTitle
                 {
                     Display = ShowTitle,
-                    Text = Title                    
+                    Text = Title
                 },
                 Legend = new Legend
                 {
@@ -51,7 +65,7 @@
                         BoxWidth = 10,
                         Padding = 2
                     }
-                }
+                }                
             };
 
         foreach (var party in Labels)
@@ -61,13 +75,16 @@
 
         var dataSet = new PieDataset<object>(Sources)
             {                
-                BackgroundColor = Colors
+                BackgroundColor = Colors,
+                BorderWidth = 1,
+                HoverBorderColor = Colors,
+                HoverBorderWidth = 5
             };
 
-            _pieConfig.Data.Datasets.Add(dataSet);
+        _pieConfig.Data.Datasets.Add(dataSet);        
 
 
-    }
+    }    
 
 }
 

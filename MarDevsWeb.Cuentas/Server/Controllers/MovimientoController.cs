@@ -103,7 +103,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
 
 
         [HttpGet("buscar")]
-        public async Task<ActionResult<HeaderMovimientoDTO>> Get(DateTime? fechaDesde, DateTime? fechaHasta, string textoBuscar, string tipoMovimiento, Guid? rubro = null)
+        public async Task<ActionResult<HeaderMovimientoDTO>> Get(DateTime? fechaDesde, DateTime? fechaHasta, string textoBuscar, string tipoMovimiento, string rubro = null)
         {
 
             var queryable = MovimientoUsuario
@@ -114,8 +114,18 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
             if(!string.IsNullOrWhiteSpace(tipoMovimiento) && !tipoMovimiento.Equals("TODOS"))
                 queryable = queryable.Where(g => g.Tipo.ToLower().Equals(tipoMovimiento.ToLower()));
 
-            if(rubro != null)
-                queryable = queryable.Where(q => q.Concepto.RubroID == rubro);
+            if (rubro != null)
+            {
+                if(rubro.Equals("[sin_rubro]"))
+                {
+                    queryable = queryable.Where(q => q.Concepto.RubroID == null);
+                }
+                else
+                {
+                    queryable = queryable.Where(q => q.Concepto.RubroID == Guid.Parse(rubro));
+                }
+                
+            }
 
             if (!string.IsNullOrWhiteSpace(textoBuscar))
                 queryable = queryable.Where(g => g.Concepto.Descripcion.Contains(textoBuscar) || g.Observaciones.Contains(textoBuscar));

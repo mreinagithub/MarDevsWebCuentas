@@ -5,6 +5,16 @@
     {
       "library": "font-awesome@5.15.1",
       "destination": "wwwroot/font-awesome/"
+    },
+    {
+      "library": "chartjs-plugin-datalabels@2.0.0",
+      "destination": "wwwroot/lib/chartjs-plugin-datalabels/",
+      "files": [
+        "chartjs-plugin-datalabels.min.js",
+        "chartjs-plugin-datalabels.esm.js",
+        "chartjs-plugin-datalabels.esm.min.js",
+        "chartjs-plugin-datalabels.js"
+      ]
     }
   ]
 }

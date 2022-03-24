@@ -66,6 +66,9 @@
     <!-- This is the glue between Blazor and Chart.js -->
     <script src="_content/ChartJs.Blazor.Fork/ChartJsBlazorInterop.js"></script>
 
+    <!--<script src="./lib/chartjs-plugin-datalabels/chartjs-plugin-datalabels.js"></script>-->
+    <script src="https://unpkg.com/chartjs-plugin-datalabels@0.7.0/dist/chartjs-plugin-datalabels.min.js"></script>
+
 
     <script>navigator.serviceWorker.register('service-worker.js');</script>
 
@@ -84,6 +87,8 @@
 
     <script src="./js/Utilidades.js"></script>
 
+    <script src="./js/ChartInterop.js"></script>
+
 
     <script>
         //Para que tome el tema de la app segun lo que este en el local stoage. Luego se establece definitivamente cuando se obtiene del backend segun pref. de usuario
@@ -91,6 +96,7 @@
         if (tema != null) {
             SetTemaAplication(tema);
         }
+
     </script>
 
 

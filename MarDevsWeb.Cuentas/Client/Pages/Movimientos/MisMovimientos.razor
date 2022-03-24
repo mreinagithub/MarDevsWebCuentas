@@ -115,7 +115,7 @@ else
     Dictionary<string, string> queryStringDict = new Dictionary<string, string>();    
     string textoBusqueda = "";
     string tipoMovimiento = "TODOS";
-    Guid? rubro = null;
+    string rubro = null;
     DateTime? fechaDesde = null;
     DateTime? fechaHasta = null;
     List<PeriodoDTO> otrosPeriodos = null;
@@ -180,7 +180,7 @@ else
         }
         if(queryStringDict.ContainsKey("rubro"))
         {
-            rubro = Guid.Parse(queryStringDict["rubro"]);            
+            rubro = queryStringDict["rubro"];            
         }
         ArmarTextoFiltro();
 
@@ -262,6 +262,10 @@ else
         if (rubro == null)
         {
             textoFiltro += " - Rubros: TODOS";    
+        }
+        else if (rubro.Equals("[sin_rubro]"))
+        {
+            textoFiltro += " - Rubros: [SIN RUBRO]";    
         }
         else
         {            
