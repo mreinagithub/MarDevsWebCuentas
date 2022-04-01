@@ -70,6 +70,11 @@ namespace MarDevsWeb.Cuentas.Client.Helpers
         public static async ValueTask GuardarComo(this IJSRuntime js, string nombreArchivo, byte[] archivo)
         {
             await js.InvokeVoidAsync("saveAsFile", nombreArchivo, Convert.ToBase64String(archivo));
-        }       
+        }     
+        
+        public static async ValueTask SetFooterText(this IJSRuntime js)
+        {
+            await js.InvokeVoidAsync("setFooterText");
+        }
     }
 }

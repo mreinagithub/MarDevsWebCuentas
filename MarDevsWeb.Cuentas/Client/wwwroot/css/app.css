@@ -164,3 +164,45 @@ div .card.card-extras {
 .dropdown-item:active {
     background-color: var(--color-primario);
 }
+
+
+/*RESPONSIVE FOOTER*/
+
+/*.app-body{
+    margin-bottom:30px;
+}*/
+
+.app-footer {    
+    position: relative;
+    clear: both;
+    right: 0;
+    left: 0;
+    bottom: 0;    
+    width: 100%;
+    background-color: #f0f0f0;
+    color: var(--color-letra);
+}
+
+.app-footer-label {
+    margin-left: 15px;
+    font-size: 14px;
+}
+
+/*@media screen and (max-width: 767px) {
+    .app-body{
+        margin-bottom:50px;
+    }
+    .app-footer{
+        height:50px;
+    }
+}
+
+@media screen and (max-width: 452px) {
+    .app-body {
+        margin-bottom: 70px;
+    }
+
+    .app-footer {
+        height: 70px;
+    }
+}*/

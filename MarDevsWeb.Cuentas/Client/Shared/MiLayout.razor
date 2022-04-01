@@ -54,13 +54,15 @@
         if (auth.User.Identity.IsAuthenticated)
         {         
             var response = await repositorio.Get<UserTemaDTO>("api/parametro/obtener-tema");                                  
-                if (!response.Error)
-                {       
-                    var temaUsuario = response.Response.Tema;                 
-                    await js.SetInLocalStorage("tema-aplicacion",temaUsuario);
-                    await js.EstablecerTemaAplicacion(temaUsuario);
-                }   
-        }       
+            if (!response.Error)
+            {       
+                var temaUsuario = response.Response.Tema;                 
+                await js.SetInLocalStorage("tema-aplicacion",temaUsuario);
+                await js.EstablecerTemaAplicacion(temaUsuario);
+            }   
+        }
+
+        await js.SetFooterText();
     }
 
     //[JSInvokable]

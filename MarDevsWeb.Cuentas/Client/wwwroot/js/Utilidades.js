@@ -91,3 +91,7 @@ function saveAsFile(filename, bytesBase64){
     document.body.removeChild(link);
 }
 
+function setFooterText() {    
+    $('.app-footer').removeAttr("hidden")
+    $('#footerId')[0].innerText = "MarDevs® 2021-2022 Todos los derechos reservados. Para consultas y comentarios enviar un e-mail a: infomardevs@gmail.com"
+}

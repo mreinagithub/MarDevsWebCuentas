@@ -37,12 +37,13 @@
             -ms-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%);
         }
+       
     </style>
 
 </head>
 
 <body>
-    <div id="app">
+    <div id="app" class="app-body">
         <div class="full-screen">
             <div class="center-splash">
                 <img src="./Imagenes/MarDevsCuentasBgTransparentHD.png" alt="Logo MarDevs Cuentas" style="max-width:350px;" />
@@ -51,6 +52,12 @@
                 </h5>
             </div>
         </div>
+
+
+    </div>
+
+    <div class="app-footer" hidden>
+        <label class="app-footer-label" id="footerId"></label>
     </div>
 
     <div id="blazor-error-ui">
@@ -96,6 +103,8 @@
         if (tema != null) {
             SetTemaAplication(tema);
         }
+
+        
 
     </script>
 

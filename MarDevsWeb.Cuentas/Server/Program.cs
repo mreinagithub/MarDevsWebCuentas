@@ -75,7 +75,7 @@ namespace MarDevsWeb.Cuentas.Server
                             {
                                 MailServer = "smtp.gmail.com",
                                 Port = 25,//465,//587,                                
-                                NetworkCredentials = new NetworkCredential("infomardevs@gmail.com", "Imd@1686"),
+                                NetworkCredentials = new NetworkCredential("infomardevs@gmail.com", "Imd@2334"),
                                 FromEmail = "infomardevs@gmail.com",
                                 //EnableSsl = true,                                
                                 //MailServer = "mail.backoffice.com.ar",
