@@ -39,7 +39,7 @@ namespace MarDevsWeb.Cuentas.Server
             services.AddRazorPages();
 
             string connString = Configuration.GetConnectionString("MarDevsContext");
-            connString = connString.Replace("[USUARIO]", "mardev");
+            connString = connString.Replace("[USUARIO]", "mardevs");
             connString = connString.Replace("[PASSWORD]", "mDev@1686");
 
             services.AddDbContext<MarDevsContext>(options =>
