@@ -11,5 +11,6 @@ namespace MarDevsWeb.Cuentas.Shared.DTOs
         public Guid Id { get; set; }        
         public string Descripcion { get; set; }
         public string Color { get; set; } = "#000000";
+        public int QConceptos { get; set; } = 0;
     }
 }

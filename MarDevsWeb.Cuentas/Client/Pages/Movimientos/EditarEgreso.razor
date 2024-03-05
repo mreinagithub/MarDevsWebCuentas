@@ -5,6 +5,7 @@
 @inject IMostrarMensajes mostrarMensajes
 @inject NavigationManager navigationManager
 @inject ErrorHandler errorHandler
+@inject ToastService toastService
 
 @implements IDisposable
 
@@ -176,10 +177,19 @@ else
         var httpResponse = await repositorio.Post<EditarEgresoDTO>("api/movimiento/editar-egreso", Model);
         if (httpResponse.Error)
         {
-            await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+            await errorHandler.MostrarError(httpResponse.HttpResponseMessage, usarToast: true);
         }
         else
         {
+            if (egresoId == null)
+            {
+                toastService.ShowToast("Egreso dado de alta.", ToastLevel.Success);
+            }
+            else
+            {
+                toastService.ShowToast("Egreso actualizado.", ToastLevel.Success);
+            }
+
             await VolverAPaginaCorrespondiente();
 
         }
@@ -203,13 +213,18 @@ else
         var httpResponse = await repositorio.Delete($"api/movimiento/eliminar/{Model.EgresoID}");
             if (httpResponse.Error)
             {
-                await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+                await errorHandler.MostrarError(httpResponse.HttpResponseMessage, usarToast: true);
             }
             else
             {
-                modalElim.Close();
+               
+
+                toastService.ShowToast("Egreso eliminado.", ToastLevel.Success);
+
                 await VolverAPaginaCorrespondiente();
             }
+
+        modalElim.Close();
     }
 
       async Task VolverAPaginaCorrespondiente()

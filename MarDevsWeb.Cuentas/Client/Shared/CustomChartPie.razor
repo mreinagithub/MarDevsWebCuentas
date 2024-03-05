@@ -1,12 +1,14 @@
 ﻿
 @inject IJSRuntime js
+@inject NavigationManager navManager;
 
 @using ChartJs.Blazor.PieChart
+@using Newtonsoft.Json.Linq
  
  <div style="display:contents;">         
                  <div class="card card-extras shadow p-3 bg-white rounded" style="margin-bottom:5px; margin-bottom:5px; padding:0px!important;">                                                                                
-                     <div class="card-body" style="padding:0px!important">                                                                                            
-                         <Chart Config="_pieConfig" SetupCompletedCallback="@SetupCompletedCallback"></Chart>
+                     <div class="card-body" style="padding:0px!important">
+            <Chart Config="_pieConfig" SetupCompletedCallback="@SetupCompletedCallback" ></Chart>
                      </div>                      
                  </div>
              </div>        
@@ -23,6 +25,7 @@
     [Parameter] public List<string> Labels { get; set; } = new List<string>();
     [Parameter] public List<object> Sources { get; set; } = new List<object>();
     [Parameter] public IndexableOption<string> Colors { get; set; }
+    [Parameter] public string TipoMovimientoDefinido { get; set; }
 
 
     protected async override Task OnInitializedAsync()
@@ -48,7 +51,8 @@
         _pieConfig.Options = new PieOptions
             {
 
-                Responsive = true,
+                Responsive = true,      
+                OnClick = new DelegateHandler<ChartMouseEvent>(OnClickHandler),
                 Title = new OptionsTitle
                 {
                     Display = ShowTitle,
@@ -83,8 +87,27 @@
 
         _pieConfig.Data.Datasets.Add(dataSet);        
 
-
     }    
+
+    public async void OnClickHandler(JObject mouseEvent, JArray activeElements)
+    {
+        foreach (JObject elem in activeElements)
+        {
+            foreach (JProperty prop in elem.GetValue("_model"))
+            {
+                if (prop.Name.Equals("label"))
+                {
+
+                    await js.SetInLocalStorage("rubro-clickeado",prop.Value.ToString());
+                    await js.SetInLocalStorage("tipomov-clickeado", TipoMovimientoDefinido);
+                    Console.WriteLine(prop.Value.ToString());
+                    navManager.NavigateTo("MisMovimientos");
+                }
+            }
+        }
+    }
+  
+  
 
 }
 

@@ -128,7 +128,9 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
             }
 
             if (!string.IsNullOrWhiteSpace(textoBuscar))
-                queryable = queryable.Where(g => g.Concepto.Descripcion.Contains(textoBuscar) || g.Observaciones.Contains(textoBuscar));
+                queryable = queryable.Where(g => g.Concepto.Descripcion.Contains(textoBuscar) 
+                || g.Observaciones.Contains(textoBuscar) 
+                || (g.Concepto.Rubro == null || g.Concepto.Rubro.Descripcion.Contains(textoBuscar)));
 
             if (fechaDesde != null)
                 queryable = queryable.Where(g => g.Fecha >= fechaDesde.Value);
@@ -137,8 +139,8 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
 
             queryable = queryable.OrderByDescending(p => p.Fecha).ThenByDescending(p => p.CreadoEl);
 
-                
-                
+
+
 
             var modelo = queryable.Select(p => new MovimientoDTO
             {
@@ -148,6 +150,8 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                 Concepto = p.Concepto.Descripcion,
                 Rubro = (p.Concepto.Rubro != null ? p.Concepto.Rubro.Descripcion : ""),
                 Importe = p.Importe,
+                ObservacionesShort = (!string.IsNullOrWhiteSpace(p.Observaciones) &&  p.Observaciones.Length > 20 
+                                        ? p.Observaciones.Substring(0, 20) + "..." : p.Observaciones),
                 Observaciones = p.Observaciones
             });
 
@@ -422,6 +426,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
         }
 
 
+
         [HttpGet("obtenerFechaActual")]
         public DateTime GetFechaActual()
         {
@@ -439,6 +444,8 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                 return periodos.AsEnumerable().MaxBy(p => p.FechaDesde).FechaDesde;
             }
         }
+
+      
 
     }
 }

@@ -22,6 +22,7 @@ namespace MarDevsWeb.Cuentas.Shared.DTOs
         public string Rubro { get; set; }
         public decimal Importe { get; set; }
         public DateTime Fecha { get; set; }
+        public string ObservacionesShort { get; set; }
         public string Observaciones { get; set; }
 
     }

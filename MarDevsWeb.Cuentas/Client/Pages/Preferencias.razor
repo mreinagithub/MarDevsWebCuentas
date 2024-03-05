@@ -5,6 +5,7 @@
 @inject IMostrarMensajes mostrarMensajes
 @inject NavigationManager navigationManager
 @inject ErrorHandler errorHandler
+@inject ToastService toastService
 
 @attribute [Authorize]
 
@@ -117,8 +118,13 @@ else
             await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
         }
         else
-        {           
-            VolverAPaginaCorrespondiente(true);
+        {          
+            toastService.ShowToast("Preferencias actualizadas.", ToastLevel.Success);
+                        
+            await js.SetInLocalStorage("tema-aplicacion", Model.Tema);
+            await js.EstablecerTemaAplicacion(Model.Tema);
+
+            VolverAPaginaCorrespondiente(false);
         }
         Actualizando = false;
     } 

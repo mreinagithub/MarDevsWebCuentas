@@ -5,6 +5,7 @@
 @inject IMostrarMensajes mostrarMensajes
 @inject NavigationManager navigationManager
 @inject ErrorHandler errorHandler
+@inject ToastService toastService
 
 @attribute [Authorize]
 
@@ -115,10 +116,19 @@ else
         var httpResponse = await repositorio.Post<EditarRubroDTO>("api/rubro/editar-rubro", Model);
         if (httpResponse.Error)
         {
-            await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+            await errorHandler.MostrarError(httpResponse.HttpResponseMessage, usarToast:true);
         }
         else
         {
+            if (rubroId == null)
+            {
+                toastService.ShowToast("Rubro dado de alta.", ToastLevel.Success);
+            }
+            else
+            {
+                toastService.ShowToast("Rubro actualizado.", ToastLevel.Success);
+            }
+
             VolverAPaginaCorrespondiente();
 
         }

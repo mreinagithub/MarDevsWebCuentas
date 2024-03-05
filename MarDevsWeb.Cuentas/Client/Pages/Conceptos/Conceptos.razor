@@ -5,6 +5,7 @@
 @inject IMostrarMensajes mostrarMensajes
 @inject NavigationManager navigationManager
 @inject ErrorHandler errorHandler
+@inject ToastService toastService
 
 
 
@@ -28,12 +29,16 @@
 </TextoAyuda>
 
 <div class="row">
-    <div class="col-6 mb-1">
+    <div class="col-2 mb-1">
         <button class="btn btn-custom btn-sm" id="btnNuevoConcepto" type="button" @onclick="AltaConcepto" >
-                                            Nuevo Concepto
+                                            Nuevo...
         </button>
     </div>
-    <div class="col-6">
+    <div class="col-8">
+        <BuscadorTexto @bind-TextoBusqueda="textoBusqueda" Buscar="BuscarRegistros" MostrarBotonBusqueda="false" BuscarAlTipear="true"
+        placeholder="Concepto, Rubro..." id="txtBusqueda"></BuscadorTexto>
+    </div>
+    <div class="col-2 float-right">
         <label class="infoRegistrosEncontrados">Registros: @cantidadRegistros</label>
     </div>
 </div>
@@ -90,6 +95,8 @@ else
     Guid conceptoIdEliminar;
     string conceptoDescEliminar = "";
 
+    string textoBusqueda = "";
+
     protected async override Task OnInitializedAsync()
     {
         modulo = await js.InvokeAsync<IJSObjectReference>("import", "./js/Conceptos.js");
@@ -103,11 +110,19 @@ else
             await modulo.InvokeVoidAsync("ScrollTop");
         }
 
-    }  
+    }    
 
     private async Task BuscarRegistros()
     {
-        var httpResponse = await repositorio.Get<List<ConceptoDTO>>("api/concepto/buscar");
+        var rubroBuscado = await js.GetFromLocalStorage("rubroBusqueda");
+        if(!string.IsNullOrWhiteSpace(rubroBuscado))
+        {
+            await js.RemoveFromLocalStorage("rubroBusqueda");
+            textoBusqueda = rubroBuscado;
+        }
+
+
+        var httpResponse = await repositorio.Get<List<ConceptoDTO>>($"api/concepto/buscar?textoBusqueda={textoBusqueda}");
         if (httpResponse.Error)
         {
             await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
@@ -141,13 +156,18 @@ else
         var httpResponse = await repositorio.Delete($"api/concepto/eliminar/{conceptoIdEliminar}");
             if (httpResponse.Error)
             {
-                await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+                await errorHandler.MostrarError(httpResponse.HttpResponseMessage, usarToast:true);
             }
             else
-            {
-                modalElim.Close();
+            {              
+
+                toastService.ShowToast("Concepto eliminado.", ToastLevel.Success);
+
+
                  await BuscarRegistros();
             }
+
+        modalElim.Close();
     }
 
 }

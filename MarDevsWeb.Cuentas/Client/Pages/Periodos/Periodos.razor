@@ -5,6 +5,7 @@
 @inject IMostrarMensajes mostrarMensajes
 @inject NavigationManager navigationManager
 @inject ErrorHandler errorHandler
+@inject ToastService toastService
 
 
 
@@ -140,13 +141,15 @@ else
         var httpResponse = await repositorio.Delete($"api/periodo/eliminar/{periodoAEliminar}");
             if (httpResponse.Error)
             {
-                await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+                await errorHandler.MostrarError(httpResponse.HttpResponseMessage, usarToast:true);
             }
             else
-            {
-                modalElim.Close();
+            {               
+                toastService.ShowToast("Periodo eliminado.", ToastLevel.Success);
                  await BuscarRegistros();
             }
+
+        modalElim.Close();
     }
 
 }

@@ -1,4 +1,5 @@
-﻿using MarDevsWeb.Cuentas.Server.Excepciones;
+﻿using MarDevsWeb.Cuentas.Client.Pages.Rubros;
+using MarDevsWeb.Cuentas.Server.Excepciones;
 using MarDevsWeb.Cuentas.Server.Models;
 using MarDevsWeb.Cuentas.Shared.DTOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -27,15 +28,19 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
         {
 
             var queryable = RubrosUsuario                
-                .OrderBy(c => c.Descripcion);
+                .OrderBy(c => c.Descripcion);            
 
-            return await queryable.Select(c => new RubroDTO
+            var rubros = await queryable.Select(c => new RubroDTO
             {
-                Id = c.Id.Value,                
+                Id = c.Id.Value,
                 Descripcion = c.Descripcion,
                 Color = c.Color ?? "#000000"
 
             }).ToListAsync();
+
+            rubros.ForEach(r => r.QConceptos = ConceptosUsuario.Count(c => c.RubroID == r.Id));
+
+            return rubros;
         }
         [HttpGet("obtenerModeloRubro/{rubroId?}")]
         public async Task<EditarRubroDTO> GetModeloRubro(Guid? rubroId = null)
@@ -154,6 +159,16 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
             var desc = (await RubrosUsuario.FirstOrDefaultAsync(r => r.Id == rubroId))?.Descripcion;
 
             return desc;
+        }
+
+
+        [HttpGet("obtener-id")]
+        public async Task<object> GetRubroIdFromDesc(string desc)
+        {
+            var id = (await RubrosUsuario.FirstOrDefaultAsync(r => r.Descripcion == desc))?.Id;
+
+            return id;
+
         }
     }
 }

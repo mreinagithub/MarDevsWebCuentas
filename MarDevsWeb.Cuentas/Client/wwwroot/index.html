@@ -5,8 +5,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>MarDevs Cuentas</title>
-    <!--<base href="./" />-->
-    <base />
+    <base href="./" />
+    <!--<base />
     <script>
         var path = window.location.pathname.split('/');
         var base = document.getElementsByTagName('base')[0];
@@ -17,7 +17,7 @@
         } else if (path[path.length - 1].length != 0) {
             window.location.replace(window.location.origin + window.location.pathname + '/' + window.location.search);
         }
-    </script>
+    </script>-->
     <link href="./css/bootstrap/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="./font-awesome/css/all.min.css" />
     <link rel="stylesheet" href="./bootstrap-select/css/bootstrap-select.min.css">
@@ -98,11 +98,11 @@
 
 
     <script>
-        //Para que tome el tema de la app segun lo que este en el local stoage. Luego se establece definitivamente cuando se obtiene del backend segun pref. de usuario
-        var tema = localStorage.getItem('tema-aplicacion');
-        if (tema != null) {
-            SetTemaAplication(tema);
-        }
+        ////Para que tome el tema de la app segun lo que este en el local stoage. Luego se establece definitivamente cuando se obtiene del backend segun pref. de usuario
+        //var tema = localStorage.getItem('tema-aplicacion');
+        //if (tema != null) {
+        //    SetTemaAplication(tema);
+        //}
 
         
 

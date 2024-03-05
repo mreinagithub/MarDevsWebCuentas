@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using MarDevsWeb.Cuentas.Client.Servicios;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -10,32 +11,26 @@ namespace MarDevsWeb.Cuentas.Client.Helpers
 {
     public class ErrorHandler
     {
-        private readonly NavigationManager navigationManager;        
+        private readonly NavigationManager navigationManager;
+        private readonly ToastService toastService;
 
-        public ErrorHandler(NavigationManager navigationManager)
+        public ErrorHandler(NavigationManager navigationManager, ToastService toastService)
         {
-            this.navigationManager = navigationManager;            
+            this.navigationManager = navigationManager;
+            this.toastService = toastService;
         }
 
 
         public int StatusCode { get; set; }
-        public string Message { get; set; }        
+        public string Message { get; set; }
 
-        public async Task MostrarError(HttpResponseMessage httpResponseMessage)
+        public async Task MostrarError(HttpResponseMessage httpResponseMessage, bool usarToast = false)
         {
-            StatusCode = (int)httpResponseMessage.StatusCode;
-
-            if(StatusCode == 401)
-            {
-                ManejarUsuarioNoAutorizado();
-            }
-            else
-            {
-                Message = await httpResponseMessage.Content.ReadAsStringAsync();                
-                navigationManager.NavigateTo("./error");
-            }         
+            MostrarError((int)httpResponseMessage.StatusCode,
+                await httpResponseMessage.Content.ReadAsStringAsync(), usarToast);
         }
-        public void MostrarError(int statusCode, string mensaje)
+
+        public void MostrarError(int statusCode, string mensaje, bool usarToast = false)
         {
             StatusCode = statusCode;
 
@@ -43,9 +38,18 @@ namespace MarDevsWeb.Cuentas.Client.Helpers
             {
                 ManejarUsuarioNoAutorizado();
             }
+            else if (StatusCode == 500)
+            {
+                Message = "Se ha producido un error interno. Si el problema persiste, contacte al administrador.";
+                navigationManager.NavigateTo("./error");
+            }
+            else if (usarToast)
+            {
+                toastService.ShowToast(mensaje, ToastLevel.Error);
+            }
             else
             {
-                Message = mensaje;                
+                Message = mensaje;
                 navigationManager.NavigateTo("./error");
             }
         }

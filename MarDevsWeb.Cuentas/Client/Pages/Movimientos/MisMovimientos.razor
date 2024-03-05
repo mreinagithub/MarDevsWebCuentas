@@ -64,7 +64,8 @@
 </div>
 
 
-<BuscadorTexto @bind-TextoBusqueda="textoBusqueda" Buscar="Actualizar" placeholder="Concepto, Observaciones..." id="txtBusqueda"></BuscadorTexto>
+<BuscadorTexto @bind-TextoBusqueda="textoBusqueda" Buscar="Actualizar" MostrarBotonBusqueda="false" BuscarAlTipear="true"
+        placeholder="Concepto, Rubro, Observaciones..." id="txtBusqueda"></BuscadorTexto>
 
 <div class="row">
     <div class="col-4">
@@ -124,7 +125,7 @@ else
     string colorTtlMostrado = "";
     decimal importeTtlMostrado = 0;
     decimal egresos = 0;
-    decimal ingresos = 0;
+    decimal ingresos = 0;    
 
 
     protected async override Task OnInitializedAsync()
@@ -229,6 +230,36 @@ else
 
     private async Task ArmarQueryDefault()
     {
+        rubro = null;
+        tipoMovimiento = "TODOS";
+        string rubroRecibido = await js.GetFromLocalStorage("rubro-clickeado");
+        if (!string.IsNullOrWhiteSpace(rubroRecibido))
+        {
+            await js.RemoveFromLocalStorage("rubro-clickeado");
+
+            if (rubroRecibido.Equals("[Sin Rubro]"))
+            {
+                rubro = "[sin_rubro]";               
+
+            }
+            else
+            {
+                rubroRecibido = Uri.EscapeDataString(rubroRecibido);
+                var httpResponseRubroId = await repositorio.Get<string>($"api/rubro/obtener-id?desc={rubroRecibido}");
+                if (!httpResponseRubroId.Error)
+                {
+                    rubro = httpResponseRubroId.Response;
+                }
+            }
+
+        }
+        string tipoMovRecibido = await js.GetFromLocalStorage("tipomov-clickeado");
+        if (!string.IsNullOrWhiteSpace(tipoMovRecibido))
+        {
+            await js.RemoveFromLocalStorage("tipomov-clickeado");
+            tipoMovimiento = tipoMovRecibido;
+        }
+
         var httpResponse = await repositorio.Get<DateTime>("api/movimiento/obtenerFechaActual");
         if (httpResponse.Error)
         {
@@ -242,9 +273,8 @@ else
             else
             {
                 fechaHasta = DateTime.Now.Date;
-            }
-            tipoMovimiento = "TODOS";
-            rubro = null;
+            }            
+           
         }
     }
     private async void ArmarTextoFiltro()

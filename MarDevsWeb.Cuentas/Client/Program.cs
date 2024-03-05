@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Serilog.Core;
 using Serilog;
 using System.Globalization;
+using MarDevsWeb.Cuentas.Client.Servicios;
 
 
 namespace MarDevsWeb.Cuentas.Client
@@ -94,6 +95,8 @@ namespace MarDevsWeb.Cuentas.Client
 
             //Para almacenar información del error a mostrar
             services.AddScoped<ErrorHandler>();
+
+            services.AddScoped<ToastService>();
 
             services.AddScoped<RenovadorTokenHandler>();            
            

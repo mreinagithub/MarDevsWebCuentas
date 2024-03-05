@@ -6,6 +6,11 @@
     <td>
         <span style="background-color:@RubroDTO.Color;width:20px;height:20px;display:inline-block; border-radius: 50%;"></span>
     </td>
+    <td style="text-align:center;">
+        <a href="javascript:void(0)" style="font-weight:bold; color:white;" @onclick="() => VerConceptos(RubroDTO.Descripcion)">
+            @RubroDTO.QConceptos
+        </a>
+        </td>
     <td><a class="btn btn-custom-secondary btn-sm" href="javascript:void(0)" @onclick="EditarRubro" title="Editar..."><i class="fas fa-edit"></i></a>
         <a class="btn btn-danger btn-sm" href="javascript:void(0)" @onclick="(() => EliminarRubro.InvokeAsync(RubroDTO))" title="Eliminar..."><i class="fa fa-trash" aria-hidden="true"></i></a></td>
 </tr>
@@ -20,5 +25,11 @@
     {       
         navigationManager.NavigateTo($"./rubro/{RubroDTO.Id}");
     }
-    
+
+    async void VerConceptos(string rubro)
+    {
+        await js.SetInLocalStorage("rubroBusqueda", rubro);
+        navigationManager.NavigateTo($"./conceptos");
+    }
+
 }

@@ -8,3 +8,4 @@ MarDevsWeb.Cuentas/Client/bin
 MarDevsWeb.Cuentas/Client/obj
 MarDevsWeb.Cuentas/Client/MarDevsWeb.Cuentas.Client.csproj.user
 .vs
+.dockerignore

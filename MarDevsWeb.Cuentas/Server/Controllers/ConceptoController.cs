@@ -24,12 +24,14 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
         }
 
         [HttpGet("buscar")]
-        public async Task<ActionResult<List<ConceptoDTO>>> Get()
+        public async Task<ActionResult<List<ConceptoDTO>>> Get(string textoBusqueda = "")
         {
 
             var queryable = ConceptosUsuario
                 .Include(c => c.Rubro)
-                .OrderBy(c => c.Tipo);            
+                .Where(c => c.Descripcion.Contains(textoBusqueda) || (c.Rubro == null || c.Rubro.Descripcion.Contains(textoBusqueda)))
+                .OrderBy(c => c.Tipo)
+                .ThenBy(c => c.Descripcion);            
 
             return await queryable.Select(c => new ConceptoDTO
             {

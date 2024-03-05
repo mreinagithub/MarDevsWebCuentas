@@ -5,6 +5,7 @@
 @inject IMostrarMensajes mostrarMensajes
 @inject NavigationManager navigationManager
 @inject ErrorHandler errorHandler
+@inject ToastService toastService
 
 @attribute [Authorize]
 
@@ -30,7 +31,7 @@ else
             <div class="row">
                 <div class="col-12">
                     <div class="form-group mb-1">
-                        <label class="control-label small mb-0 font-weight-bold">Fecha</label>
+                        <label class="control-label small mb-0 font-weight-bold">Fecha de inicio del período</label>
                         <span class="small" style="display:inline-block">
                             <ValidationMessage For="@(() => Model.FechaDesde)" />
                         </span> 
@@ -108,10 +109,20 @@ else
         var httpResponse = await repositorio.Post<EditarPeriodoDTO>("api/periodo/editarPeriodo", Model);
         if (httpResponse.Error)
         {
-            await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+            await errorHandler.MostrarError(httpResponse.HttpResponseMessage, usarToast: true);
         }
         else
         {
+            if (periodoId == null)
+            {
+                toastService.ShowToast("Periodo dado de alta.", ToastLevel.Success);
+            }
+            else
+            {
+                toastService.ShowToast("Periodo actualizado.", ToastLevel.Success);
+            }
+
+
             VolverAPaginaCorrespondiente();
 
         }

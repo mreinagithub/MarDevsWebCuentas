@@ -5,6 +5,7 @@
 @inject IMostrarMensajes mostrarMensajes
 @inject NavigationManager navigationManager
 @inject ErrorHandler errorHandler
+@inject ToastService toastService
 
 @implements IDisposable
 
@@ -176,10 +177,20 @@ else
         var httpResponse = await repositorio.Post<EditarIngresoDTO>("api/movimiento/editar-ingreso", Model);
         if (httpResponse.Error)
         {
-            await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+            await errorHandler.MostrarError(httpResponse.HttpResponseMessage, usarToast: true);
         }
         else
         {
+
+            if (ingresoId == null)
+            {
+                toastService.ShowToast("Ingreso dado de alta.", ToastLevel.Success);
+            }
+            else
+            {
+                toastService.ShowToast("Ingreso actualizado.", ToastLevel.Success);
+            }
+
             await VolverAPaginaCorrespondiente();
 
         }
@@ -207,9 +218,14 @@ else
             }
             else
             {
-                modalElim.Close();
+              
+
+                toastService.ShowToast("Ingreso eliminado.", ToastLevel.Success);
+
                 await VolverAPaginaCorrespondiente();
             }
+
+        modalElim.Close();
     }
 
       async Task VolverAPaginaCorrespondiente()

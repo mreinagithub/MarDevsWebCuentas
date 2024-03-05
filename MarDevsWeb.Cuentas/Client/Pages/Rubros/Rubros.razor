@@ -5,6 +5,7 @@
 @inject IMostrarMensajes mostrarMensajes
 @inject NavigationManager navigationManager
 @inject ErrorHandler errorHandler
+@inject ToastService toastService
 
 
 
@@ -30,7 +31,7 @@
 <div class="row">
     <div class="col-6 mb-1">
         <button class="btn btn-custom btn-sm" id="btnNuevoRubro" type="button" @onclick="AltaRubro" >
-                                            Nuevo Rubro
+                                            Nuevo...
         </button>
     </div>
     <div class="col-6">
@@ -52,6 +53,7 @@ else
                 <tr>                    
                     <th>Descripción</th>    
                     <th>Color</th>
+                    <th style="text-align:center;">Q.Cptos.</th>
                     <th></th>                    
                 </tr>
             </thead>
@@ -140,13 +142,16 @@ else
         var httpResponse = await repositorio.Delete($"api/rubro/eliminar/{rubroIdEliminar}");
             if (httpResponse.Error)
             {
-                await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+                await errorHandler.MostrarError(httpResponse.HttpResponseMessage, usarToast:true);
             }
             else
-            {
-                modalElim.Close();
+            {              
+                toastService.ShowToast("Rubro eliminado.", ToastLevel.Success);
+
                  await BuscarRegistros();
             }
+
+        modalElim.Close();
     }
 
 }

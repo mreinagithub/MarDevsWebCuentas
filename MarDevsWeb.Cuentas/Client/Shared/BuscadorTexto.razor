@@ -1,20 +1,24 @@
 ﻿<div class="form-row mb-2">
-    <div class="form-group form-group-custom-align position-relative col-9 col-sm-10 col-md-10 col-lg-10 col-xl-11">
+    <div class="form-group form-group-custom-align position-relative @colsImput">
         <input type="text" name="textoBusqueda" class="form-control" @attributes="ParametrosAdicionales"
                @bind="@TextoBusqueda"
                @bind:event="oninput"
-               @onkeypress="@((KeyboardEventArgs e) => ProcesarCambioTextoBusqueda(e))" />
+               @onkeyup="@((KeyboardEventArgs e) => ProcesarCambioTextoBusqueda(e))" />
         @if (!string.IsNullOrWhiteSpace(TextoBusqueda))
         {
             <span @onclick="BorrarContenidoInputBusqueda" class="form-clear"><i class="fas fa-times"></i></span>
         }
 
     </div>
-    <div class="col-3 col-sm-2 col-md-2 col-lg-2 col-xl-1">
-        <div class="float-right">
+
+    @if (MostrarBotonBusqueda)
+    {
+        <div class="@colsBtn">
+            <div class="float-right">
             <button class="btn btn-custom ml-1" @onclick="ProcesarBusqueda">Buscar</button>
         </div>
     </div>
+    }
 </div>
 
 @code{
@@ -22,18 +26,33 @@
     [Parameter] public string TextoBusqueda { get; set; }
     [Parameter] public EventCallback Buscar { get; set; }
     [Parameter] public EventCallback<string> TextoBusquedaChanged { get; set; }
+    [Parameter] public bool MostrarBotonBusqueda { get; set; } = true;
+    [Parameter] public bool BuscarAlTipear { get; set; } = false;
+
+    string colsImput = "col-9 col-sm-10 col-md-10 col-lg-10 col-xl-11";
+    string colsBtn = "col-3 col-sm-2 col-md-2 col-lg-2 col-xl-1";
+
+    protected override void OnInitialized()
+    {
+        if (!MostrarBotonBusqueda)
+        {
+            colsImput = "col-12";
+            colsBtn = "";
+        }
+    }
 
     [Parameter(CaptureUnmatchedValues = true)] 
     public IDictionary<string,object> ParametrosAdicionales { get; set; }
 
 
-    private void BorrarContenidoInputBusqueda()
+    private async void BorrarContenidoInputBusqueda()
     {
         TextoBusqueda = "";
+        if (BuscarAlTipear) await ProcesarBusqueda();
     }
     private async Task ProcesarCambioTextoBusqueda(KeyboardEventArgs e)
     {
-        if (e.Key == "Enter")
+        if (e.Key == "Enter" || BuscarAlTipear)
         {
             await ProcesarBusqueda();
         }       

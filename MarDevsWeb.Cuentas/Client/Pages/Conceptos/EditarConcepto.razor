@@ -5,6 +5,7 @@
 @inject IMostrarMensajes mostrarMensajes
 @inject NavigationManager navigationManager
 @inject ErrorHandler errorHandler
+@inject ToastService toastService
 
 @attribute [Authorize]
 
@@ -102,7 +103,7 @@ else
 
 @code {
 
-      [Parameter] public Guid? conceptoId { get; set; }
+    [Parameter] public Guid? conceptoId { get; set; }
     protected string tituloAccion = "Alta de Concepto";
     public EditarConceptoDTO Model { get; set; }    
     bool Actualizando = false;
@@ -114,7 +115,7 @@ else
         {
             tituloAccion = "Edición de Concepto";
 
-           
+
 
         }
 
@@ -140,10 +141,21 @@ else
         var httpResponse = await repositorio.Post<EditarConceptoDTO>("api/concepto/editarConcepto", Model);
         if (httpResponse.Error)
         {
-            await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
+            await errorHandler.MostrarError(httpResponse.HttpResponseMessage, usarToast:true);
         }
         else
         {
+
+            if (conceptoId == null)
+            {
+                toastService.ShowToast("Concepto dado de alta.", ToastLevel.Success);
+            }
+            else
+            {
+                toastService.ShowToast("Concepto actualizado.", ToastLevel.Success);
+            }
+
+
             VolverAPaginaCorrespondiente();
 
         }
