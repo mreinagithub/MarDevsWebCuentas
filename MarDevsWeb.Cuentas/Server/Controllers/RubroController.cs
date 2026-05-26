@@ -26,41 +26,61 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
         [HttpGet("buscar")]
         public async Task<ActionResult<List<RubroDTO>>> Get()
         {
-
-            var queryable = RubrosUsuario                
-                .OrderBy(c => c.Descripcion);            
-
-            var rubros = await queryable.Select(c => new RubroDTO
+            try
             {
-                Id = c.Id.Value,
-                Descripcion = c.Descripcion,
-                Color = c.Color ?? "#000000"
+                var queryable = RubrosUsuario                
+                    .OrderBy(c => c.Descripcion);            
 
-            }).ToListAsync();
+                var rubros = await queryable.Select(c => new RubroDTO
+                {
+                    Id = c.Id.Value,
+                    Descripcion = c.Descripcion,
+                    Color = c.Color ?? "#000000"
 
-            rubros.ForEach(r => r.QConceptos = ConceptosUsuario.Count(c => c.RubroID == r.Id));
+                }).ToListAsync();
 
-            return rubros;
+                rubros.ForEach(r => r.QConceptos = ConceptosUsuario.Count(c => c.RubroID == r.Id));
+
+                return rubros;
+            }
+            catch (ExcepcionNegocios exN)
+            {
+                return BadRequest(exN.Message);
+            }
+            catch (Exception ex)
+            {
+                throw WrapException(ex);
+            }
         }
+
         [HttpGet("obtenerModeloRubro/{rubroId?}")]
         public async Task<EditarRubroDTO> GetModeloRubro(Guid? rubroId = null)
         {
-
-            var modelo = new EditarRubroDTO();
-
-            if (rubroId != null)
+            try
             {
-                var rubro = await RubrosUsuario.FirstOrDefaultAsync(c => c.Id == rubroId.Value);
-                if (rubro == null)
-                    throw new ExcepcionNegocios("El rubro que intenta modificar no fue encontrado.");
+                var modelo = new EditarRubroDTO();
 
-                modelo.RubroId = rubro.Id.Value;             
-                modelo.Descripcion = rubro.Descripcion;
-                modelo.Color = rubro.Color;
-            }         
+                if (rubroId != null)
+                {
+                    var rubro = await RubrosUsuario.FirstOrDefaultAsync(c => c.Id == rubroId.Value);
+                    if (rubro == null)
+                        throw new ExcepcionNegocios("El rubro que intenta modificar no fue encontrado.");
 
-            return modelo;
+                    modelo.RubroId = rubro.Id.Value;             
+                    modelo.Descripcion = rubro.Descripcion;
+                    modelo.Color = rubro.Color;
+                }         
 
+                return modelo;
+            }
+            catch (ExcepcionNegocios exN)
+            {
+                throw new BadRequestObjectResult(exN.Message);
+            }
+            catch (Exception ex)
+            {
+                throw WrapException(ex);
+            }
         }
 
         [HttpPost("editar-rubro")]
@@ -153,22 +173,41 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                 throw WrapException(ex);
             }
         }
+
         [HttpGet("obtener-descripcion")]
         public async Task<object> ObtenerDescripcion(Guid rubroId)
         {
-            var desc = (await RubrosUsuario.FirstOrDefaultAsync(r => r.Id == rubroId))?.Descripcion;
-
-            return desc;
+            try
+            {
+                var desc = (await RubrosUsuario.FirstOrDefaultAsync(r => r.Id == rubroId))?.Descripcion;
+                return desc;
+            }
+            catch (ExcepcionNegocios exN)
+            {
+                throw new BadRequestObjectResult(exN.Message);
+            }
+            catch (Exception ex)
+            {
+                throw WrapException(ex);
+            }
         }
-
 
         [HttpGet("obtener-id")]
         public async Task<object> GetRubroIdFromDesc(string desc)
         {
-            var id = (await RubrosUsuario.FirstOrDefaultAsync(r => r.Descripcion == desc))?.Id;
-
-            return id;
-
+            try
+            {
+                var id = (await RubrosUsuario.FirstOrDefaultAsync(r => r.Descripcion == desc))?.Id;
+                return id;
+            }
+            catch (ExcepcionNegocios exN)
+            {
+                throw new BadRequestObjectResult(exN.Message);
+            }
+            catch (Exception ex)
+            {
+                throw WrapException(ex);
+            }
         }
     }
 }
