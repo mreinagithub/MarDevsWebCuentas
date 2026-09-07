@@ -73,10 +73,10 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
 
                 return modelo;
             }
-            catch (ExcepcionNegocios exN)
-            {
-                throw new BadRequestObjectResult(exN.Message);
-            }
+            //catch (ExcepcionNegocios exN)
+            //{
+            //    return BadRequest(exN.Message);
+            //}
             catch (Exception ex)
             {
                 throw WrapException(ex);
@@ -182,10 +182,10 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                 var desc = (await RubrosUsuario.FirstOrDefaultAsync(r => r.Id == rubroId))?.Descripcion;
                 return desc;
             }
-            catch (ExcepcionNegocios exN)
-            {
-                throw new BadRequestObjectResult(exN.Message);
-            }
+            //catch (ExcepcionNegocios exN)
+            //{
+            //    throw new BadRequestObjectResult(exN.Message);
+            //}
             catch (Exception ex)
             {
                 throw WrapException(ex);
@@ -200,10 +200,10 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                 var id = (await RubrosUsuario.FirstOrDefaultAsync(r => r.Descripcion == desc))?.Id;
                 return id;
             }
-            catch (ExcepcionNegocios exN)
-            {
-                throw new BadRequestObjectResult(exN.Message);
-            }
+            //catch (ExcepcionNegocios exN)
+            //{
+            //    throw new BadRequestObjectResult(exN.Message);
+            //}
             catch (Exception ex)
             {
                 throw WrapException(ex);
