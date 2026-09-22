@@ -1,16 +1,17 @@
-﻿using MarDevsWeb.Cuentas.Shared.DTOs;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System;
-using MarDevsWeb.Cuentas.Server.Excepciones;
+﻿using MarDevsWeb.Cuentas.Server.Excepciones;
 using MarDevsWeb.Cuentas.Server.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using MarDevsWeb.Cuentas.Shared.DTOs;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SGAWeb.Server.Servicios;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace MarDevsWeb.Cuentas.Server.Controllers
 {
@@ -19,7 +20,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]    
     public class MovimientoController : MiBaseController
     {
-        public MovimientoController(MarDevsContext context) : base(context)
+        public MovimientoController(MarDevsContext context, HoraService horaService) : base(context, horaService)
         {
 
         }
@@ -57,7 +58,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
             var resumenPorRubroDTO = new List<ResumenPorRubroDTO>();
             var fechaDesde = ObtenerFechaActual();
 
-            var query = from m in MovimientoUsuario where m.Tipo == "Egreso" && m.Fecha.Date >= fechaDesde.Date
+            var query = from m in MovimientoUsuario where m.Tipo == "Egreso" && m.Fecha >= fechaDesde
                         join c in ConceptosUsuario on m.ConceptoID equals c.Id
                         join r in RubrosUsuario on c.RubroID equals r.Id into rub
                         from rConVacios in rub.DefaultIfEmpty()                        
@@ -82,7 +83,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
             var fechaDesde = ObtenerFechaActual();
 
             var query = from m in MovimientoUsuario
-                        where m.Tipo == "Ingreso" && m.Fecha.Date >= fechaDesde.Date
+                        where m.Tipo == "Ingreso" && m.Fecha >= fechaDesde
                         join c in ConceptosUsuario on m.ConceptoID equals c.Id
                         join r in RubrosUsuario on c.RubroID equals r.Id into rub
                         from rConVacios in rub.DefaultIfEmpty()
@@ -103,7 +104,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
 
 
         [HttpGet("buscar")]
-        public async Task<ActionResult<HeaderMovimientoDTO>> Get(DateTime? fechaDesde, DateTime? fechaHasta, string textoBuscar, string tipoMovimiento, string rubro = null)
+        public async Task<ActionResult<HeaderMovimientoDTO>> Get(DateOnly? fechaDesde, DateOnly? fechaHasta, string textoBuscar, string tipoMovimiento, string rubro = null)
         {
 
             var queryable = MovimientoUsuario
@@ -242,7 +243,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (egresoaeditar.Fecha.Date > DateTime.Today.Date)
+                if (egresoaeditar.Fecha > DateOnly.FromDateTime(_horaService.FechaActualLOCAL))
                     throw new ExcepcionNegocios("La fecha del egreso no puede ser futura.");
 
                 try
@@ -272,7 +273,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                     else
                     {
                         gasto.Id = Guid.NewGuid();
-                        gasto.CreadoEl = DateTime.Now;
+                        gasto.CreadoEl = _horaService.FechaYHoraActualUTC;
                         gasto.CreadoPor = YO;
                         _context.Add(gasto);
                     }
@@ -301,7 +302,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (ingresoEditar.Fecha.Date > DateTime.Today.Date)
+                if (ingresoEditar.Fecha > DateOnly.FromDateTime(_horaService.FechaActualLOCAL))
                     throw new ExcepcionNegocios("La fecha del ingreso no puede ser futura.");
 
                 try
@@ -331,7 +332,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                     else
                     {
                         gasto.Id = Guid.NewGuid();
-                        gasto.CreadoEl = DateTime.Now;
+                        gasto.CreadoEl = _horaService.FechaYHoraActualUTC;
                         gasto.CreadoPor = YO;
                         _context.Add(gasto);
                     }
@@ -404,7 +405,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                     if (periodo != null)
                         nuevo.Hasta = periodo.FechaDesde.AddDays(-1);
                     else
-                        nuevo.Hasta = (nuevo.Desde > DateTime.Now.Date ? nuevo.Desde : DateTime.Now.Date);
+                        nuevo.Hasta = (nuevo.Desde > DateOnly.FromDateTime(_horaService.FechaActualLOCAL) ? nuevo.Desde : DateOnly.FromDateTime(_horaService.FechaActualLOCAL));
                 }
                 listPeriodos.Add(nuevo);
             }
@@ -428,17 +429,17 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
 
 
         [HttpGet("obtenerFechaActual")]
-        public DateTime GetFechaActual()
+        public DateOnly GetFechaActual()
         {
 
             return ObtenerFechaActual();
         }
 
-        private DateTime ObtenerFechaActual()
+        private DateOnly ObtenerFechaActual()
         {
-            var periodos = PeriodosUsuario.Where(p => p.FechaDesde.Date <= DateTime.Now.Date);
+            var periodos = PeriodosUsuario.Where(p => p.FechaDesde <= DateOnly.FromDateTime(_horaService.FechaActualLOCAL));
             if (periodos == null || periodos.Count() == 0)
-                return DateTime.MinValue;
+                return DateOnly.FromDateTime(DateTime.MinValue);
             else
             {
                 return periodos.AsEnumerable().MaxBy(p => p.FechaDesde).FechaDesde;

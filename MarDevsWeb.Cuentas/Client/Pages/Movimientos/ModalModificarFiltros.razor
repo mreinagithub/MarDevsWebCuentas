@@ -109,22 +109,22 @@
 
     [Parameter] public string TipoMovimiento { get; set; }
     [Parameter] public string Rubro { get; set; }
-    [Parameter] public DateTime? FechaDesde { get; set; }
-    [Parameter] public DateTime? FechaHasta { get; set; }
+    [Parameter] public DateOnly? FechaDesde { get; set; }
+    [Parameter] public DateOnly? FechaHasta { get; set; }
     [Parameter] public List<PeriodoDTO> OtrosPeriodos { get; set; }    
     [Parameter] public List<RubroDTO> Rubros { get; set; }
 
     [Parameter] public EventCallback<string> RubroChanged { get; set; }
     [Parameter] public EventCallback<string> TipoMovimientoChanged { get; set; }
-    [Parameter] public EventCallback<DateTime?> FechaDesdeChanged { get; set; }
-    [Parameter] public EventCallback<DateTime?> FechaHastaChanged { get; set; }
+    [Parameter] public EventCallback<DateOnly?> FechaDesdeChanged { get; set; }
+    [Parameter] public EventCallback<DateOnly?> FechaHastaChanged { get; set; }
     [Parameter] public EventCallback AlCancelarCambioFecha { get; set; }
     [Parameter] public EventCallback ProcesarCambioFecha { get; set; }
     [Parameter] public EventCallback RestablecerFechasDefault { get; set; }
 
     string errorAlProcesar = "";
-    DateTime? minFecha;
-    DateTime? maxFecha;
+    DateOnly? minFecha;
+    DateOnly? maxFecha;
 
     protected override void OnInitialized()
     {

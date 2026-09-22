@@ -9,16 +9,16 @@ namespace MarDevsWeb.Cuentas.Shared.DTOs
     public class PeriodoDTO
     {
         public Guid Id { get; set; }        
-        public DateTime Desde { get; set; }
-        public DateTime? Hasta { get; set; } = null;
+        public DateOnly Desde { get; set; }
+        public DateOnly? Hasta { get; set; } = null;
         public int? Dias
         {
             get
             {
-                if (Hasta != null)
-                    return Hasta.Value.Subtract(Desde).Days;
-                else
-                    return null;
+                if (Hasta.HasValue)
+                    return Hasta.Value.DayNumber - Desde.DayNumber;
+
+                return null;
             }
         }
     }

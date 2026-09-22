@@ -19,11 +19,11 @@ namespace MarDevsWeb.Cuentas.Server
         {
 
             modelBuilder.Entity<UsuarioValidacion>()
-                .HasKey("UsuarioID", "TokenValidacion");
+                .HasKey(a => new { a.UsuarioID, a.TokenValidacion });                
             modelBuilder.Entity<UsuarioRefreshToken>()
-               .HasKey("UsuarioID", "BrowserToken");
+               .HasKey(a => new { a.UsuarioID, a.BrowserToken });
             modelBuilder.Entity<UsuarioPreferencia>()
-                .HasKey("UsuarioID");
+                .HasKey(a => new { a.UsuarioID });
                 
 
         }

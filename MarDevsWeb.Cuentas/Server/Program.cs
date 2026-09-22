@@ -4,10 +4,12 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
+using Serilog.Formatting.Display;
 using Serilog.Sinks.Email;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 
 namespace MarDevsWeb.Cuentas.Server
@@ -71,24 +73,22 @@ namespace MarDevsWeb.Cuentas.Server
                                                   + "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} - [{Level:u3}] - Usuario: {User} - {Message:lj}{NewLine}{Exception}",  // Set custom file format                                    
                                     shared: true // Shared between multi-process shared log files
                                     )
-                            .WriteTo.Email(new EmailConnectionInfo
-                            {
-                                MailServer = "smtp.gmail.com",
-                                Port = 25,//465,//587,                                
-                                NetworkCredentials = new NetworkCredential("infomardevs@gmail.com", "Imd@2334"),
-                                FromEmail = "infomardevs@gmail.com",
-                                //EnableSsl = true,                                
-                                //MailServer = "mail.backoffice.com.ar",
-                                //Port = 2525,
-                                //NetworkCredentials = new NetworkCredential("drmcerrlogesp@daruma.com.ar", "Jpoq1915"),
-                                //FromEmail = "errlog@daruma.com.ar",
-                                ToEmail = destinatariosNotificacion,
-                                EmailSubject = "MarDevs Cuentas - Reporte de error"                                
-                            },
-                            batchPostingLimit: 1,
-                                    outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} - [{Level:u3}] - Usuario: {User} - {Message:lj}{NewLine}{Exception}",
-                                    restrictedToMinimumLevel: LogEventLevel.Error//LogEventLevel.Error // Minimum Log level
-                                    )
+
+                              .WriteTo.Email(
+                                options: new EmailSinkOptions
+                                {
+                                    Host = "smtp.gmail.com",
+                                    Port = 587,
+                                    Credentials = new NetworkCredential("infomardevs@gmail.com", "qfpk ymgg foty otwt"),
+                                    From = "infomardevs@gmail.com",
+                                    To = destinatariosNotificacion.Split(',', ';').Select(x => x.Trim()).ToList(),
+                                    ConnectionSecurity = MailKit.Security.SecureSocketOptions.StartTls,
+                                    Subject = new MessageTemplateTextFormatter($"MarDevs Cuentas - Reporte de error"),
+                                    Body = new MessageTemplateTextFormatter(
+                                        "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} - [{Level:u3}] - Usuario: {User} - {Message:lj}{NewLine}{Exception}"),
+                                    IsBodyHtml = false
+                                },
+                                restrictedToMinimumLevel: LogEventLevel.Error)
                             .CreateLogger();
         }
 

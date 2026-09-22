@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SGAWeb.Server.Servicios;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ParametroController : MiBaseController
     {
-        public ParametroController(MarDevsContext context) : base(context)
+        public ParametroController(MarDevsContext context, HoraService horaService) : base(context, horaService)
         {
 
         }

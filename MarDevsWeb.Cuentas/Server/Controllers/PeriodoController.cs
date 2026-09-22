@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SGAWeb.Server.Servicios;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PeriodoController : MiBaseController
     {
-        public PeriodoController(MarDevsContext context) : base(context)
+        public PeriodoController(MarDevsContext context, HoraService horaService) : base(context, horaService)
         {
 
         }
@@ -26,30 +27,43 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
         public async Task<ActionResult<List<PeriodoDTO>>> Get()
         {
 
-            var queryable = PeriodosUsuario;            
-
-            var listPeriodos = new List<PeriodoDTO>();
-            PeriodoDTO nuevo;
-            foreach (var q in queryable)
+            try
             {
-                nuevo = new PeriodoDTO
-                {
-                    Id = q.Id.Value,
-                    Desde = q.FechaDesde
-                };
 
-                var periodos = await queryable.Where(p => p.FechaDesde > nuevo.Desde).ToListAsync();
-                if (periodos != null)
+                var listaBase = await PeriodosUsuario.ToListAsync();
+
+                var listPeriodos = new List<PeriodoDTO>();
+                PeriodoDTO nuevo;
+                foreach (var q in listaBase)
                 {
-                    var periodo = periodos.MinBy(f => f.FechaDesde);
-                    if (periodo != null)
-                        nuevo.Hasta = periodo.FechaDesde.AddDays(-1);
+                    nuevo = new PeriodoDTO
+                    {
+                        Id = q.Id.Value,
+                        Desde = q.FechaDesde
+                    };                    
+
+                    var siguienteFecha = listaBase
+                            .Where(p => p.FechaDesde > nuevo.Desde)
+                            .MinBy(f => f.FechaDesde)?.FechaDesde;
+
+                    if (siguienteFecha.HasValue)
+                    {
+                        nuevo.Hasta = siguienteFecha.Value.AddDays(-1);
+                    }
+
+                    listPeriodos.Add(nuevo);                    
                 }
 
-                listPeriodos.Add(nuevo);
-            }            
-
-            return listPeriodos.OrderBy(p => p.Desde).ToList();
+                return listPeriodos.OrderBy(p => p.Desde).ToList();
+            }
+            catch (ExcepcionNegocios exN)
+            {
+                return BadRequest(exN.Message);
+            }
+            catch (Exception ex)
+            {
+                throw WrapException(ex);
+            }
         }
         [HttpGet("obtenerModeloPeriodo/{periodoId?}")]
         public async Task<EditarPeriodoDTO> GetModeloPeriodo(Guid? periodoId = null)
@@ -103,7 +117,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                     else
                     {
                         periodo.Id = Guid.NewGuid();
-                        periodo.CreadoEl = DateTime.Now;
+                        periodo.CreadoEl = _horaService.FechaYHoraActualUTC;
                         periodo.CreadoPor = YO;
                         _context.Add(periodo);
                     }

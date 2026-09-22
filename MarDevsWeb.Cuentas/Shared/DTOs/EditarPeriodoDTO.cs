@@ -12,6 +12,6 @@ namespace MarDevsWeb.Cuentas.Shared.DTOs
     {
         public Guid? PeriodoId { get; set; } = null;
         [Required(ErrorMessage = "Campo fecha desde obligatorio")]
-        public DateTime? FechaDesde { get; set; } = null;
+        public DateOnly? FechaDesde { get; set; } = null;
     }
 }

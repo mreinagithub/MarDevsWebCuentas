@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
+﻿using MarDevsWeb.Cuentas.Server.Excepciones;
+using MarDevsWeb.Cuentas.Server.Models;
+using MarDevsWeb.Cuentas.Server.Models.Seguridad;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MarDevsWeb.Cuentas.Server.Excepciones;
+using Npgsql;
+using SGAWeb.Server.Servicios;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using MarDevsWeb.Cuentas.Server.Models;
 using System.Security.Claims;
-using MarDevsWeb.Cuentas.Server.Models.Seguridad;
+using System.Threading.Tasks;
 
 namespace MarDevsWeb.Cuentas.Server.Controllers
 {
@@ -16,10 +17,13 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
     {
 
         protected readonly MarDevsContext _context;
+        protected readonly HoraService _horaService;
 
-        public MiBaseController(MarDevsContext context)
+
+        public MiBaseController(MarDevsContext context, HoraService horaService)
         {
             _context = context;
+            _horaService = horaService;
         }
 
 
@@ -60,20 +64,24 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
 
         protected Exception WrapException(Exception ex)
         {
-            if (ex is DbUpdateConcurrencyException) //Chequear cuando se implemente versinado, que ante errores de concurrencia caiga acá.
+            if (ex is DbUpdateConcurrencyException) //Chequear cuando se implemente versionado, que ante errores de concurrencia caiga acá.
                 return new ExcepcionConcurrencia(STR_ERROR_CONCURRENCIA, ex);
-            if ((ex.InnerException is SqlException) && ((ex.InnerException as SqlException).Number == 547))//violacion de foreign key
-                return new ExcepcionEliminacion(STR_ERROR_ELIMINAR_FK,ex);
-            else if ((ex.InnerException is SqlException) && ((ex.InnerException as SqlException).Number == 2627))//violacion de unique al insertar
-                return new ExcepcionInsertClaveDuplicada(STR_ERROR_INSERTAR_UK, ex);
-            else if ((ex.InnerException is SqlException) && ((ex.InnerException as SqlException).Number == 2601))//violacion de unique al insertar
-                return new ExcepcionInsertClaveDuplicada(STR_ERROR_INSERTAR_UK, ex);
-            else if ((ex.InnerException is SqlException) && ((ex.InnerException as SqlException).Number == 50000))//Raiserror
-                return new ExcepcionRaiserrorUsuario(ex.InnerException.Message, ex);
-            else if ((ex.InnerException is SqlException))//Otro error SQL que siempre viene en el inner
-                return new ExcepcionRaiserrorUsuario(ex.InnerException.Message, ex);
-            //DADO QUE SE PRODUJO UNA EXCEPCION, DEBEMOS RESETEAR LOS ID'S            
-            //return new ExcepcionTecnica(STR_ERROR_ACCESO_DATOS, ex);
+
+            if ((ex.InnerException is PostgresException pgEx))
+            {
+                switch (pgEx.SqlState)
+                {
+                    case "23503": // foreign_key_violation
+                        return new ExcepcionEliminacion(STR_ERROR_ELIMINAR_FK, ex);
+
+                    case "23505": // unique_violation (cubre lo que antes eran 2627 y 2601)
+                        return new ExcepcionInsertClaveDuplicada(STR_ERROR_INSERTAR_UK, ex);
+
+                    case "P0001": // RAISE EXCEPTION genérico (equivalente a RAISERROR de SQL Server)
+                        return new ExcepcionRaiserrorUsuario(pgEx.MessageText, ex);
+                }
+            }
+
             return ex;
 
         }
@@ -86,7 +94,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
         {
             get
             {
-                return _context.Periodo.Where(p => p.CreadoPor == YO).AsQueryable();
+                return _context.Periodo.Where(p => p.CreadoPor == YO).AsQueryable();                
             }
         }
         protected IQueryable<Concepto> ConceptosUsuario

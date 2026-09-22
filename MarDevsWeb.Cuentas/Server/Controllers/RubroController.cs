@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SGAWeb.Server.Servicios;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class RubroController : MiBaseController
     {
-        public RubroController(MarDevsContext context) : base(context)
+        public RubroController(MarDevsContext context, HoraService horaService) : base(context, horaService)
         {
 
         }
@@ -119,7 +120,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                     else
                     {
                         rubro.Id = Guid.NewGuid();
-                        rubro.CreadoEl = DateTime.Now;
+                        rubro.CreadoEl = _horaService.FechaYHoraActualUTC;
                         rubro.CreadoPor = YO;
                         _context.Add(rubro);
                     }

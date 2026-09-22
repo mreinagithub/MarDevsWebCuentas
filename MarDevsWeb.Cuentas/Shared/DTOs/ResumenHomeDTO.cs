@@ -8,7 +8,7 @@ namespace MarDevsWeb.Cuentas.Shared.DTOs
 {
     public class ResumenHomeDTO
     {
-        public DateTime FechaDesde { get; set; }
+        public DateOnly FechaDesde { get; set; }
         public bool MostrarSaldoInicial { get; set; }
         public decimal SaldoInicial { get; set; }
         public decimal TotalIngresos { get; set; }

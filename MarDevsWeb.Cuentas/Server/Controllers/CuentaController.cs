@@ -24,6 +24,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using SGAWeb.Server.Servicios;
 
 namespace MarDevsWeb.Cuentas.Server.Controllers
 {
@@ -48,7 +49,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                                                                   <p>MarDevs Argentina</p>";
 
         public CuentaController(IConfiguration configuration, IMailService servicioCorreo, IHttpContextAccessor httpContext,
-            MarDevsContext context) : base(context)
+            MarDevsContext context, HoraService horaService) : base(context, horaService)
         {
             _configuration = configuration;
             _servicioCorreo = servicioCorreo;
@@ -70,7 +71,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                 .FirstOrDefaultAsync(urt => urt.UsuarioID == usuario.Id && urt.BrowserToken == usrRefreshToken.BrowserToken);            
 
             if(usrRfToken == null || usrRfToken.RefreshToken != usrRefreshToken.RefreshToken 
-                || usrRfToken.RefreshTokenExpireDate.Value.Subtract(DateTime.UtcNow) < TimeSpan.FromMinutes(0))
+                || usrRfToken.RefreshTokenExpireDate.Value.Subtract(_horaService.FechaYHoraActualUTC) < TimeSpan.FromMinutes(0))
             {
                 return BadRequest("El Refresh Token es inválido. No se puede renovar, debe volver a iniciar sesión.");
             }
@@ -291,7 +292,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
 
                     string passNuevoSHA = Encriptacion.EncriptarSHA(email, usuario.Id.ToString());
                     usuario.Password = passNuevoSHA;
-                    usuario.FechaUltimoCambioPassword = DateTime.Now;
+                    usuario.FechaUltimoCambioPassword = _horaService.FechaYHoraActualLOCAL;
                 }
                 else
                 {
@@ -302,7 +303,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                     usuario.ImagenURL = user.FindFirstValue("urn:google:picture");
                 }
 
-                usuario.FechaUltimoIngreso = DateTime.Now;
+                usuario.FechaUltimoIngreso = _horaService.FechaYHoraActualLOCAL ;
                 _context.Update(usuario);
 
                 await _context.SaveChangesAsync();
@@ -366,7 +367,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
                 throw new ExcepcionNegocios("Usuario o contraseña incorrecta");
 
             usuario.PasswordTempRecupero = null;
-            usuario.FechaUltimoIngreso = DateTime.Now;
+            usuario.FechaUltimoIngreso = _horaService.FechaYHoraActualLOCAL; ;
 
             _context.Update(usuario);
 
@@ -430,7 +431,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
             string passNuevoSHA = Encriptacion.EncriptarSHA(userRegistro.PasswordNuevo, usuario.Id.ToString());
 
             usuario.Password = passNuevoSHA;
-            usuario.FechaUltimoCambioPassword = DateTime.Now;
+            usuario.FechaUltimoCambioPassword = _horaService.FechaYHoraActualLOCAL ;
 
             _context.Update(usuario);
 
@@ -448,7 +449,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
             if (usrValidacion == null)
                 throw new ExcepcionNegocios("El el link es inválido. Es posible que no exista o haya expirado.");
 
-            if (usrValidacion.FechaExpiracion < DateTime.Now)
+            if (usrValidacion.FechaExpiracion < _horaService.FechaYHoraActualUTC)
             {
                 _context.Remove(usrValidacion);
                 await _context.SaveChangesAsync();
@@ -534,7 +535,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
 
             usuario.PasswordTempRecupero = null;
             usuario.Password = passNuevoSHA;
-            usuario.FechaUltimoCambioPassword = DateTime.Now;
+            usuario.FechaUltimoCambioPassword = _horaService.FechaYHoraActualLOCAL;
 
             _context.Update(usuario);
 
@@ -547,7 +548,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
             {
                 UsuarioID = usuario.Id.Value,
                 TokenValidacion = RandomString(60, true),
-                FechaExpiracion = DateTime.Now.AddHours(72) //72hrs para registrarse
+                FechaExpiracion = _horaService.FechaYHoraActualUTC.AddHours(72) //72hrs para registrarse
             };
 
             _context.Add(usrValidacion);
@@ -638,7 +639,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
 
             usuario.PasswordTempRecupero = null;
             usuario.Password = passNuevoSHA;
-            usuario.FechaUltimoCambioPassword = DateTime.Now;
+            usuario.FechaUltimoCambioPassword = _horaService.FechaYHoraActualLOCAL;
 
             _context.Update(usuario);
 
@@ -694,7 +695,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["jwt:key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var expiration = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["jwt:MinutesToExpire"]));
+            var expiration = _horaService.FechaYHoraActualUTC.AddMinutes(Convert.ToDouble(_configuration["jwt:MinutesToExpire"]));
 
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: null,
@@ -716,7 +717,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
         private void AsignarRefreshToken(UsuarioRefreshToken usuarioRfToken)
         {
             usuarioRfToken.RefreshToken = GenerateRefreshToken();
-            usuarioRfToken.RefreshTokenExpireDate = DateTime.UtcNow.AddDays(30);
+            usuarioRfToken.RefreshTokenExpireDate = _horaService.FechaYHoraActualUTC.AddDays(30);
         }          
         private static string GenerateRefreshToken()
         {

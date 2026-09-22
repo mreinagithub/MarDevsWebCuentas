@@ -16,10 +16,10 @@ namespace MarDevsWeb.Cuentas.Shared.DTOs
         public Guid? ConceptoID { get; set; }
         [Display(Name = "Importe")]
         [Required(ErrorMessage = "Debe indicar el importe")]
-        [Range(0.1, 999999, ErrorMessage = "El valor indicado es inválido")]
+        [Range(0.1, double.MaxValue, ErrorMessage = "El valor indicado es inválido")]
         public decimal? Importe { get; set; } = null;
         [Required(ErrorMessage = "Campo fecha obligatorio")]
-        public DateTime Fecha { get; set; } = DateTime.Now.Date;
+        public DateOnly Fecha { get; set; } = DateOnly.FromDateTime(DateTime.Now);
         public string Observaciones { get; set; }
     }
 }

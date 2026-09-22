@@ -12,7 +12,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Npgsql;
 using Serilog;
+using SGAWeb.Server.Servicios;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -38,12 +40,18 @@ namespace MarDevsWeb.Cuentas.Server
             services.AddControllersWithViews();
             services.AddRazorPages();
 
+            //string connString = Configuration.GetConnectionString("MarDevsContext");            
+
+            //services.AddDbContext<MarDevsContext>(options =>
+            // options.UseSqlServer(connString));
+
             string connString = Configuration.GetConnectionString("MarDevsContext");
-            connString = connString.Replace("[USUARIO]", "mardevs");
-            connString = connString.Replace("[PASSWORD]", "mDev@1686");
+
+            var dataSourceBuilder = new NpgsqlDataSourceBuilder(connString);
+            var dataSource = dataSourceBuilder.Build();
 
             services.AddDbContext<MarDevsContext>(options =>
-             options.UseSqlServer(connString));
+                options.UseNpgsql(dataSource));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)                                
              .AddJwtBearer(opt =>             
@@ -68,6 +76,8 @@ namespace MarDevsWeb.Cuentas.Server
                 });
 
             services.AddScoped<IMailService, MailService>();
+
+            services.AddScoped<HoraService>();
 
             services.AddHttpContextAccessor();
         }

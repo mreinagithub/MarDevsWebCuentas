@@ -25,7 +25,7 @@ namespace MarDevsWeb.Cuentas.Client.Auth
         public static readonly string ULTIMO_USUARIO_LOGUEADO = "ultimo_usr_logueado";
         private readonly IJSRuntime js;
         private readonly HttpClient httpClient;
-        private readonly IRepositorio repositorio;
+        private readonly IRepositorio repositorio;        
 
         private AuthenticationState Anonimo =>
             new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));

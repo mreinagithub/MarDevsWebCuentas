@@ -117,8 +117,8 @@ else
     string textoBusqueda = "";
     string tipoMovimiento = "TODOS";
     string rubro = null;
-    DateTime? fechaDesde = null;
-    DateTime? fechaHasta = null;
+    DateOnly? fechaDesde = null;
+    DateOnly? fechaHasta = null;
     List<PeriodoDTO> otrosPeriodos = null;
     List<RubroDTO> rubros = null;
     string textoFiltro = "";
@@ -168,12 +168,12 @@ else
         }
         if(queryStringDict.ContainsKey("fechaDesde"))
         {
-            fechaDesde = DateTime.Parse(queryStringDict["fechaDesde"]);            
+            fechaDesde = DateOnly.Parse(queryStringDict["fechaDesde"]);            
 
         }
         if(queryStringDict.ContainsKey("fechaHasta"))
         {
-            fechaHasta = DateTime.Parse(queryStringDict["fechaHasta"]);                        
+            fechaHasta = DateOnly.Parse(queryStringDict["fechaHasta"]);                        
         }
         if(queryStringDict.ContainsKey("tipoMovimiento"))
         {
@@ -260,19 +260,19 @@ else
             tipoMovimiento = tipoMovRecibido;
         }
 
-        var httpResponse = await repositorio.Get<DateTime>("api/movimiento/obtenerFechaActual");
+        var httpResponse = await repositorio.Get<DateOnly>("api/movimiento/obtenerFechaActual");
         if (httpResponse.Error)
         {
             await errorHandler.MostrarError(httpResponse.HttpResponseMessage);
         }
         else
         {
-            fechaDesde = httpResponse.Response.Date;            
-            if (fechaDesde.Value.Date > DateTime.Now.Date)
+            fechaDesde = httpResponse.Response;            
+            if (fechaDesde.Value > DateOnly.FromDateTime(DateTime.Now))
                 fechaHasta = fechaDesde;
             else
             {
-                fechaHasta = DateTime.Now.Date;
+                fechaHasta = DateOnly.FromDateTime(DateTime.Now);
             }            
            
         }
