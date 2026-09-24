@@ -98,9 +98,11 @@ namespace MarDevsWeb.Cuentas.Client
 
             services.AddScoped<ToastService>();
 
-            services.AddScoped<RenovadorTokenHandler>();            
-           
-           
+            services.AddScoped<RenovadorTokenHandler>();
+
+            services.AddScoped<GastoProcesadorService>();
+
+
             services.AddScoped(sp =>
             {
                 var handler = sp.GetRequiredService<RenovadorTokenHandler>();

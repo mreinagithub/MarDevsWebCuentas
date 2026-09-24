@@ -7,6 +7,11 @@
 	 <UserSecretsId>913c947b-59bf-4cbd-a3d3-f8a80d4d574f</UserSecretsId>
   </PropertyGroup>
 
+  <!--<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <CompressBlazorServerApplication>false</CompressBlazorServerApplication>
+    <BlazorEnableCompression>false</BlazorEnableCompression>
+  </PropertyGroup>-->
+
   <ItemGroup>
     <PackageReference Include="ChartJs.Blazor.Fork" Version="2.0.2" />
     <PackageReference Include="EPPlus" Version="7.0.6" />

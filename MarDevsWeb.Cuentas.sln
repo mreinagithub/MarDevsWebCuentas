@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.32014.148
+# Visual Studio Version 18
+VisualStudioVersion = 18.10.12210.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarDevsWeb.Cuentas.Shared", "MarDevsWeb.Cuentas\Shared\MarDevsWeb.Cuentas.Shared.csproj", "{DE0D884C-1ABC-4A57-99CE-D60FF0AB3F4C}"
 EndProject

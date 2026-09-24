@@ -54,7 +54,7 @@ else
         <EditForm Model="Model" OnValidSubmit="Actualizar" autocomplete="off" accept-charset="utf-8">
             <DataAnnotationsValidator />
             <div class="row">
-                <div class="col-12">
+                <div class="col-10">
                     <div class="form-group mb-1">
                         <label class="control-label small mb-0 font-weight-bold">Concepto</label>                                                            
                         <span class="small" style="display:inline-block">
@@ -69,6 +69,11 @@ else
                         </select>             
                         
                     </div>
+                </div>
+                <div class="col-2 pl-1 d-flex align-items-end" style="margin-bottom:4px;">
+                    <MicrofonoVozInput ConceptosDisponibles="Model.ConceptosDisponibles"
+                                       OnResultadoProcesado="AlProcesarVoz"
+                                       OnTextoDictado="res => literal = res" />
                 </div>
             </div>
             <div class="row">
@@ -248,4 +253,36 @@ else
         }        
     }
     
+    // private string mensajeAlerta;
+    // private string claseAlerta = "alert-info";
+    private string literal;
+    private async Task AlProcesarVoz(ResultadoProcesamientoVoz res)
+    {
+        if (!res.EsExitoso)
+        {
+            // mensajeAlerta = "No se logró capturar audio. Inténtalo nuevamente.";
+            // claseAlerta = "alert-danger";
+            // return;
+            toastService.ShowToast("No se logró capturar audio. Inténtalo nuevamente.", ToastLevel.Info);
+            return;
+        }
+
+        Model.ConceptoID = res.ConceptoEncontrado?.ConceptoID;
+        Model.Importe = res.Importe;
+
+        await js.ActualizarValorBootstrapSelect("lstConceptosDisponibles", Model.ConceptoID?.ToString() ?? "");
+        StateHasChanged();
+
+        // if (res.ConceptoEncontrado != null)
+        // {
+        //     gastoForm.ConceptoId = res.ConceptoEncontrado.Id;
+        // }
+
+        // if (res.Importe.HasValue)
+        // {
+        //     gastoForm.Importe = res.Importe;
+        // }
+        // mensajeAlerta = $"Interpretado: \"{literal}\".";
+        // claseAlerta = "alert-success";
+    }
 }

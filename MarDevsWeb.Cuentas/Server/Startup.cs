@@ -37,6 +37,13 @@ namespace MarDevsWeb.Cuentas.Server
         public void ConfigureServices(IServiceCollection services)
         {
 
+            //Alivia la carga de archivos, lo hace más rapido.
+            services.AddResponseCompression(options =>
+            {
+                options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+                    new[] { "application/octet-stream", "application/wasm" });
+            });
+
             services.AddControllersWithViews();
             services.AddRazorPages();
 
@@ -103,8 +110,27 @@ namespace MarDevsWeb.Cuentas.Server
             }
 
             app.UseHttpsRedirection();
+
+            if (!env.IsDevelopment())
+            {
+                app.UseResponseCompression();
+            }
+
             app.UseBlazorFrameworkFiles();
-            app.UseStaticFiles();          
+
+            //No cacheamos el archivo del service-worker.js
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    if (ctx.File.Name == "service-worker.js")
+                    {
+                        ctx.Context.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+                        ctx.Context.Response.Headers["Pragma"] = "no-cache";
+                        ctx.Context.Response.Headers["Expires"] = "-1";
+                    }
+                }
+            });
 
             //Harcodear información cultural a la  es-AR
             var defaultCulture = new CultureInfo("es-AR");

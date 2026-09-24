@@ -1,0 +1,102 @@
+﻿@inject IJSRuntime JS
+@inject GastoProcesadorService ProcesadorService
+@implements IAsyncDisposable
+
+<button type="button"
+        class="btn btn-outline-secondary w-100 @(estaEscuchando ? "btn-danger text-white pulse-animation" : "")"
+        @onmousedown="IniciarDictado"
+        @onmouseup="DetenerDictado"
+        @ontouchstart="IniciarDictado"
+        @ontouchend="DetenerDictado"
+        disabled="@estaProcesando"
+        title="Mantén presionado para dictar por voz">
+    @if (estaProcesando)
+    {
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    }
+    else
+    {
+        <span>🎙️</span>
+    }
+</button>
+
+@code {
+    [Parameter] public IEnumerable<ConceptoDisponibleDTO> ConceptosDisponibles { get; set; } = new List<ConceptoDisponibleDTO>();
+    [Parameter] public EventCallback<ResultadoProcesamientoVoz> OnResultadoProcesado { get; set; }
+    [Parameter] public EventCallback<string> OnTextoDictado { get; set; }
+
+    private bool estaEscuchando = false;
+    private bool estaProcesando = false;
+    private IJSObjectReference moduloJs;
+    private DotNetObjectReference<MicrofonoVozInput> dotNetReference;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            moduloJs = await JS.InvokeAsync<IJSObjectReference>("import", "./js/vocal.js");
+            dotNetReference = DotNetObjectReference.Create(this);
+        }
+    }
+
+    private async Task IniciarDictado()
+    {
+        if (moduloJs is not null && !estaEscuchando && !estaProcesando)
+        {
+            estaEscuchando = true;
+            await moduloJs.InvokeVoidAsync("iniciarGrabacionVoz", dotNetReference);
+        }
+    }
+
+    private async Task DetenerDictado()
+    {
+        if (moduloJs is not null && estaEscuchando)
+        {
+            estaEscuchando = false;
+            estaProcesando = true;
+            StateHasChanged();
+
+            await moduloJs.InvokeVoidAsync("detenerGrabacionVoz");
+        }
+    }
+
+    [JSInvokable]
+    public async Task ProcesarComandoVoz(string textoDictado)
+    {
+        estaProcesando = false;
+
+        if (OnTextoDictado.HasDelegate)
+        {
+            await OnTextoDictado.InvokeAsync(textoDictado);
+        }
+
+        if (!string.IsNullOrWhiteSpace(textoDictado))
+        {
+            // Le pasamos al servicio el texto dictado Y la lista de conceptos permitidos
+            var resultado = ProcesadorService.ProcesarFrase(textoDictado, ConceptosDisponibles);
+
+            if (OnResultadoProcesado.HasDelegate)
+            {
+                await OnResultadoProcesado.InvokeAsync(resultado);
+            }
+        }
+        else
+        {
+            if (OnResultadoProcesado.HasDelegate)
+            {
+                await OnResultadoProcesado.InvokeAsync(new ResultadoProcesamientoVoz { EsExitoso = false });
+            }
+        }
+
+        StateHasChanged();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        dotNetReference?.Dispose();
+        if (moduloJs is not null)
+        {
+            await moduloJs.DisposeAsync();
+        }
+    }
+}
