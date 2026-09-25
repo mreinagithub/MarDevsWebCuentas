@@ -19,7 +19,7 @@ namespace MarDevsWeb.Cuentas.Shared.DTOs
         [Range(0.1, double.MaxValue, ErrorMessage = "El valor indicado es inválido")]
         public decimal? Importe { get; set; } = null;
         [Required(ErrorMessage ="Campo fecha obligatorio")]        
-        public DateOnly Fecha { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+        public DateOnly Fecha { get; set; }
         public string Observaciones { get; set; }
     }
 

@@ -177,7 +177,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
         public async Task<EditarEgresoDTO> GetModeloEgreso(Guid? egresoId = null)
         {
 
-            var modelo = new EditarEgresoDTO();
+            var modelo = new EditarEgresoDTO { Fecha = DateOnly.FromDateTime(_horaService.FechaActualLOCAL) };
             
             if(egresoId != null)
             {
@@ -209,7 +209,7 @@ namespace MarDevsWeb.Cuentas.Server.Controllers
         public async Task<EditarIngresoDTO> GetModeloIngreso(Guid? ingresoId = null)
         {
 
-            var modelo = new EditarIngresoDTO();
+            var modelo = new EditarIngresoDTO { Fecha = DateOnly.FromDateTime(_horaService.FechaActualLOCAL) };
 
             if (ingresoId != null)
             {
