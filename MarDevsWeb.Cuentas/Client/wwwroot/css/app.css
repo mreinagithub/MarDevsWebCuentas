@@ -172,7 +172,7 @@ div .card.card-extras {
     margin-bottom:30px;
 }*/
 
-.app-footer {    
+/*.app-footer {    
     position: relative;
     clear: both;
     right: 0;
@@ -187,22 +187,4 @@ div .card.card-extras {
     margin-left: 15px;
     font-size: 14px;
 }
-
-/*@media screen and (max-width: 767px) {
-    .app-body{
-        margin-bottom:50px;
-    }
-    .app-footer{
-        height:50px;
-    }
-}
-
-@media screen and (max-width: 452px) {
-    .app-body {
-        margin-bottom: 70px;
-    }
-
-    .app-footer {
-        height: 70px;
-    }
-}*/
+*/

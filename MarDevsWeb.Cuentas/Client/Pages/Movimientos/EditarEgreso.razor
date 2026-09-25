@@ -52,7 +52,7 @@ else
     }
     <div id="editarEgersoForm">
         <EditForm Model="Model" OnValidSubmit="Actualizar" autocomplete="off" accept-charset="utf-8">
-            <DataAnnotationsValidator />
+            <DataAnnotationsValidator />          
             <div class="row">
                 <div class="col-10">
                     <div class="form-group mb-1">
@@ -272,6 +272,8 @@ else
 
         await js.ActualizarValorBootstrapSelect("lstConceptosDisponibles", Model.ConceptoID?.ToString() ?? "");
         StateHasChanged();
+
+        toastService.ShowToast($"Interpretado: \"{literal}\".", ToastLevel.Info);
 
         // if (res.ConceptoEncontrado != null)
         // {

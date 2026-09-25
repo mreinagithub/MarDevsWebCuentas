@@ -72,9 +72,9 @@ namespace MarDevsWeb.Cuentas.Client.Helpers
             await js.InvokeVoidAsync("saveAsFile", nombreArchivo, Convert.ToBase64String(archivo));
         }     
         
-        public static async ValueTask SetFooterText(this IJSRuntime js)
-        {
-            await js.InvokeVoidAsync("setFooterText");
-        }
+        //public static async ValueTask SetFooterText(this IJSRuntime js)
+        //{
+        //    await js.InvokeVoidAsync("setFooterText");
+        //}
     }
 }

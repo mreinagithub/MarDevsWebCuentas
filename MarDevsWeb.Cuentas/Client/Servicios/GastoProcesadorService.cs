@@ -32,7 +32,7 @@ namespace MarDevsWeb.Cuentas.Client.Servicios
             // 1. Extraer el importe numérico de la frase completa
             resultado.Importe = ExtraerImporteHibrido(textoDictado);
 
-            // 2. Buscar coincidencia en la lista de conceptos (limpiando cifras y tildes)
+            // 2. Buscar coincidencia en la lista de conceptos (limpiando cifras, tildes y repeticiones de Android)
             if (conceptosDisponibles != null && conceptosDisponibles.Any())
             {
                 string textoSinMonto = LimpiarTextoPrevioABusqueda(textoDictado);
@@ -45,7 +45,7 @@ namespace MarDevsWeb.Cuentas.Client.Servicios
             return resultado;
         }
 
-        #region Búsqueda de Conceptos
+        #region Búsqueda de Conceptos con Aproximación (Levenshtein)
         private ConceptoDisponibleDTO BuscarMejorCoincidenciaConcepto(string textoNormalizado, IEnumerable<ConceptoDisponibleDTO> conceptos)
         {
             string textoLimpio = NormalizarTexto(textoNormalizado);
@@ -80,7 +80,76 @@ namespace MarDevsWeb.Cuentas.Client.Servicios
                 .OrderByDescending(x => x.Coincidencias)
                 .FirstOrDefault();
 
-            return coincidenciaPalabras?.Dto;
+            if (coincidenciaPalabras != null)
+            {
+                return coincidenciaPalabras.Dto;
+            }
+
+            // Búsqueda 3: Aproximación por Distancia de Levenshtein (por ej. "naturgi" vs "naturgy")
+            ConceptoDisponibleDTO mejorCandidatoLevenshtein = null;
+            int menorDistancia = int.MaxValue;
+
+            foreach (var concepto in conceptos)
+            {
+                string normConcepto = NormalizarTexto(concepto.Descripcion);
+                if (string.IsNullOrEmpty(normConcepto)) continue;
+
+                // Compara cada palabra dictada contra cada palabra del concepto
+                var palabrasConcepto = normConcepto.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var pDictada in palabrasTexto)
+                {
+                    // Ignoramos palabras dictadas de menos de 3 letras para evitar falsos positivos
+                    if (pDictada.Length < 3) continue;
+
+                    foreach (var pConcepto in palabrasConcepto)
+                    {
+                        if (pConcepto.Length < 3) continue;
+
+                        int distancia = CalcularDistanciaLevenshtein(pDictada, pConcepto);
+
+                        // Umbral: Permitimos 1 diferencia para palabras cortas (<=5 letras) y hasta 2 para palabras más largas
+                        int umbralMaximo = pConcepto.Length <= 5 ? 1 : 2;
+
+                        if (distancia <= umbralMaximo && distancia < menorDistancia)
+                        {
+                            menorDistancia = distancia;
+                            mejorCandidatoLevenshtein = concepto;
+                        }
+                    }
+                }
+            }
+
+            return mejorCandidatoLevenshtein;
+        }
+
+        /// <summary>
+        /// Algoritmo de Distancia de Levenshtein para medir diferencia entre dos cadenas.
+        /// </summary>
+        private int CalcularDistanciaLevenshtein(string fuente, string destino)
+        {
+            if (string.IsNullOrEmpty(fuente)) return destino?.Length ?? 0;
+            if (string.IsNullOrEmpty(destino)) return fuente.Length;
+
+            int n = fuente.Length;
+            int m = destino.Length;
+            int[,] d = new int[n + 1, m + 1];
+
+            for (int i = 0; i <= n; d[i, 0] = i++) { }
+            for (int j = 0; j <= m; d[0, j] = j++) { }
+
+            for (int i = 1; i <= n; i++)
+            {
+                for (int j = 1; j <= m; j++)
+                {
+                    int costo = (destino[j - 1] == fuente[i - 1]) ? 0 : 1;
+                    d[i, j] = Math.Min(
+                        Math.Min(d[i - 1, j] + 1, d[i, j - 1] + 1),
+                        d[i - 1, j - 1] + costo);
+                }
+            }
+
+            return d[n, m];
         }
 
         /// <summary>
@@ -111,10 +180,18 @@ namespace MarDevsWeb.Cuentas.Client.Servicios
         {
             if (string.IsNullOrWhiteSpace(texto)) return string.Empty;
 
+            // 1. Remueve palabras conectoras
             string t = Regex.Replace(texto, @"\b(por|de|un|una|pesos)\b", " ", RegexOptions.IgnoreCase);
+
+            // 2. Remueve cifras
             t = Regex.Replace(t, @"\d+[\d\.,\s]*", " ");
+
+            // 3. Colapso defensivo de palabras duplicadas consecutivas (Fix para Android "nafta nafta por nafta")
+            t = Regex.Replace(t, @"\b(\w+)(?:\s+\1)+\b", "$1", RegexOptions.IgnoreCase);
+
             return t.Trim();
         }
+
         #endregion
 
         #region Algoritmo de Extracción de Importes

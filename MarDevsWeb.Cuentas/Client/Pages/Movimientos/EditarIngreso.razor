@@ -275,6 +275,8 @@ else
         await js.ActualizarValorBootstrapSelect("lstConceptosDisponibles", Model.ConceptoID?.ToString() ?? "");
         StateHasChanged();
 
+        toastService.ShowToast($"Interpretado: \"{literal}\".", ToastLevel.Info);
+
         // if (res.ConceptoEncontrado != null)
         // {
         //     gastoForm.ConceptoId = res.ConceptoEncontrado.Id;
