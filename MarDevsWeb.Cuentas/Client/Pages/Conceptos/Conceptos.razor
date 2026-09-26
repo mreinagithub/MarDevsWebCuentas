@@ -33,14 +33,16 @@
         <button class="btn btn-custom btn-sm" id="btnNuevoConcepto" type="button" @onclick="AltaConcepto" >
                                             Nuevo...
         </button>
-    </div>
-    <div class="col-8">
-        <BuscadorTexto @bind-TextoBusqueda="textoBusqueda" Buscar="BuscarRegistros" MostrarBotonBusqueda="false" BuscarAlTipear="true"
-        placeholder="Concepto, Rubro..." id="txtBusqueda"></BuscadorTexto>
-    </div>
-    <div class="col-2 float-right">
+    </div>    
+    <div class="col-10 float-right">
         <label class="infoRegistrosEncontrados">Registros: @cantidadRegistros</label>
     </div>
+</div>
+<div class="row">   
+    <div class="col-12">
+        <BuscadorTexto @bind-TextoBusqueda="textoBusqueda" Buscar="BuscarRegistros" MostrarBotonBusqueda="false" BuscarAlTipear="true"
+        placeholder="Concepto, Rubro..." id="txtBusqueda"></BuscadorTexto>
+    </div>  
 </div>
 
 <button @onclick="ScrollTop" id="btnScrollTop" title="Ir arriba"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
